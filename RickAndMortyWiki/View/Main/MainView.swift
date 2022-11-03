@@ -21,7 +21,7 @@ class MainView: UIView {
         collection.delegate = self
         collection.dataSource = self
         collection.translatesAutoresizingMaskIntoConstraints = false
-        collection.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collection.register(CharacterInfoCollectionViewCell.self, forCellWithReuseIdentifier: CharacterInfoCollectionViewCell.identifier)
         return collection
     }()
     
@@ -38,19 +38,6 @@ class MainView: UIView {
     func setupElements() {
         collectionViewConstraints()
     }
-    
-    // MARK: Constraints
-    func collectionViewConstraints() {
-        self.addSubview(collectionView)
-        
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 10),
-            collectionView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
-            collectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5),
-            collectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5)
-        ])
-    }
-    
 }
 
 extension MainView: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -59,7 +46,7 @@ extension MainView: UICollectionViewDataSource, UICollectionViewDelegate, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath)
         cell.backgroundColor = .black
         cell.layer.borderColor = UIColor.green.cgColor
         cell.layer.borderWidth = 5
