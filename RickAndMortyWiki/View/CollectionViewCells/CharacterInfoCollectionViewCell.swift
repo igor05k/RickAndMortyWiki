@@ -68,6 +68,37 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
         return status
     }()
     
+    lazy var lastKnownLocationLabel: UILabel = {
+        let last = UILabel()
+        last.translatesAutoresizingMaskIntoConstraints = false
+        last.text = "Last known location: "
+        last.textColor = .darkGray
+        return last
+    }()
+    
+    lazy var locationLabel: UILabel = {
+        let location = UILabel()
+        location.translatesAutoresizingMaskIntoConstraints = false
+        location.text = "Interdimensional cable"
+        return location
+    }()
+    
+    lazy var firstSeenLabel: UILabel = {
+        let first = UILabel()
+        first.translatesAutoresizingMaskIntoConstraints = false
+        first.text = "First seen in:"
+        first.textColor = .darkGray
+        return first
+    }()
+    
+    lazy var episodeLabel: UILabel = {
+        let episode = UILabel()
+        episode.translatesAutoresizingMaskIntoConstraints = false
+        episode.text = "Morty's mind blowers"
+        episode.textColor = .black
+        return episode
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupVisualElements()
@@ -83,6 +114,10 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
         setupCharacterLabelConstraints()
         setupStatusCircleConstraints()
         setupStatusStackViewConstraints()
+        setupLastKnownConstraints()
+        setupLocationLabel()
+        setupFirstSeen()
+        setupEpisodeLabel()
     }
     
     func setupCharacterImageViewConstraints() {
@@ -138,6 +173,46 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
             statusStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -100),
             statusStackView.leadingAnchor.constraint(equalTo: statusCircle.trailingAnchor, constant: 5),
             statusStackView.centerYAnchor.constraint(equalTo: statusCircle.centerYAnchor)
+        ])
+    }
+    
+    func setupLastKnownConstraints() {
+        contentView.addSubview(lastKnownLocationLabel)
+        
+        NSLayoutConstraint.activate([
+            lastKnownLocationLabel.topAnchor.constraint(equalTo: statusCircle.bottomAnchor, constant: 20),
+            lastKnownLocationLabel.leadingAnchor.constraint(equalTo: statusCircle.leadingAnchor),
+            lastKnownLocationLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+        ])
+    }
+    
+    func setupLocationLabel() {
+        contentView.addSubview(locationLabel)
+        
+        NSLayoutConstraint.activate([
+            locationLabel.topAnchor.constraint(equalTo: lastKnownLocationLabel.bottomAnchor),
+            locationLabel.leadingAnchor.constraint(equalTo: lastKnownLocationLabel.leadingAnchor),
+            locationLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+        ])
+    }
+    
+    func setupFirstSeen() {
+        contentView.addSubview(firstSeenLabel)
+        
+        NSLayoutConstraint.activate([
+            firstSeenLabel.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 20),
+            firstSeenLabel.leadingAnchor.constraint(equalTo: locationLabel.leadingAnchor),
+            firstSeenLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+        ])
+    }
+    
+    func setupEpisodeLabel() {
+        contentView.addSubview(episodeLabel)
+        
+        NSLayoutConstraint.activate([
+            episodeLabel.topAnchor.constraint(equalTo: firstSeenLabel.bottomAnchor),
+            episodeLabel.leadingAnchor.constraint(equalTo: firstSeenLabel.leadingAnchor),
+            episodeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
         ])
     }
 }
