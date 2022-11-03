@@ -25,6 +25,49 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
         return container
     }()
     
+    lazy var characterName: UILabel = {
+        let character = UILabel()
+        character.text = "Rick Sanchez"
+        character.textColor = .darkText
+        character.translatesAutoresizingMaskIntoConstraints = false
+        return character
+    }()
+    
+    lazy var statusStackView: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .horizontal
+        stack.spacing = 5
+        stack.distribution = .fillEqually
+        stack.backgroundColor = .orange
+        return stack
+    }()
+    
+    lazy var statusCircle: UIView = {
+        let circle = UIView()
+        circle.translatesAutoresizingMaskIntoConstraints = false
+        circle.backgroundColor = .black
+        circle.layer.cornerRadius = 6
+        circle.clipsToBounds = true
+        return circle
+    }()
+    
+    lazy var statusLabel: UILabel = {
+        let status = UILabel()
+        status.text = "Alive -"
+        status.textColor = .black
+        status.translatesAutoresizingMaskIntoConstraints = false
+        return status
+    }()
+    
+    lazy var speciesLabel: UILabel = {
+        let status = UILabel()
+        status.text = "Alien"
+        status.textColor = .black
+        status.translatesAutoresizingMaskIntoConstraints = false
+        return status
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupVisualElements()
@@ -37,6 +80,9 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
     func setupVisualElements() {
         setupCharacterImageViewConstraints()
         setupDescriptionContainerConstraints()
+        setupCharacterLabelConstraints()
+        setupStatusCircleConstraints()
+        setupStatusStackViewConstraints()
     }
     
     func setupCharacterImageViewConstraints() {
@@ -58,6 +104,40 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
             descriptionContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             descriptionContainer.leadingAnchor.constraint(equalTo: characterImageView.trailingAnchor),
             descriptionContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+        ])
+    }
+    
+    func setupCharacterLabelConstraints() {
+        contentView.addSubview(characterName)
+        
+        NSLayoutConstraint.activate([
+            characterName.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+            characterName.leadingAnchor.constraint(equalTo: characterImageView.trailingAnchor, constant: 5),
+            characterName.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 5),
+        ])
+    }
+    
+    func setupStatusCircleConstraints() {
+        contentView.addSubview(statusCircle)
+
+        NSLayoutConstraint.activate([
+            statusCircle.topAnchor.constraint(equalTo: characterName.bottomAnchor, constant: 5),
+            statusCircle.leadingAnchor.constraint(equalTo: characterName.leadingAnchor),
+            statusCircle.heightAnchor.constraint(equalToConstant: 12),
+            statusCircle.widthAnchor.constraint(equalToConstant: 12),
+        ])
+    }
+    
+    func setupStatusStackViewConstraints() {
+        contentView.addSubview(statusStackView)
+        statusStackView.addArrangedSubview(statusLabel)
+        statusStackView.addArrangedSubview(speciesLabel)
+
+        NSLayoutConstraint.activate([
+            statusStackView.topAnchor.constraint(equalTo: characterName.bottomAnchor, constant: 5),
+            statusStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -100),
+            statusStackView.leadingAnchor.constraint(equalTo: statusCircle.trailingAnchor, constant: 5),
+            statusStackView.centerYAnchor.constraint(equalTo: statusCircle.centerYAnchor)
         ])
     }
 }
