@@ -25,7 +25,7 @@ class MainViewController: UIViewController {
             switch result {
             case .success(let success):
                 self?.allCharacters = success.results
-                print(self?.allCharacters[0].name)
+                print(self?.allCharacters)
             case .failure(let failure):
                 print(failure)
             }
@@ -44,7 +44,9 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
-        cell.configure(with: Results(id: 1, name: "Morty", status: "Dead", species: "Human", type: "Unknown", gender: "Male", origin: Location(name: "", url: ""), location: Location(name: "", url: ""), image: "", episode: ["1"], url: "", created: ""))
+        DispatchQueue.main.async {
+            cell.configure(with: self.allCharacters[indexPath.row])
+        }
         cell.backgroundColor = .black
         cell.layer.borderColor = UIColor.green.cgColor
         cell.layer.borderWidth = 5

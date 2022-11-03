@@ -10,6 +10,23 @@ import UIKit
 class CharacterInfoCollectionViewCell: UICollectionViewCell {
     static let identifier = String(describing: CharacterInfoCollectionViewCell.self)
     
+    private var cellViewModel: CharacterInfoCollectionViewCellViewModel?
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupVisualElements()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: Configure method
+    func configure(with charInfo: Results) {
+        cellViewModel = CharacterInfoCollectionViewCellViewModel(characterInfo: charInfo)
+        characterName.text = cellViewModel?.name
+    }
+    
     lazy var characterImageView: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
@@ -98,21 +115,6 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
         episode.textColor = .black
         return episode
     }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupVisualElements()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    // MARK: Configure method
-    func configure(with model: Results) {
-        characterName.text = model.name
-    }
-    
     
     // MARK: Set Visual Elements
     func setupVisualElements() {
