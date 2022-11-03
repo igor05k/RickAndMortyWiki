@@ -8,6 +8,8 @@
 import UIKit
 
 class MainView: UIView {
+    var didTapCharacter: (() -> Void)?
+    
     // MARK: Create visual elements
     lazy var collectionView: UICollectionView = {
         // flow layout
@@ -57,5 +59,10 @@ extension MainView: UICollectionViewDataSource, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: self.bounds.width - 10, height: 200)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        didTapCharacter?()
     }
 }
