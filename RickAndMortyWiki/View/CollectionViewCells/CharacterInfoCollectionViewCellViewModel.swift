@@ -8,11 +8,22 @@
 import Foundation
 
 struct CharacterInfoCollectionViewCellViewModel {
-    private var characterInfo: Results
+    private var characterInfo: CharacterResults
     
-    init(characterInfo: Results) {
+    init(characterInfo: CharacterResults) {
         self.characterInfo = characterInfo
     }
+    
+//    func getEpisodeNumber(_ episode: String) {
+//        Service.getFirstCharacterEpisode(episode: episode) { result in
+//            switch result {
+//            case .success(let success):
+//                print(success)
+//            case .failure(let failure):
+//                print(failure)
+//            }
+//        }
+//    }
     
     public var name: String {
         return characterInfo.name

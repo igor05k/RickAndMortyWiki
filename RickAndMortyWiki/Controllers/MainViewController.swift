@@ -8,7 +8,8 @@
 import UIKit
 
 class MainViewController: UIViewController {
-    private var allCharacters: [Results] = [Results]()
+    private var allCharacters: [CharacterResults] = [CharacterResults]()
+    private var allEpisodes: [EpisodeResults] = [EpisodeResults]()
     
     lazy var mainView: MainView = {
         let main = MainView()
@@ -21,15 +22,35 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         title = "Welcome"
         view.backgroundColor = .red
-        Service.getAllCharacters { [weak self] result in
+//        Service.getAllCharacters { [weak self] result in
+//            switch result {
+//            case .success(let success):
+//                self?.allCharacters = success.results
+//                print(self?.allCharacters)
+//            case .failure(let failure):
+//                print(failure)
+//            }
+//        }
+        
+        Service.getFirstCharacterEpisode { result in
             switch result {
             case .success(let success):
-                self?.allCharacters = success.results
-                print(self?.allCharacters)
+                Service.getEpisodesDetails(url: success[0]) { result in
+                    switch result {
+                    case .success(let success):
+                        print(success)
+                    case .failure(let failure):
+                        print(failure)
+                    }
+                }
             case .failure(let failure):
                 print(failure)
             }
         }
+        
+//        Service.getEpisodesDetails(url: "https://rickandmortyapi.com/api/episode/51") { _ in
+//
+//        }
     }
     
     override func loadView() {
@@ -45,7 +66,8 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
         DispatchQueue.main.async {
-            cell.configure(with: self.allCharacters[indexPath.row])
+//            cell.configure(with: self.allCharacters[indexPath.row])
+//            cell.configure(with: allCharacters[indexPath.row])
         }
         cell.backgroundColor = .black
         cell.layer.borderColor = UIColor.green.cgColor

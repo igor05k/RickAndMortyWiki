@@ -21,6 +21,7 @@
 		82713FC3291402BB00930394 /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FC2291402BB00930394 /* Character.swift */; };
 		82713FC5291412E700930394 /* CharacterInfoCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FC4291412E700930394 /* CharacterInfoCollectionViewCellViewModel.swift */; };
 		82713FC829141C0F00930394 /* UIImageView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FC729141C0F00930394 /* UIImageView+.swift */; };
+		82713FCA2914213700930394 /* Episodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FC92914213700930394 /* Episodes.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		82713FC2291402BB00930394 /* Character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
 		82713FC4291412E700930394 /* CharacterInfoCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterInfoCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
 		82713FC729141C0F00930394 /* UIImageView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+.swift"; sourceTree = "<group>"; };
+		82713FC92914213700930394 /* Episodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Episodes.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				82713FC2291402BB00930394 /* Character.swift */,
+				82713FC92914213700930394 /* Episodes.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -234,6 +237,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				82713FC829141C0F00930394 /* UIImageView+.swift in Sources */,
+				82713FCA2914213700930394 /* Episodes.swift in Sources */,
 				82713FC5291412E700930394 /* CharacterInfoCollectionViewCellViewModel.swift in Sources */,
 				82713FB829135F3E00930394 /* CharacterInfoCollectionViewCell.swift in Sources */,
 				82713F9E29134FF900930394 /* MainViewController.swift in Sources */,

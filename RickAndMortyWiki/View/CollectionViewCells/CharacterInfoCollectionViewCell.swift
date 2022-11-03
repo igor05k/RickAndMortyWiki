@@ -22,15 +22,17 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: Configure method
-    func configure(with charInfo: Results) {
-        cellViewModel = CharacterInfoCollectionViewCellViewModel(characterInfo: charInfo)
-        characterName.text = cellViewModel?.name
-        statusLabel.text = cellViewModel?.status
-        locationLabel.text = cellViewModel?.lastKnownLocation.name
+    func configure(with charInfo: CharacterResults) {
+//        cellViewModel = CharacterInfoCollectionViewCellViewModel(characterInfo: charInfo)
+//        characterName.text = cellViewModel?.name
+//        statusLabel.text = cellViewModel?.status
+//        locationLabel.text = cellViewModel?.lastKnownLocation.name
         // todo
-//        episodeLabel.text = cellViewModel?.episode
-        characterImageView.downloaded(from: cellViewModel?.characterImage ?? "")
+        
+//        characterImageView.downloaded(from: cellViewModel?.characterImage ?? "")
     }
+    
+    
     
     lazy var characterImageView: UIImageView = {
         let image = UIImageView()
