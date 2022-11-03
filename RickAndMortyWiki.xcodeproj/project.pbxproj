@@ -20,6 +20,7 @@
 		82713FC02914002100930394 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FBF2914002100930394 /* Service.swift */; };
 		82713FC3291402BB00930394 /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FC2291402BB00930394 /* Character.swift */; };
 		82713FC5291412E700930394 /* CharacterInfoCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FC4291412E700930394 /* CharacterInfoCollectionViewCellViewModel.swift */; };
+		82713FC829141C0F00930394 /* UIImageView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FC729141C0F00930394 /* UIImageView+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		82713FBF2914002100930394 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		82713FC2291402BB00930394 /* Character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
 		82713FC4291412E700930394 /* CharacterInfoCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterInfoCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
+		82713FC729141C0F00930394 /* UIImageView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 		82713F9829134FF900930394 /* RickAndMortyWiki */ = {
 			isa = PBXGroup;
 			children = (
+				82713FC629141BFA00930394 /* Extensions */,
 				82713FC1291402B300930394 /* Model */,
 				82713FBE2914001A00930394 /* Network */,
 				82713FAF29135B6900930394 /* Resources */,
@@ -152,6 +155,14 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		82713FC629141BFA00930394 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				82713FC729141C0F00930394 /* UIImageView+.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -222,6 +233,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82713FC829141C0F00930394 /* UIImageView+.swift in Sources */,
 				82713FC5291412E700930394 /* CharacterInfoCollectionViewCellViewModel.swift in Sources */,
 				82713FB829135F3E00930394 /* CharacterInfoCollectionViewCell.swift in Sources */,
 				82713F9E29134FF900930394 /* MainViewController.swift in Sources */,

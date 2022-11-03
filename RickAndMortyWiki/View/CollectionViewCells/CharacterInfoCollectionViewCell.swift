@@ -25,6 +25,11 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
     func configure(with charInfo: Results) {
         cellViewModel = CharacterInfoCollectionViewCellViewModel(characterInfo: charInfo)
         characterName.text = cellViewModel?.name
+        statusLabel.text = cellViewModel?.status
+        locationLabel.text = cellViewModel?.lastKnownLocation.name
+        // todo
+//        episodeLabel.text = cellViewModel?.episode
+        characterImageView.downloaded(from: cellViewModel?.characterImage ?? "")
     }
     
     lazy var characterImageView: UIImageView = {
