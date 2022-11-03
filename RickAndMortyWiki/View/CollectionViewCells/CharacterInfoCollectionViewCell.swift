@@ -108,6 +108,13 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: Configure method
+    func configure(with model: Results) {
+        characterName.text = model.name
+    }
+    
+    
+    // MARK: Set Visual Elements
     func setupVisualElements() {
         setupCharacterImageViewConstraints()
         setupDescriptionContainerConstraints()
