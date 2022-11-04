@@ -19,7 +19,6 @@ class CharacterCollectionViewTableViewCell: UITableViewCell {
         // create collection
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collection.translatesAutoresizingMaskIntoConstraints = false
-        collection.backgroundColor = .systemCyan
         collection.delegate = self
         collection.dataSource = self
         collection.register(CharacterInfoCollectionViewCell.self, forCellWithReuseIdentifier: CharacterInfoCollectionViewCell.identifier)

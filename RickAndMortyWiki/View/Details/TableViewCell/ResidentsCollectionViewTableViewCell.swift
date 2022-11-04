@@ -20,7 +20,6 @@ class ResidentsCollectionViewTableViewCell: UITableViewCell {
         // create collection
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collection.translatesAutoresizingMaskIntoConstraints = false
-        collection.backgroundColor = .systemCyan
         collection.dataSource = self
         collection.delegate = self
         collection.register(ResidentsCollectionViewCell.self, forCellWithReuseIdentifier: ResidentsCollectionViewCell.identifier)
