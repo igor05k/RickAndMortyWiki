@@ -8,18 +8,33 @@
 import UIKit
 
 class DetailsViewController: UIViewController {
+    var didSetArray: ((_ model: CharacterResults) -> Void)?
+    
     lazy var detailsView: DetailsView = {
         let details = DetailsView()
-//        details.collectionView.delegate = self
-//        details.collectionView.dataSource = self
         return details
+    }()
+    
+    // MARK: Create visual elements
+    
+    lazy var tableView: UITableView = {
+        let table = UITableView()
+        table.translatesAutoresizingMaskIntoConstraints = false
+        table.backgroundColor = .darkGray
+        table.register(DetailsTableViewCell.self, forCellReuseIdentifier: DetailsTableViewCell.identifier)
+        table.register(OriginTableViewCell.self, forCellReuseIdentifier: OriginTableViewCell.identifier)
+        table.register(CharacterCollectionViewTableViewCell.self, forCellReuseIdentifier: CharacterCollectionViewTableViewCell.identifier)
+        table.register(ResidentsCollectionViewTableViewCell.self, forCellReuseIdentifier: ResidentsCollectionViewTableViewCell.identifier)
+        table.delegate = self
+        table.dataSource = self
+        return table
     }()
     
     private var characterSelected: [CharacterResults] = [CharacterResults]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(characterSelected)
+        self.view.addSubview(tableView)
     }
     
     // MARK: Life cycles
@@ -32,7 +47,73 @@ class DetailsViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = false
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        tableView.frame = view.bounds
+    }
+    
     public func configure(with model: CharacterResults) {
         self.characterSelected = [model]
+    }
+}
+
+extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch indexPath.section {
+        case Sections.characterDetails.rawValue:
+            let cell = tableView.dequeueReusableCell(withIdentifier: CharacterCollectionViewTableViewCell.identifier, for: indexPath) as! CharacterCollectionViewTableViewCell
+            cell.configure(with: characterSelected[0])
+            return cell
+        case Sections.originDetails.rawValue:
+            let cell = tableView.dequeueReusableCell(withIdentifier: OriginTableViewCell.identifier, for: indexPath)
+            return cell
+        case Sections.residentDetails.rawValue:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ResidentsCollectionViewTableViewCell.identifier, for: indexPath)
+            return cell
+        default:
+            return UITableViewCell()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 3
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 35
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch indexPath.section {
+        case Sections.originDetails.rawValue:
+            return 130
+        default:
+            return 200
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch section {
+        case Sections.characterDetails.rawValue:
+            return nil
+        case Sections.originDetails.rawValue:
+            return "Origin"
+        case Sections.residentDetails.rawValue:
+            return "Residents"
+        default:
+            return nil
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let header = view as? UITableViewHeaderFooterView else { return }
+        header.textLabel?.textColor = UIColor.white
+        header.textLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+        header.textLabel?.frame = header.bounds
+        header.textLabel?.textAlignment = .left
     }
 }

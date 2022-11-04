@@ -9,6 +9,7 @@ import UIKit
 
 class CharacterCollectionViewTableViewCell: UITableViewCell {
     static let identifier = String(describing: CharacterCollectionViewTableViewCell.self)
+    private var characterSelected: [CharacterResults] = [CharacterResults]()
     
     lazy var collectionView: UICollectionView = {
         // flow layout
@@ -44,11 +45,16 @@ class CharacterCollectionViewTableViewCell: UITableViewCell {
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5)
         ])
     }
+    
+    func configure(with model: CharacterResults) {
+        self.characterSelected = [model]
+    }
 }
 
 extension CharacterCollectionViewTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
+        cell.configure(with: characterSelected[0], epName: "N/A")
         return cell
     }
     

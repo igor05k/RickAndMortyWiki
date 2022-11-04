@@ -23,16 +23,21 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        Service.getLocationBy(id: 1) { result in
+        Service.getCharacterBy(id: 1) { result in
             switch result {
             case .success(let success):
-                print(success)
+                Service.getLocationBy(url: success[0].origin!.url) { result in
+                    switch result {
+                    case .success(let success):
+                        print(success)
+                    case .failure(let failure):
+                        print(failure)
+                    }
+                }
             case .failure(let failure):
                 print(failure)
             }
         }
-        
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {

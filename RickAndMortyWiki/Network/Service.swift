@@ -72,8 +72,7 @@ class Service {
         }.resume()
     }
     
-    static func getLocationBy(id: Int, completion: @escaping (Result<LocationDetails, NetworkError>) -> Void) {
-        let url = ConstanstsAPI.base_url + Endpoints.location.rawValue + "/" + String(id)
+    static func getLocationBy(url: String, completion: @escaping (Result<LocationDetails, NetworkError>) -> Void) {
         guard let url = URL(string: url) else { return }
         
         URLSession.shared.dataTask(with: url) { data, _, error in
