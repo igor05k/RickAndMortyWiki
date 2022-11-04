@@ -8,11 +8,9 @@
 import UIKit
 
 class CharacterInfoCollectionViewCell: UICollectionViewCell {
-    public var allCharacters: [CharacterResults] = [CharacterResults]()
     static let identifier = String(describing: CharacterInfoCollectionViewCell.self)
     
     private var cellViewModel: CharacterInfoCollectionViewCellViewModel?
-//    private var viewModel: MainViewViewModel?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,17 +26,22 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
         cellViewModel = CharacterInfoCollectionViewCellViewModel(characterInfo: characterInfo)
 
         characterName.text = cellViewModel?.getName
-        statusLabel.text = "\(cellViewModel?.getStatus ?? "Unknown") - \(cellViewModel?.getSpecies ?? "Unknown")"
+        statusLabel.text = cellViewModel?.getStatus
+        speciesLabel.text = "- \(cellViewModel?.getSpecies ?? "Unknown")"
         locationLabel.text = cellViewModel?.getLastKnownLocation.name
         characterImageView.downloaded(from: cellViewModel?.getCharacterImage ?? "")
-//        episodeLabel.text = cellViewModel?.getEpisode[0]
         episodeLabel.text = epName
+        
+        if statusLabel.text == "Alive" {
+            statusCircle.backgroundColor = .green
+        } else {
+            statusCircle.backgroundColor = .red
+        }
     }
     
     lazy var characterImageView: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
-        image.backgroundColor = .blue
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
@@ -46,41 +49,39 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
     lazy var descriptionContainer: UIView = {
         let container = UIView()
         container.translatesAutoresizingMaskIntoConstraints = false
-        container.backgroundColor = .white
+        container.backgroundColor = UIColor(red: 60 / 255, green: 62 / 255, blue: 68 / 255, alpha: 1)
         return container
     }()
     
     lazy var characterName: UILabel = {
         let character = UILabel()
         character.text = "Rick Sanchez"
-        character.textColor = .darkText
+        character.textColor = .white
         character.translatesAutoresizingMaskIntoConstraints = false
         return character
-    }()
-    
-    lazy var statusStackView: UIStackView = {
-        let stack = UIStackView()
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        stack.axis = .horizontal
-        stack.spacing = 5
-        stack.distribution = .fillEqually
-        stack.backgroundColor = .orange
-        return stack
     }()
     
     lazy var statusCircle: UIView = {
         let circle = UIView()
         circle.translatesAutoresizingMaskIntoConstraints = false
         circle.backgroundColor = .black
-        circle.layer.cornerRadius = 6
+        circle.layer.cornerRadius = 5
         circle.clipsToBounds = true
         return circle
     }()
     
     lazy var statusLabel: UILabel = {
         let status = UILabel()
-        status.text = "Alive -"
-        status.textColor = .black
+        status.text = "Alive"
+        status.textColor = .white
+        status.translatesAutoresizingMaskIntoConstraints = false
+        return status
+    }()
+    
+    lazy var speciesLabel: UILabel = {
+        let status = UILabel()
+        status.text = "Specie"
+        status.textColor = .white
         status.translatesAutoresizingMaskIntoConstraints = false
         return status
     }()
@@ -89,7 +90,7 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
         let last = UILabel()
         last.translatesAutoresizingMaskIntoConstraints = false
         last.text = "Last known location: "
-        last.textColor = .darkGray
+        last.textColor = .lightGray
         return last
     }()
     
@@ -97,6 +98,7 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
         let location = UILabel()
         location.translatesAutoresizingMaskIntoConstraints = false
         location.text = "Interdimensional cable"
+        location.textColor = .white
         return location
     }()
     
@@ -104,7 +106,7 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
         let first = UILabel()
         first.translatesAutoresizingMaskIntoConstraints = false
         first.text = "First seen in:"
-        first.textColor = .darkGray
+        first.textColor = .lightGray
         return first
     }()
     
@@ -112,7 +114,7 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
         let episode = UILabel()
         episode.translatesAutoresizingMaskIntoConstraints = false
         episode.text = "Morty's mind blowers"
-        episode.textColor = .black
+        episode.textColor = .white
         return episode
     }()
     
@@ -122,7 +124,6 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
         setupDescriptionContainerConstraints()
         setupCharacterLabelConstraints()
         setupStatusCircleConstraints()
-        setupStatusStackViewConstraints()
         setupLastKnownConstraints()
         setupLocationLabel()
         setupFirstSeen()
@@ -163,24 +164,24 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
     
     func setupStatusCircleConstraints() {
         contentView.addSubview(statusCircle)
+        contentView.addSubview(statusLabel)
+        contentView.addSubview(speciesLabel)
+
 
         NSLayoutConstraint.activate([
-            statusCircle.topAnchor.constraint(equalTo: characterName.bottomAnchor, constant: 5),
+            statusCircle.topAnchor.constraint(equalTo: characterName.bottomAnchor, constant: 15),
             statusCircle.leadingAnchor.constraint(equalTo: characterName.leadingAnchor),
-            statusCircle.heightAnchor.constraint(equalToConstant: 12),
-            statusCircle.widthAnchor.constraint(equalToConstant: 12),
-        ])
-    }
-    
-    func setupStatusStackViewConstraints() {
-        contentView.addSubview(statusStackView)
-        statusStackView.addArrangedSubview(statusLabel)
-
-        NSLayoutConstraint.activate([
-            statusStackView.topAnchor.constraint(equalTo: characterName.bottomAnchor, constant: 5),
-            statusStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -50),
-            statusStackView.leadingAnchor.constraint(equalTo: statusCircle.trailingAnchor, constant: 5),
-            statusStackView.centerYAnchor.constraint(equalTo: statusCircle.centerYAnchor)
+            statusCircle.heightAnchor.constraint(equalToConstant: 10),
+            statusCircle.widthAnchor.constraint(equalToConstant: 10),
+            statusCircle.centerYAnchor.constraint(equalTo: statusLabel.centerYAnchor),
+            
+            statusLabel.topAnchor.constraint(equalTo: characterName.bottomAnchor, constant: 5),
+            statusLabel.leadingAnchor.constraint(equalTo: statusCircle.trailingAnchor, constant: 5),
+            
+            speciesLabel.topAnchor.constraint(equalTo: characterName.bottomAnchor, constant: 5),
+            speciesLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -50),
+            speciesLabel.leadingAnchor.constraint(equalTo: statusLabel.trailingAnchor, constant: 5),
+            speciesLabel.centerYAnchor.constraint(equalTo: statusLabel.centerYAnchor),
         ])
     }
     

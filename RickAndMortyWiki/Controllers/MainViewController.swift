@@ -9,7 +9,6 @@ import UIKit
 import Combine
 
 class MainViewController: UIViewController {
-//    private var viewModel = MainViewViewModel()
     public var allCharacters: [CharacterResults] = [CharacterResults]()
     public var allEpisodes: [EpisodeResults] = [EpisodeResults]()
     
@@ -20,10 +19,19 @@ class MainViewController: UIViewController {
         return main
     }()
     
+    // MARK: Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.prefersLargeTitles = true
         title = "Welcome"
-        view.backgroundColor = .red
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        title = ""
+        navigationController?.navigationBar.prefersLargeTitles = false
     }
     
     override func loadView() {
@@ -33,13 +41,13 @@ class MainViewController: UIViewController {
 
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return 20
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
         
-        Service.getAllCharacters { result in
+        Service.getAllCharacters { [weak self] result in
             switch result {
             case .success(let characters):
                 Service.getCharacterDetails(id: characters.results[0].id) { result in
@@ -48,10 +56,12 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
                         Service.getEpisodesDetails(url: characterDetails[indexPath.row].episode[0]) { result in
                             switch result {
                             case .success(let episodeDetails):
+                                guard let self = self else { return }
                                 DispatchQueue.main.async {
                                     self.allCharacters = characters.results
                                     self.allEpisodes = [episodeDetails]
-                                    cell.configure(with: self.allCharacters[indexPath.row], epName: self.allEpisodes[0].name)
+                                    cell.configure(with: self.allCharacters[indexPath.row],
+                                                   epName: self.allEpisodes[0].name)
                                 }
                             case .failure(let failure):
                                 print(failure)
@@ -66,10 +76,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
             }
         }
         
-        cell.backgroundColor = .black
-        cell.layer.borderColor = UIColor.green.cgColor
-        cell.layer.borderWidth = 5
-        cell.layer.cornerRadius = 5
+        cell.layer.cornerRadius = 15
         cell.clipsToBounds = true
         return cell
     }
@@ -80,6 +87,17 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+        let character = allCharacters[indexPath.row]
+        Service.getCharacterDetails(id: character.id) { result in
+            switch result {
+            case .success(let success):
+                let detailvc = DetailsViewController()
+                self.navigationController?.pushViewController(detailvc, animated: true)
+                detailvc.configure(with: success[indexPath.row])
+            case .failure(let failure):
+                print(failure)
+            }
+        }
     }
 }
 

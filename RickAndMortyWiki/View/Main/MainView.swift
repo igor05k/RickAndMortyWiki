@@ -8,7 +8,6 @@
 import UIKit
 
 class MainView: UIView {
-    var didTapCharacter: (() -> Void)?
     
     // MARK: Create visual elements
     lazy var collectionView: UICollectionView = {
@@ -19,7 +18,6 @@ class MainView: UIView {
         
         // create collection
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collection.backgroundColor = .purple
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.register(CharacterInfoCollectionViewCell.self, forCellWithReuseIdentifier: CharacterInfoCollectionViewCell.identifier)
         return collection
@@ -28,6 +26,7 @@ class MainView: UIView {
     // MARK: Inits
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.backgroundColor = .white
         setupElements()
     }
     

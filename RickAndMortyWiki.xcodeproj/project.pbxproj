@@ -22,6 +22,8 @@
 		82713FC5291412E700930394 /* CharacterInfoCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FC4291412E700930394 /* CharacterInfoCollectionViewCellViewModel.swift */; };
 		82713FC829141C0F00930394 /* UIImageView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FC729141C0F00930394 /* UIImageView+.swift */; };
 		82713FCA2914213700930394 /* Episodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FC92914213700930394 /* Episodes.swift */; };
+		82713FCF29155C5900930394 /* MainViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FCE29155C5900930394 /* MainViewViewModel.swift */; };
+		82713FD129159C1A00930394 /* DetailsViewConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FD029159C1A00930394 /* DetailsViewConstraints.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +44,8 @@
 		82713FC4291412E700930394 /* CharacterInfoCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterInfoCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
 		82713FC729141C0F00930394 /* UIImageView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+.swift"; sourceTree = "<group>"; };
 		82713FC92914213700930394 /* Episodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Episodes.swift; sourceTree = "<group>"; };
+		82713FCE29155C5900930394 /* MainViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewViewModel.swift; sourceTree = "<group>"; };
+		82713FD029159C1A00930394 /* DetailsViewConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewConstraints.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,6 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				82713FBC2913FE5900930394 /* DetailsView.swift */,
+				82713FD029159C1A00930394 /* DetailsViewConstraints.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -170,6 +175,7 @@
 		82713FCB29145F3900930394 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				82713FCE29155C5900930394 /* MainViewViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -246,6 +252,8 @@
 			files = (
 				82713FC829141C0F00930394 /* UIImageView+.swift in Sources */,
 				82713FCA2914213700930394 /* Episodes.swift in Sources */,
+				82713FCF29155C5900930394 /* MainViewViewModel.swift in Sources */,
+				82713FD129159C1A00930394 /* DetailsViewConstraints.swift in Sources */,
 				82713FC5291412E700930394 /* CharacterInfoCollectionViewCellViewModel.swift in Sources */,
 				82713FB829135F3E00930394 /* CharacterInfoCollectionViewCell.swift in Sources */,
 				82713F9E29134FF900930394 /* MainViewController.swift in Sources */,
