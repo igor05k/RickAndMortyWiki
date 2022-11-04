@@ -16,6 +16,7 @@ enum Endpoints: String {
 enum NetworkError: Error {
     case decoding
     case invalidData
+    case invalidUrl
 }
 
 struct ConstanstsAPI {
@@ -44,17 +45,27 @@ class Service {
         }.resume()
     }
     
-    static func getFirstCharacterEpisode(completion: @escaping (Result<[String], NetworkError>) -> Void) {
+    static func getCharacterDetails(id: Int, completion: @escaping (Result<[CharacterResults], NetworkError>) -> Void) {
         getAllCharacters { result in
             switch result {
             case .success(let success):
-                completion(.success(success.results[0].episode))
-            case .failure(let failure):
-                print(failure)
+                completion(.success(success.results))
+            case .failure(_):
                 completion(.failure(.decoding))
             }
         }
     }
+    
+//    static func getEpisodesDetails(url: String) async throws -> EpisodeResults {
+//        guard let url = URL(string: url) else {
+//            throw NetworkError.invalidUrl
+//        }
+//
+//        let (data, _) = try await URLSession.shared.data(from: url)
+//        let json = try JSONDecoder().decode(EpisodeResults.self, from: data)
+//
+//        return json
+//    }
     
     static func getEpisodesDetails(url: String, completion: @escaping (Result<EpisodeResults, NetworkError>) -> Void) {
         guard let url = URL(string: url) else { return }

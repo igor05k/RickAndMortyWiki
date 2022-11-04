@@ -74,6 +74,7 @@
 		82713F9829134FF900930394 /* RickAndMortyWiki */ = {
 			isa = PBXGroup;
 			children = (
+				82713FCB29145F3900930394 /* ViewModel */,
 				82713FC629141BFA00930394 /* Extensions */,
 				82713FC1291402B300930394 /* Model */,
 				82713FBE2914001A00930394 /* Network */,
@@ -164,6 +165,13 @@
 				82713FC729141C0F00930394 /* UIImageView+.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		82713FCB29145F3900930394 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

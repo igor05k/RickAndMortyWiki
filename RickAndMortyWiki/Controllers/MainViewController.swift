@@ -6,10 +6,12 @@
 //
 
 import UIKit
+import Combine
 
 class MainViewController: UIViewController {
-    private var allCharacters: [CharacterResults] = [CharacterResults]()
-    private var allEpisodes: [EpisodeResults] = [EpisodeResults]()
+//    private var viewModel = MainViewViewModel()
+    public var allCharacters: [CharacterResults] = [CharacterResults]()
+    public var allEpisodes: [EpisodeResults] = [EpisodeResults]()
     
     lazy var mainView: MainView = {
         let main = MainView()
@@ -22,35 +24,6 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         title = "Welcome"
         view.backgroundColor = .red
-//        Service.getAllCharacters { [weak self] result in
-//            switch result {
-//            case .success(let success):
-//                self?.allCharacters = success.results
-//                print(self?.allCharacters)
-//            case .failure(let failure):
-//                print(failure)
-//            }
-//        }
-        
-        Service.getFirstCharacterEpisode { result in
-            switch result {
-            case .success(let success):
-                Service.getEpisodesDetails(url: success[0]) { result in
-                    switch result {
-                    case .success(let success):
-                        print(success)
-                    case .failure(let failure):
-                        print(failure)
-                    }
-                }
-            case .failure(let failure):
-                print(failure)
-            }
-        }
-        
-//        Service.getEpisodesDetails(url: "https://rickandmortyapi.com/api/episode/51") { _ in
-//
-//        }
     }
     
     override func loadView() {
@@ -65,10 +38,34 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
-        DispatchQueue.main.async {
-//            cell.configure(with: self.allCharacters[indexPath.row])
-//            cell.configure(with: allCharacters[indexPath.row])
+        
+        Service.getAllCharacters { result in
+            switch result {
+            case .success(let characters):
+                Service.getCharacterDetails(id: characters.results[0].id) { result in
+                    switch result {
+                    case .success(let characterDetails):
+                        Service.getEpisodesDetails(url: characterDetails[indexPath.row].episode[0]) { result in
+                            switch result {
+                            case .success(let episodeDetails):
+                                DispatchQueue.main.async {
+                                    self.allCharacters = characters.results
+                                    self.allEpisodes = [episodeDetails]
+                                    cell.configure(with: self.allCharacters[indexPath.row], epName: self.allEpisodes[0].name)
+                                }
+                            case .failure(let failure):
+                                print(failure)
+                            }
+                        }
+                    case .failure(let failure):
+                        print(failure)
+                    }
+                }
+            case .failure(let failure):
+                print(failure)
+            }
         }
+        
         cell.backgroundColor = .black
         cell.layer.borderColor = UIColor.green.cgColor
         cell.layer.borderWidth = 5

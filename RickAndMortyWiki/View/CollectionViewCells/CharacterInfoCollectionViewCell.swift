@@ -8,9 +8,11 @@
 import UIKit
 
 class CharacterInfoCollectionViewCell: UICollectionViewCell {
+    public var allCharacters: [CharacterResults] = [CharacterResults]()
     static let identifier = String(describing: CharacterInfoCollectionViewCell.self)
     
     private var cellViewModel: CharacterInfoCollectionViewCellViewModel?
+//    private var viewModel: MainViewViewModel?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,17 +24,16 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: Configure method
-    func configure(with charInfo: CharacterResults) {
-//        cellViewModel = CharacterInfoCollectionViewCellViewModel(characterInfo: charInfo)
-//        characterName.text = cellViewModel?.name
-//        statusLabel.text = cellViewModel?.status
-//        locationLabel.text = cellViewModel?.lastKnownLocation.name
-        // todo
-        
-//        characterImageView.downloaded(from: cellViewModel?.characterImage ?? "")
+    func configure(with characterInfo: CharacterResults, epName: String) {
+        cellViewModel = CharacterInfoCollectionViewCellViewModel(characterInfo: characterInfo)
+
+        characterName.text = cellViewModel?.getName
+        statusLabel.text = "\(cellViewModel?.getStatus ?? "Unknown") - \(cellViewModel?.getSpecies ?? "Unknown")"
+        locationLabel.text = cellViewModel?.getLastKnownLocation.name
+        characterImageView.downloaded(from: cellViewModel?.getCharacterImage ?? "")
+//        episodeLabel.text = cellViewModel?.getEpisode[0]
+        episodeLabel.text = epName
     }
-    
-    
     
     lazy var characterImageView: UIImageView = {
         let image = UIImageView()
@@ -79,14 +80,6 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
     lazy var statusLabel: UILabel = {
         let status = UILabel()
         status.text = "Alive -"
-        status.textColor = .black
-        status.translatesAutoresizingMaskIntoConstraints = false
-        return status
-    }()
-    
-    lazy var speciesLabel: UILabel = {
-        let status = UILabel()
-        status.text = "Alien"
         status.textColor = .black
         status.translatesAutoresizingMaskIntoConstraints = false
         return status
@@ -182,11 +175,10 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
     func setupStatusStackViewConstraints() {
         contentView.addSubview(statusStackView)
         statusStackView.addArrangedSubview(statusLabel)
-        statusStackView.addArrangedSubview(speciesLabel)
 
         NSLayoutConstraint.activate([
             statusStackView.topAnchor.constraint(equalTo: characterName.bottomAnchor, constant: 5),
-            statusStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -100),
+            statusStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -50),
             statusStackView.leadingAnchor.constraint(equalTo: statusCircle.trailingAnchor, constant: 5),
             statusStackView.centerYAnchor.constraint(equalTo: statusCircle.centerYAnchor)
         ])

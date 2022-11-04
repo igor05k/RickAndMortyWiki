@@ -14,47 +14,32 @@ struct CharacterInfoCollectionViewCellViewModel {
         self.characterInfo = characterInfo
     }
     
-//    func getEpisodeNumber(_ episode: String) {
-//        Service.getFirstCharacterEpisode(episode: episode) { result in
-//            switch result {
-//            case .success(let success):
-//                print(success)
-//            case .failure(let failure):
-//                print(failure)
-//            }
-//        }
-//    }
-    
-    public var name: String {
+    public var getName: String {
         return characterInfo.name
     }
-    
-    public var status: String {
+
+    public var getStatus: String {
         return characterInfo.status
     }
-    
-    public var lastKnownLocation: Location {
+
+    public var getLastKnownLocation: Location {
         return characterInfo.location ?? Location(name: "Unknown", url: "")
     }
     
-    public var episode: [String] {
+    public var getEpisode: [String] {
         return characterInfo.episode
     }
-    
-    public var characterImage: String {
+
+    public var getCharacterImage: String {
         return characterInfo.image
     }
     
+    public var getSpecies: String {
+        return characterInfo.species
+    }
     
-    /*
-     let id: Int
-     let name, status, species, type: String
-     let gender: String
-     let origin, location: Location?
-     let image: String
-     let episode: [String]
-     let url: String
-     let created: String
-     */
+//    public var getEpisode: String {
+//        return episodeInfo.name
+//    }
     
 }
