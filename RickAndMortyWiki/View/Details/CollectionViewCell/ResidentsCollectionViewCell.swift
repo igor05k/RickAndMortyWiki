@@ -10,6 +10,13 @@ import UIKit
 class ResidentsCollectionViewCell: UICollectionViewCell {
     static let identifier = String(describing: ResidentsCollectionViewCell.self)
     
+    lazy var characterImageView: UIImageView = {
+        let image = UIImageView()
+        image.contentMode = .scaleAspectFill
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+    
     lazy var characterName: UILabel = {
         let character = UILabel()
         character.text = "Rick Sanchez"
@@ -57,6 +64,17 @@ class ResidentsCollectionViewCell: UICollectionViewCell {
     func setupVisualElements() {
         setupNameLabelConstraints()
         setupStatusCircle()
+    }
+    
+    func setupImageView() {
+        contentView.addSubview(characterImageView)
+        
+        NSLayoutConstraint.activate([
+            characterImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            characterImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            characterImageView.leadingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            characterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+        ])
     }
     
     func setupNameLabelConstraints() {
