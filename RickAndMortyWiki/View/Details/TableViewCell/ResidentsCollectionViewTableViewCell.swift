@@ -1,5 +1,5 @@
 //
-//  CharacterCollectionViewTableViewCell.swift
+//  ResidentsCollectionViewTableViewCell.swift
 //  RickAndMortyWiki
 //
 //  Created by Igor Fernandes on 04/11/22.
@@ -7,20 +7,23 @@
 
 import UIKit
 
-class CharacterCollectionViewTableViewCell: UITableViewCell {
-    static let identifier = String(describing: CharacterCollectionViewTableViewCell.self)
+class ResidentsCollectionViewTableViewCell: UITableViewCell {
+    static let identifier = String(describing: ResidentsCollectionViewTableViewCell.self)
     
     lazy var collectionView: UICollectionView = {
         // flow layout
         let layout = UICollectionViewFlowLayout()
         layout.estimatedItemSize = .zero
-        layout.sectionInset = .init(top: 0, left: 0, bottom: 0, right: 0)
+        layout.scrollDirection = .horizontal
+        layout.itemSize = CGSize(width: 150, height: 190)
         
         // create collection
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.backgroundColor = .systemCyan
-        collection.register(CharacterInfoCollectionViewCell.self, forCellWithReuseIdentifier: CharacterInfoCollectionViewCell.identifier)
+        collection.dataSource = self
+        collection.delegate = self
+        collection.register(ResidentsCollectionViewCell.self, forCellWithReuseIdentifier: ResidentsCollectionViewCell.identifier)
         return collection
     }()
     
@@ -37,10 +40,21 @@ class CharacterCollectionViewTableViewCell: UITableViewCell {
         contentView.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            collectionView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5)
         ])
+    }
+}
+
+extension ResidentsCollectionViewTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ResidentsCollectionViewCell.identifier, for: indexPath)
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 10
     }
 }

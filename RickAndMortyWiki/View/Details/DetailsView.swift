@@ -23,6 +23,7 @@ class DetailsView: UIView {
         table.register(DetailsTableViewCell.self, forCellReuseIdentifier: DetailsTableViewCell.identifier)
         table.register(OriginTableViewCell.self, forCellReuseIdentifier: OriginTableViewCell.identifier)
         table.register(CharacterCollectionViewTableViewCell.self, forCellReuseIdentifier: CharacterCollectionViewTableViewCell.identifier)
+        table.register(ResidentsCollectionViewTableViewCell.self, forCellReuseIdentifier: ResidentsCollectionViewTableViewCell.identifier)
         table.delegate = self
         table.dataSource = self
         return table
@@ -53,10 +54,11 @@ extension DetailsView: UITableViewDelegate, UITableViewDataSource {
         case Sections.originDetails.rawValue:
             let cell = tableView.dequeueReusableCell(withIdentifier: OriginTableViewCell.identifier, for: indexPath)
             return cell
-            // only 2 cells are needed to dequeue, that being origin and residents cells
-        default:
-            let cell = tableView.dequeueReusableCell(withIdentifier: DetailsTableViewCell.identifier, for: indexPath)
+        case Sections.residentDetails.rawValue:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ResidentsCollectionViewTableViewCell.identifier, for: indexPath)
             return cell
+        default:
+            return UITableViewCell()
         }
     }
     
@@ -67,6 +69,7 @@ extension DetailsView: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
+    
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 35

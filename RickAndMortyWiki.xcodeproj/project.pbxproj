@@ -26,6 +26,8 @@
 		82713FD42915A3F300930394 /* DetailsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FD32915A3F300930394 /* DetailsTableViewCell.swift */; };
 		82713FD62915A8FF00930394 /* OriginTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FD52915A8FF00930394 /* OriginTableViewCell.swift */; };
 		82713FD82915AEEC00930394 /* CharacterCollectionViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FD72915AEEC00930394 /* CharacterCollectionViewTableViewCell.swift */; };
+		82713FDA2915B03300930394 /* ResidentsCollectionViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FD92915B03300930394 /* ResidentsCollectionViewTableViewCell.swift */; };
+		82713FDD2915B6C000930394 /* ResidentsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FDC2915B6C000930394 /* ResidentsCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +52,8 @@
 		82713FD32915A3F300930394 /* DetailsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsTableViewCell.swift; sourceTree = "<group>"; };
 		82713FD52915A8FF00930394 /* OriginTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OriginTableViewCell.swift; sourceTree = "<group>"; };
 		82713FD72915AEEC00930394 /* CharacterCollectionViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterCollectionViewTableViewCell.swift; sourceTree = "<group>"; };
+		82713FD92915B03300930394 /* ResidentsCollectionViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResidentsCollectionViewTableViewCell.swift; sourceTree = "<group>"; };
+		82713FDC2915B6C000930394 /* ResidentsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResidentsCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,7 +111,6 @@
 			isa = PBXGroup;
 			children = (
 				82713FBB2913FE5000930394 /* Details */,
-				82713FB629135F2600930394 /* CollectionViewCells */,
 				82713FB229135E7D00930394 /* Main */,
 			);
 			path = View;
@@ -127,6 +130,7 @@
 		82713FB229135E7D00930394 /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				82713FB629135F2600930394 /* CollectionViewCells */,
 				82713FB029135B8E00930394 /* MainView.swift */,
 				82713FB429135E9100930394 /* MainViewConstraints.swift */,
 			);
@@ -145,6 +149,7 @@
 		82713FBB2913FE5000930394 /* Details */ = {
 			isa = PBXGroup;
 			children = (
+				82713FDB2915B6AF00930394 /* CollectionViewCell */,
 				82713FD22915A3D100930394 /* TableViewCell */,
 				82713FBC2913FE5900930394 /* DetailsView.swift */,
 			);
@@ -190,8 +195,17 @@
 				82713FD32915A3F300930394 /* DetailsTableViewCell.swift */,
 				82713FD52915A8FF00930394 /* OriginTableViewCell.swift */,
 				82713FD72915AEEC00930394 /* CharacterCollectionViewTableViewCell.swift */,
+				82713FD92915B03300930394 /* ResidentsCollectionViewTableViewCell.swift */,
 			);
 			path = TableViewCell;
+			sourceTree = "<group>";
+		};
+		82713FDB2915B6AF00930394 /* CollectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				82713FDC2915B6C000930394 /* ResidentsCollectionViewCell.swift */,
+			);
+			path = CollectionViewCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -266,9 +280,11 @@
 			files = (
 				82713FC829141C0F00930394 /* UIImageView+.swift in Sources */,
 				82713FCA2914213700930394 /* Episodes.swift in Sources */,
+				82713FDA2915B03300930394 /* ResidentsCollectionViewTableViewCell.swift in Sources */,
 				82713FCF29155C5900930394 /* MainViewViewModel.swift in Sources */,
 				82713FD82915AEEC00930394 /* CharacterCollectionViewTableViewCell.swift in Sources */,
 				82713FC5291412E700930394 /* CharacterInfoCollectionViewCellViewModel.swift in Sources */,
+				82713FDD2915B6C000930394 /* ResidentsCollectionViewCell.swift in Sources */,
 				82713FB829135F3E00930394 /* CharacterInfoCollectionViewCell.swift in Sources */,
 				82713F9E29134FF900930394 /* MainViewController.swift in Sources */,
 				82713FB529135E9100930394 /* MainViewConstraints.swift in Sources */,
