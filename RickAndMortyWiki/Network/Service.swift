@@ -45,7 +45,7 @@ class Service {
         }.resume()
     }
     
-    static func getCharacterDetails(id: Int, completion: @escaping (Result<[CharacterResults], NetworkError>) -> Void) {
+    static func getCharacterBy(id: Int, completion: @escaping (Result<[CharacterResults], NetworkError>) -> Void) {
         getAllCharacters { result in
             switch result {
             case .success(let success):
@@ -72,7 +72,7 @@ class Service {
         }.resume()
     }
     
-    static func getLocationById(id: Int, completion: @escaping (Result<LocationDetails, NetworkError>) -> Void) {
+    static func getLocationBy(id: Int, completion: @escaping (Result<LocationDetails, NetworkError>) -> Void) {
         let url = ConstanstsAPI.base_url + Endpoints.location.rawValue + "/" + String(id)
         guard let url = URL(string: url) else { return }
         

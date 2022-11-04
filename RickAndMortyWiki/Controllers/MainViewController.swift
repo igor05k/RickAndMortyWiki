@@ -23,7 +23,7 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        Service.getLocationById(id: 1) { result in
+        Service.getLocationBy(id: 1) { result in
             switch result {
             case .success(let success):
                 print(success)
@@ -31,6 +31,8 @@ class MainViewController: UIViewController {
                 print(failure)
             }
         }
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,7 +61,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         Service.getAllCharacters { [weak self] result in
             switch result {
             case .success(let characters):
-                Service.getCharacterDetails(id: characters.results[0].id) { result in
+                Service.getCharacterBy(id: characters.results[0].id) { result in
                     switch result {
                     case .success(let characterDetails):
                         Service.getEpisodesDetails(url: characterDetails[indexPath.row].episode[0]) { result in
@@ -97,7 +99,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         let character = allCharacters[indexPath.row]
-        Service.getCharacterDetails(id: character.id) { result in
+        Service.getCharacterBy(id: character.id) { result in
             switch result {
             case .success(let success):
                 let detailvc = DetailsViewController()

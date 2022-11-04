@@ -16,7 +16,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "48"
             endingLineNumber = "48"
-            landmarkName = "getCharacterDetails(id:completion:)"
+            landmarkName = "getCharacterBy(id:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
