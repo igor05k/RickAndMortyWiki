@@ -15,24 +15,14 @@ enum Sections: Int {
 
 class DetailsView: UIView {
     // MARK: Create visual elements
-    lazy var collectionView: UICollectionView = {
-        // flow layout
-        let layout = UICollectionViewFlowLayout()
-        layout.estimatedItemSize = .zero
-        layout.sectionInset = .init(top: 0, left: 0, bottom: 0, right: 0)
-        
-        // create collection
-        let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collection.translatesAutoresizingMaskIntoConstraints = false
-        collection.register(CharacterInfoCollectionViewCell.self, forCellWithReuseIdentifier: CharacterInfoCollectionViewCell.identifier)
-        return collection
-    }()
     
     lazy var tableView: UITableView = {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
         table.backgroundColor = .darkGray
         table.register(DetailsTableViewCell.self, forCellReuseIdentifier: DetailsTableViewCell.identifier)
+        table.register(OriginTableViewCell.self, forCellReuseIdentifier: OriginTableViewCell.identifier)
+        table.register(CharacterCollectionViewTableViewCell.self, forCellReuseIdentifier: CharacterCollectionViewTableViewCell.identifier)
         table.delegate = self
         table.dataSource = self
         return table
@@ -41,7 +31,6 @@ class DetailsView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .lightGray
-        setupCollectionViewConstraints()
         self.addSubview(tableView)
     }
     
@@ -57,8 +46,18 @@ class DetailsView: UIView {
 
 extension DetailsView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: DetailsTableViewCell.identifier, for: indexPath)
-        return cell
+        switch indexPath.section {
+        case Sections.characterDetails.rawValue:
+            let cell = tableView.dequeueReusableCell(withIdentifier: CharacterCollectionViewTableViewCell.identifier, for: indexPath)
+            return cell
+        case Sections.originDetails.rawValue:
+            let cell = tableView.dequeueReusableCell(withIdentifier: OriginTableViewCell.identifier, for: indexPath)
+            return cell
+            // only 2 cells are needed to dequeue, that being origin and residents cells
+        default:
+            let cell = tableView.dequeueReusableCell(withIdentifier: DetailsTableViewCell.identifier, for: indexPath)
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -76,7 +75,7 @@ extension DetailsView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case Sections.originDetails.rawValue:
-            return 150
+            return 130
         default:
             return 200
         }
@@ -85,7 +84,7 @@ extension DetailsView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case Sections.characterDetails.rawValue:
-            return "Character"
+            return nil
         case Sections.originDetails.rawValue:
             return "Origin"
         case Sections.residentDetails.rawValue:

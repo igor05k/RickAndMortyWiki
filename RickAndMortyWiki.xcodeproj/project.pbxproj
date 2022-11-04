@@ -23,8 +23,9 @@
 		82713FC829141C0F00930394 /* UIImageView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FC729141C0F00930394 /* UIImageView+.swift */; };
 		82713FCA2914213700930394 /* Episodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FC92914213700930394 /* Episodes.swift */; };
 		82713FCF29155C5900930394 /* MainViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FCE29155C5900930394 /* MainViewViewModel.swift */; };
-		82713FD129159C1A00930394 /* DetailsViewConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FD029159C1A00930394 /* DetailsViewConstraints.swift */; };
 		82713FD42915A3F300930394 /* DetailsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FD32915A3F300930394 /* DetailsTableViewCell.swift */; };
+		82713FD62915A8FF00930394 /* OriginTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FD52915A8FF00930394 /* OriginTableViewCell.swift */; };
+		82713FD82915AEEC00930394 /* CharacterCollectionViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FD72915AEEC00930394 /* CharacterCollectionViewTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,8 +47,9 @@
 		82713FC729141C0F00930394 /* UIImageView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+.swift"; sourceTree = "<group>"; };
 		82713FC92914213700930394 /* Episodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Episodes.swift; sourceTree = "<group>"; };
 		82713FCE29155C5900930394 /* MainViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewViewModel.swift; sourceTree = "<group>"; };
-		82713FD029159C1A00930394 /* DetailsViewConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewConstraints.swift; sourceTree = "<group>"; };
 		82713FD32915A3F300930394 /* DetailsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsTableViewCell.swift; sourceTree = "<group>"; };
+		82713FD52915A8FF00930394 /* OriginTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OriginTableViewCell.swift; sourceTree = "<group>"; };
+		82713FD72915AEEC00930394 /* CharacterCollectionViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterCollectionViewTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,7 +147,6 @@
 			children = (
 				82713FD22915A3D100930394 /* TableViewCell */,
 				82713FBC2913FE5900930394 /* DetailsView.swift */,
-				82713FD029159C1A00930394 /* DetailsViewConstraints.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -187,6 +188,8 @@
 			isa = PBXGroup;
 			children = (
 				82713FD32915A3F300930394 /* DetailsTableViewCell.swift */,
+				82713FD52915A8FF00930394 /* OriginTableViewCell.swift */,
+				82713FD72915AEEC00930394 /* CharacterCollectionViewTableViewCell.swift */,
 			);
 			path = TableViewCell;
 			sourceTree = "<group>";
@@ -264,7 +267,7 @@
 				82713FC829141C0F00930394 /* UIImageView+.swift in Sources */,
 				82713FCA2914213700930394 /* Episodes.swift in Sources */,
 				82713FCF29155C5900930394 /* MainViewViewModel.swift in Sources */,
-				82713FD129159C1A00930394 /* DetailsViewConstraints.swift in Sources */,
+				82713FD82915AEEC00930394 /* CharacterCollectionViewTableViewCell.swift in Sources */,
 				82713FC5291412E700930394 /* CharacterInfoCollectionViewCellViewModel.swift in Sources */,
 				82713FB829135F3E00930394 /* CharacterInfoCollectionViewCell.swift in Sources */,
 				82713F9E29134FF900930394 /* MainViewController.swift in Sources */,
@@ -274,6 +277,7 @@
 				82713FC02914002100930394 /* Service.swift in Sources */,
 				82713FBD2913FE5900930394 /* DetailsView.swift in Sources */,
 				82713FC3291402BB00930394 /* Character.swift in Sources */,
+				82713FD62915A8FF00930394 /* OriginTableViewCell.swift in Sources */,
 				82713F9A29134FF900930394 /* AppDelegate.swift in Sources */,
 				82713FD42915A3F300930394 /* DetailsTableViewCell.swift in Sources */,
 				82713F9C29134FF900930394 /* SceneDelegate.swift in Sources */,
