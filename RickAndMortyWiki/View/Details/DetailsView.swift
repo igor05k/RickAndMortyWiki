@@ -70,7 +70,6 @@ extension DetailsView: UITableViewDelegate, UITableViewDataSource {
         return 3
     }
     
-    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 35
     }

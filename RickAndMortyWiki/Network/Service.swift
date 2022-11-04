@@ -56,17 +56,6 @@ class Service {
         }
     }
     
-//    static func getEpisodesDetails(url: String) async throws -> EpisodeResults {
-//        guard let url = URL(string: url) else {
-//            throw NetworkError.invalidUrl
-//        }
-//
-//        let (data, _) = try await URLSession.shared.data(from: url)
-//        let json = try JSONDecoder().decode(EpisodeResults.self, from: data)
-//
-//        return json
-//    }
-    
     static func getEpisodesDetails(url: String, completion: @escaping (Result<EpisodeResults, NetworkError>) -> Void) {
         guard let url = URL(string: url) else { return }
         URLSession.shared.dataTask(with: url) { data, _, error in
@@ -79,6 +68,25 @@ class Service {
                     completion(.failure(.decoding))
                     print(error)
                 }
+            }
+        }.resume()
+    }
+    
+    static func getLocationById(id: Int, completion: @escaping (Result<LocationDetails, NetworkError>) -> Void) {
+        let url = ConstanstsAPI.base_url + Endpoints.location.rawValue + "/" + String(id)
+        guard let url = URL(string: url) else { return }
+        
+        URLSession.shared.dataTask(with: url) { data, _, error in
+            guard let data = data, error == nil else {
+                completion(.failure(.invalidData))
+                return
+            }
+            
+            do {
+                let json = try JSONDecoder().decode(LocationDetails.self, from: data)
+                completion(.success(json))
+            } catch {
+                completion(.failure(.decoding))
             }
         }.resume()
     }

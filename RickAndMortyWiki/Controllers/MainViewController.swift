@@ -22,6 +22,15 @@ class MainViewController: UIViewController {
     // MARK: Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        Service.getLocationById(id: 1) { result in
+            switch result {
+            case .success(let success):
+                print(success)
+            case .failure(let failure):
+                print(failure)
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
