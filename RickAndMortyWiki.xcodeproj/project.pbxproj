@@ -24,6 +24,7 @@
 		82713FCA2914213700930394 /* Episodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FC92914213700930394 /* Episodes.swift */; };
 		82713FCF29155C5900930394 /* MainViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FCE29155C5900930394 /* MainViewViewModel.swift */; };
 		82713FD129159C1A00930394 /* DetailsViewConstraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FD029159C1A00930394 /* DetailsViewConstraints.swift */; };
+		82713FD42915A3F300930394 /* DetailsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FD32915A3F300930394 /* DetailsTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		82713FC92914213700930394 /* Episodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Episodes.swift; sourceTree = "<group>"; };
 		82713FCE29155C5900930394 /* MainViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewViewModel.swift; sourceTree = "<group>"; };
 		82713FD029159C1A00930394 /* DetailsViewConstraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewConstraints.swift; sourceTree = "<group>"; };
+		82713FD32915A3F300930394 /* DetailsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +143,7 @@
 		82713FBB2913FE5000930394 /* Details */ = {
 			isa = PBXGroup;
 			children = (
+				82713FD22915A3D100930394 /* TableViewCell */,
 				82713FBC2913FE5900930394 /* DetailsView.swift */,
 				82713FD029159C1A00930394 /* DetailsViewConstraints.swift */,
 			);
@@ -178,6 +181,14 @@
 				82713FCE29155C5900930394 /* MainViewViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		82713FD22915A3D100930394 /* TableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				82713FD32915A3F300930394 /* DetailsTableViewCell.swift */,
+			);
+			path = TableViewCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -264,6 +275,7 @@
 				82713FBD2913FE5900930394 /* DetailsView.swift in Sources */,
 				82713FC3291402BB00930394 /* Character.swift in Sources */,
 				82713F9A29134FF900930394 /* AppDelegate.swift in Sources */,
+				82713FD42915A3F300930394 /* DetailsTableViewCell.swift in Sources */,
 				82713F9C29134FF900930394 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
