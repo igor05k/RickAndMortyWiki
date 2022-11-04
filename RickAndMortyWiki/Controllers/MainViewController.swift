@@ -106,10 +106,21 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         let character = allCharacters[indexPath.row]
         Service.getCharacterBy(id: character.id) { result in
             switch result {
-            case .success(let success):
-                let detailvc = DetailsViewController()
-                self.navigationController?.pushViewController(detailvc, animated: true)
-                detailvc.configure(with: success[indexPath.row])
+            case .success(let character):
+                Service.getLocationBy(url: character[indexPath.row].origin!.url) { result in
+                    switch result {
+                    case .success(let location):
+                        print(location)
+                        DispatchQueue.main.async {
+                            let detailvc = DetailsViewController()
+                            self.navigationController?.pushViewController(detailvc, animated: true)
+                            detailvc.configure(with: character[indexPath.row])
+                            detailvc.configureLocations(with: location)
+                        }
+                    case .failure(let failure):
+                        print(failure)
+                    }
+                }
             case .failure(let failure):
                 print(failure)
             }

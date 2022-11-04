@@ -10,6 +10,16 @@ import UIKit
 class OriginTableViewCell: UITableViewCell {
     static let identifier = String(describing: OriginTableViewCell.self)
     
+    private var viewModel: OriginTableViewCellViewModel?
+    
+    // MARK: Configure method
+    func configure(with model: LocationDetails) {
+        viewModel = OriginTableViewCellViewModel(model: model)
+        originPlanetLabel.text = viewModel?.getPlanetName
+        originTypeLabel.text = viewModel?.getTypeName
+        dimensionLabel.text = viewModel?.getDimensionName
+    }
+    
     lazy var originPlanetLabel: UILabel = {
         let origin = UILabel()
         origin.translatesAutoresizingMaskIntoConstraints = false

@@ -8,7 +8,8 @@
 import UIKit
 
 class DetailsViewController: UIViewController {
-    var didSetArray: ((_ model: CharacterResults) -> Void)?
+    private var characterSelected: [CharacterResults] = [CharacterResults]()
+    private var locationDetailsArray: [LocationDetails] = [LocationDetails]()
     
     lazy var detailsView: DetailsView = {
         let details = DetailsView()
@@ -21,7 +22,7 @@ class DetailsViewController: UIViewController {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
         table.backgroundColor = .darkGray
-        table.register(DetailsTableViewCell.self, forCellReuseIdentifier: DetailsTableViewCell.identifier)
+//        table.register(DetailsTableViewCell.self, forCellReuseIdentifier: DetailsTableViewCell.identifier)
         table.register(OriginTableViewCell.self, forCellReuseIdentifier: OriginTableViewCell.identifier)
         table.register(CharacterCollectionViewTableViewCell.self, forCellReuseIdentifier: CharacterCollectionViewTableViewCell.identifier)
         table.register(ResidentsCollectionViewTableViewCell.self, forCellReuseIdentifier: ResidentsCollectionViewTableViewCell.identifier)
@@ -30,7 +31,6 @@ class DetailsViewController: UIViewController {
         return table
     }()
     
-    private var characterSelected: [CharacterResults] = [CharacterResults]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,6 +55,10 @@ class DetailsViewController: UIViewController {
     public func configure(with model: CharacterResults) {
         self.characterSelected = [model]
     }
+    
+    public func configureLocations(with model: LocationDetails) {
+        self.locationDetailsArray = [model]
+    }
 }
 
 extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
@@ -65,7 +69,8 @@ extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
             cell.configure(with: characterSelected[0])
             return cell
         case Sections.originDetails.rawValue:
-            let cell = tableView.dequeueReusableCell(withIdentifier: OriginTableViewCell.identifier, for: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: OriginTableViewCell.identifier, for: indexPath) as! OriginTableViewCell
+            cell.configure(with: locationDetailsArray[indexPath.row])
             return cell
         case Sections.residentDetails.rawValue:
             let cell = tableView.dequeueReusableCell(withIdentifier: ResidentsCollectionViewTableViewCell.identifier, for: indexPath)
