@@ -22,22 +22,6 @@ class MainViewController: UIViewController {
     // MARK: Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        Service.getCharacterBy(id: 1) { result in
-            switch result {
-            case .success(let success):
-                Service.getLocationBy(url: success[0].origin!.url) { result in
-                    switch result {
-                    case .success(let success):
-                        print(success)
-                    case .failure(let failure):
-                        print(failure)
-                    }
-                }
-            case .failure(let failure):
-                print(failure)
-            }
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -104,21 +88,26 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         let character = allCharacters[indexPath.row]
+        print(character.id)
         Service.getCharacterBy(id: character.id) { result in
             switch result {
             case .success(let character):
-                Service.getLocationBy(url: character[indexPath.row].origin!.url) { result in
-                    switch result {
-                    case .success(let location):
-                        print(location)
-                        DispatchQueue.main.async {
-                            let detailvc = DetailsViewController()
-                            self.navigationController?.pushViewController(detailvc, animated: true)
-                            detailvc.configure(with: character[indexPath.row])
-                            detailvc.configureLocations(with: location)
+                // if origin is not empty, use origin url; otherwise use location url
+                if let origin = character[indexPath.row].origin?.url,
+                   let location = character[indexPath.row].location?.url {
+                    Service.getLocationBy(url: !origin.isEmpty ? origin : location) { result in
+                        switch result {
+                        case .success(let location):
+                            DispatchQueue.main.async {
+                                print(character)
+                                let detailvc = DetailsViewController()
+                                self.navigationController?.pushViewController(detailvc, animated: true)
+                                detailvc.configure(with: character[indexPath.row])
+                                detailvc.configureLocations(with: location)
+                            }
+                        case .failure(let failure):
+                            print(failure)
                         }
-                    case .failure(let failure):
-                        print(failure)
                     }
                 }
             case .failure(let failure):
