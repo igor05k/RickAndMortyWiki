@@ -12,6 +12,32 @@ class DetailsViewController: UIViewController {
     private var locationDetailsArray: [LocationDetails] = [LocationDetails]()
     private var episodeDetails: [EpisodeResults] = [EpisodeResults]()
     
+    private var viewModel: MainViewViewModel
+    
+    init(viewModel: MainViewViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.addSubview(tableView)
+    }
+    
+    // MARK: Life cycles
+    override func loadView() {
+        self.view = detailsView
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
+        navigationController?.navigationBar.prefersLargeTitles = false
+    }
+    
     lazy var detailsView: DetailsView = {
         let details = DetailsView()
         return details
@@ -31,22 +57,6 @@ class DetailsViewController: UIViewController {
         table.dataSource = self
         return table
     }()
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.addSubview(tableView)
-    }
-    
-    // MARK: Life cycles
-    override func loadView() {
-        self.view = detailsView
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
-        navigationController?.navigationBar.prefersLargeTitles = false
-    }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()

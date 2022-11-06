@@ -34,6 +34,15 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        viewModel.fetchEpisodeDetails(url: "https://rickandmortyapi.com/api/episode/28") { result in
+            switch result {
+            case .success(let success):
+                print(success)
+            case .failure(let failure):
+                print(failure)
+            }
+        }
+        
         viewModel.fetchAllCharacters { characterArray in
             self.allCharacters = characterArray
             DispatchQueue.main.async {
@@ -59,47 +68,25 @@ class MainViewController: UIViewController {
 
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
-//        return allCharacters.count
+        return allCharacters.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
         
-        viewModel.fetchAllCharacters { characterArray in
-            DispatchQueue.main.async {
-                cell.configure(with: characterArray[indexPath.row], epName: EpisodeResults(id: 1, name: "", airDate: "", episode: "", characters: [""], url: "", created: ""))
+        viewModel.fetchAllCharacters { [weak self] characterArray in
+            self?.viewModel.fetchEpisodeDetails(url: characterArray[indexPath.row].episode[0]) { result in
+                switch result {
+                case .success(let success):
+                    self?.allEpisodes.append(success)
+                    DispatchQueue.main.async {
+                        cell.configure(with: characterArray[indexPath.row], epName: self?.allEpisodes[indexPath.row])
+                    }
+                case .failure(let failure):
+                    print(failure)
+                }
             }
         }
-        
-//        Service.getAllCharacters { [weak self] result in
-//            switch result {
-//            case .success(let characters):
-//                Service.getCharacterBy(id: characters.results[0].id) { result in
-//                    switch result {
-//                    case .success(let characterDetails):
-//                        Service.getEpisodesDetails(url: characterDetails[indexPath.row].episode[0]) { result in
-//                            switch result {
-//                            case .success(let episodeDetails):
-//                                guard let self = self else { return }
-//                                DispatchQueue.main.async {
-//                                    self.allCharacters = characters.results
-//                                    self.allEpisodes = [episodeDetails]
-//                                    cell.configure(with: self.allCharacters[indexPath.row],
-//                                                   epName: self.allEpisodes[0])
-//                                }
-//                            case .failure(let failure):
-//                                print(failure)
-//                            }
-//                        }
-//                    case .failure(let failure):
-//                        print(failure)
-//                    }
-//                }
-//            case .failure(let failure):
-//                print(failure)
-//            }
-//        }
         
         cell.layer.cornerRadius = 15
         cell.clipsToBounds = true

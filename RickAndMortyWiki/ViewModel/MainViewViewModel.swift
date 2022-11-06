@@ -37,5 +37,16 @@ class MainViewViewModel {
             }
         }
     }
+    
+    func fetchEpisodeDetails(url: String, completion: @escaping (Result<EpisodeResults, NetworkError>) -> Void) {
+        Service.getEpisodesDetails(url: url) { result in
+            switch result {
+            case .success(let success):
+                completion(.success(success))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
 }
 
