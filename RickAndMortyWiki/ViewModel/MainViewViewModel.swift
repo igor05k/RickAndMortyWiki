@@ -8,35 +8,22 @@
 import Foundation
 
 class MainViewViewModel {
-//    public var allCharacters: [CharacterResults] = [CharacterResults]()
-//    public var allEpisodes: [EpisodeResults] = [EpisodeResults]()
+    private var allCharacters: Character?
+    private var allEpisodes: EpisodeResults?
     
-//    func fetchCharactersData() {
-//        Service.getAllCharacters { result in
-//            switch result {
-//            case .success(let characters):
-//                Service.getCharacterDetails(id: characters.results[0].id) { result in
-//                    switch result {
-//                    case .success(let characterDetails):
-//                        Service.getEpisodesDetails(url: characterDetails[indexPath.row].episode[0]) { result in
-//                            switch result {
-//                            case .success(let episodeDetails):
-//                                DispatchQueue.main.async {
-//                                    self.allCharacters = characters.results
-//                                    self.allEpisodes = [episodeDetails]
-//                                    cell.configure(with: self.allCharacters[indexPath.row], epName: self.allEpisodes[0].name)
-//                                }
-//                            case .failure(let failure):
-//                                print(failure)
-//                            }
-//                        }
-//                    case .failure(let failure):
-//                        print(failure)
-//                    }
-//                }
-//            case .failure(let failure):
-//                print(failure)
-//            }
-//        }
-//    }
+    public var getCharacters: Character? {
+        return allCharacters ?? nil
+    }
+    
+    func fetchAllCharacters(completion: @escaping ([CharacterResults]) -> Void) {
+        Service.getAllCharacters { result in
+            switch result {
+            case .success(let success):
+                completion(success.results)
+            case .failure(let failure):
+                print(failure)
+            }
+        }
+    }
 }
+

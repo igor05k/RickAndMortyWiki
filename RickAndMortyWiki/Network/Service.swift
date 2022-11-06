@@ -33,7 +33,7 @@ class Service {
                 return
             }
             
-            DispatchQueue.main.async {
+//            DispatchQueue.main.async {
                 do {
                     let json = try JSONDecoder().decode(Character.self, from: data)
                     completion(.success(json))
@@ -41,7 +41,7 @@ class Service {
                     completion(.failure(.decoding))
                     print(error.localizedDescription)
                 }
-            }
+//            }
         }.resume()
     }
     
