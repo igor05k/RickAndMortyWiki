@@ -15,12 +15,24 @@ class MainViewViewModel {
         return allCharacters ?? nil
     }
     
-    func fetchAllCharacters(completion: @escaping ([CharacterResults]) -> Void) {
+    func fetchAllCharacters(completion: @escaping ([AllCharacterResults]) -> Void) {
         Service.getAllCharacters { result in
             switch result {
             case .success(let success):
                 completion(success.results)
             case .failure(let failure):
+                print(failure)
+            }
+        }
+    }
+    
+    func fetchCharactersById(id: Int, completion: @escaping (Result<AllCharacterResults, NetworkError>) -> Void) {
+        Service.getCharactersById(id: id) { result in
+            switch result {
+            case .success(let success):
+                completion(.success(success))
+            case .failure(let failure):
+                completion(.failure(.invalidData))
                 print(failure)
             }
         }

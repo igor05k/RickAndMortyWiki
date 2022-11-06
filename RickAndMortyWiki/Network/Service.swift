@@ -32,28 +32,30 @@ class Service {
                 completion(.failure(.invalidData))
                 return
             }
-            
-//            DispatchQueue.main.async {
-                do {
-                    let json = try JSONDecoder().decode(Character.self, from: data)
-                    completion(.success(json))
-                } catch {
-                    completion(.failure(.decoding))
-                    print(error.localizedDescription)
-                }
-//            }
+            do {
+                let json = try JSONDecoder().decode(Character.self, from: data)
+                completion(.success(json))
+            } catch {
+                completion(.failure(.decoding))
+                print(error.localizedDescription)
+            }
         }.resume()
     }
     
-    static func getCharacterBy(id: Int, completion: @escaping (Result<[CharacterResults], NetworkError>) -> Void) {
-        getAllCharacters { result in
-            switch result {
-            case .success(let success):
-                completion(.success(success.results))
-            case .failure(_):
-                completion(.failure(.decoding))
+    static func getCharactersById(id: Int, completion: @escaping (Result<AllCharacterResults, NetworkError>) -> Void) {
+        guard let url = URL(string: ConstanstsAPI.base_url + Endpoints.characters.rawValue + "/" + String(id)) else { return }
+        URLSession.shared.dataTask(with: url) { data, _, error in
+            guard let data = data, error == nil else { return }
+            DispatchQueue.main.async {
+                do {
+                    let json = try JSONDecoder().decode(AllCharacterResults.self, from: data)
+                    completion(.success(json))
+                } catch {
+                    completion(.failure(.decoding))
+                    print(error)
+                }
             }
-        }
+        }.resume()
     }
     
     static func getEpisodesDetails(url: String, completion: @escaping (Result<EpisodeResults, NetworkError>) -> Void) {

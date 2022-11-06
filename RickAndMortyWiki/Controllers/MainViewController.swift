@@ -9,7 +9,7 @@ import UIKit
 import Combine
 
 class MainViewController: UIViewController {
-    private var allCharacters: [CharacterResults] = [CharacterResults]()
+    private var allCharacters: [AllCharacterResults] = [AllCharacterResults]()
     private var allEpisodes: [EpisodeResults] = [EpisodeResults]()
     
     private var viewModel: MainViewViewModel
@@ -59,7 +59,8 @@ class MainViewController: UIViewController {
 
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return allCharacters.count
+        return 1
+//        return allCharacters.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -111,6 +112,19 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+        viewModel.fetchAllCharacters { characterArray in
+            self.viewModel.fetchCharactersById(id: characterArray[indexPath.row].id) { result in
+                switch result {
+                case .success(let success):
+                    print(success)
+                case .failure(let failure):
+                    print(failure)
+                }
+            }
+//            DispatchQueue.main.async {
+//                cell.configure(with: characterArray[indexPath.row], epName: EpisodeResults(id: 1, name: "", airDate: "", episode: "", characters: [""], url: "", created: ""))
+//            }
+        }
 //        let character = allCharacters[indexPath.row]
 //        print(character.id)
 //        Service.getCharacterBy(id: character.id) { result in

@@ -9,7 +9,7 @@ import UIKit
 
 class CharacterCollectionViewTableViewCell: UITableViewCell {
     static let identifier = String(describing: CharacterCollectionViewTableViewCell.self)
-    private var characterSelected: [CharacterResults] = [CharacterResults]()
+    private var characterSelected: [AllCharacterResults] = [AllCharacterResults]()
     private var episodeResults: [EpisodeResults] = [EpisodeResults]()
     
     lazy var collectionView: UICollectionView = {
@@ -47,7 +47,7 @@ class CharacterCollectionViewTableViewCell: UITableViewCell {
         ])
     }
     
-    func configure(with model: CharacterResults, episodeName: EpisodeResults) {
+    func configure(with model: AllCharacterResults, episodeName: EpisodeResults) {
         self.characterSelected = [model]
         self.episodeResults = [episodeName]
     }

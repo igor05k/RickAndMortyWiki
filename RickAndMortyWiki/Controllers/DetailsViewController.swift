@@ -8,7 +8,7 @@
 import UIKit
 
 class DetailsViewController: UIViewController {
-    private var characterSelected: [CharacterResults] = [CharacterResults]()
+    private var characterSelected: [AllCharacterResults] = [AllCharacterResults]()
     private var locationDetailsArray: [LocationDetails] = [LocationDetails]()
     private var episodeDetails: [EpisodeResults] = [EpisodeResults]()
     
@@ -53,7 +53,7 @@ class DetailsViewController: UIViewController {
         tableView.frame = view.bounds
     }
     
-    public func configure(with model: CharacterResults) {
+    public func configure(with model: AllCharacterResults) {
         self.characterSelected = [model]
     }
     
