@@ -22,15 +22,15 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: Configure method
-    func configure(with characterInfo: CharacterResults, epName: String) {
-        cellViewModel = CharacterInfoCollectionViewCellViewModel(characterInfo: characterInfo)
+    func configure(with characterInfo: CharacterResults, epName: EpisodeResults) {
+        cellViewModel = CharacterInfoCollectionViewCellViewModel(characterInfo: characterInfo, episodeResults: epName)
 
         characterName.text = cellViewModel?.getName
         statusLabel.text = cellViewModel?.getStatus
         speciesLabel.text = "- \(cellViewModel?.getSpecies ?? "Unknown")"
         locationLabel.text = cellViewModel?.getLastKnownLocation.name
         characterImageView.downloaded(from: cellViewModel?.getCharacterImage ?? "")
-        episodeLabel.text = epName
+        episodeLabel.text = cellViewModel?.getEpisodeName
         
         if statusLabel.text == "Alive" {
             statusCircle.backgroundColor = .green

@@ -10,6 +10,7 @@ import UIKit
 class DetailsViewController: UIViewController {
     private var characterSelected: [CharacterResults] = [CharacterResults]()
     private var locationDetailsArray: [LocationDetails] = [LocationDetails]()
+    private var episodeDetails: [EpisodeResults] = [EpisodeResults]()
     
     lazy var detailsView: DetailsView = {
         let details = DetailsView()
@@ -59,6 +60,10 @@ class DetailsViewController: UIViewController {
     public func configureLocations(with model: LocationDetails) {
         self.locationDetailsArray = [model]
     }
+    
+    public func configureEpisodeDetails(with model: EpisodeResults) {
+        self.episodeDetails = [model]
+    }
 }
 
 extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
@@ -66,7 +71,7 @@ extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.section {
         case Sections.characterDetails.rawValue:
             let cell = tableView.dequeueReusableCell(withIdentifier: CharacterCollectionViewTableViewCell.identifier, for: indexPath) as! CharacterCollectionViewTableViewCell
-            cell.configure(with: characterSelected[0])
+            cell.configure(with: characterSelected[0], episodeName: episodeDetails[0])
             return cell
         case Sections.originDetails.rawValue:
             let cell = tableView.dequeueReusableCell(withIdentifier: OriginTableViewCell.identifier, for: indexPath) as! OriginTableViewCell

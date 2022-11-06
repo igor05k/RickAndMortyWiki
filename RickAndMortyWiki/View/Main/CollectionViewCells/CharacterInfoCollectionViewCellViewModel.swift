@@ -9,9 +9,15 @@ import Foundation
 
 struct CharacterInfoCollectionViewCellViewModel {
     private var characterInfo: CharacterResults
+    private var episodeResults: EpisodeResults
     
-    init(characterInfo: CharacterResults) {
+    init(characterInfo: CharacterResults, episodeResults: EpisodeResults) {
         self.characterInfo = characterInfo
+        self.episodeResults = episodeResults
+    }
+    
+    public var getEpisodeName: String {
+        return episodeResults.name
     }
     
     public var getName: String {

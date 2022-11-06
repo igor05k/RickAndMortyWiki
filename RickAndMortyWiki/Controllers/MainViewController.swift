@@ -9,8 +9,8 @@ import UIKit
 import Combine
 
 class MainViewController: UIViewController {
-    public var allCharacters: [CharacterResults] = [CharacterResults]()
-    public var allEpisodes: [EpisodeResults] = [EpisodeResults]()
+    private var allCharacters: [CharacterResults] = [CharacterResults]()
+    private var allEpisodes: [EpisodeResults] = [EpisodeResults]()
     
     lazy var mainView: MainView = {
         let main = MainView()
@@ -61,7 +61,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
                                     self.allCharacters = characters.results
                                     self.allEpisodes = [episodeDetails]
                                     cell.configure(with: self.allCharacters[indexPath.row],
-                                                   epName: self.allEpisodes[0].name)
+                                                   epName: self.allEpisodes[0])
                                 }
                             case .failure(let failure):
                                 print(failure)
@@ -92,18 +92,28 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         Service.getCharacterBy(id: character.id) { result in
             switch result {
             case .success(let character):
+                // MARK: Get origin/location details
                 // if origin is not empty, use origin url; otherwise use location url
                 if let origin = character[indexPath.row].origin?.url,
                    let location = character[indexPath.row].location?.url {
                     Service.getLocationBy(url: !origin.isEmpty ? origin : location) { result in
                         switch result {
                         case .success(let location):
-                            DispatchQueue.main.async {
-                                print(character)
-                                let detailvc = DetailsViewController()
-                                self.navigationController?.pushViewController(detailvc, animated: true)
-                                detailvc.configure(with: character[indexPath.row])
-                                detailvc.configureLocations(with: location)
+                            // MARK: Get Episode Details
+                            Service.getEpisodesDetails(url: character[indexPath.row].episode[0]) { result in
+                                switch result {
+                                case .success(let episodeDetails):
+                                    DispatchQueue.main.async { [weak self] in
+                                        let detailvc = DetailsViewController()
+                                        detailvc.configureEpisodeDetails(with: episodeDetails)
+                                        detailvc.configure(with: character[indexPath.row])
+                                        detailvc.configureLocations(with: location)
+                                        
+                                        self?.navigationController?.pushViewController(detailvc, animated: true)
+                                    }
+                                case .failure(let failure):
+                                    print(failure)
+                                }
                             }
                         case .failure(let failure):
                             print(failure)

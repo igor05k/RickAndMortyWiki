@@ -10,6 +10,7 @@ import UIKit
 class CharacterCollectionViewTableViewCell: UITableViewCell {
     static let identifier = String(describing: CharacterCollectionViewTableViewCell.self)
     private var characterSelected: [CharacterResults] = [CharacterResults]()
+    private var episodeResults: [EpisodeResults] = [EpisodeResults]()
     
     lazy var collectionView: UICollectionView = {
         // flow layout
@@ -46,15 +47,16 @@ class CharacterCollectionViewTableViewCell: UITableViewCell {
         ])
     }
     
-    func configure(with model: CharacterResults) {
+    func configure(with model: CharacterResults, episodeName: EpisodeResults) {
         self.characterSelected = [model]
+        self.episodeResults = [episodeName]
     }
 }
 
 extension CharacterCollectionViewTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
-        cell.configure(with: characterSelected[0], epName: "N/A")
+        cell.configure(with: characterSelected[0], epName: episodeResults[0])
         return cell
     }
     
