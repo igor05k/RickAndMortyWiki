@@ -56,7 +56,7 @@ class CharacterCollectionViewTableViewCell: UITableViewCell {
 extension CharacterCollectionViewTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
-        cell.configure(with: characterSelected[0], epName: episodeResults[0])
+        cell.configure(characterInfo: characterSelected[0], epName: episodeResults[0])
         return cell
     }
     

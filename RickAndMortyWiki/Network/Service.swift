@@ -24,7 +24,7 @@ struct ConstanstsAPI {
 }
 
 class Service {
-    static func getAllCharacters(completion: @escaping (Result<Character, NetworkError>) -> Void) {
+    func getAllCharacters(completion: @escaping (Result<Character, NetworkError>) -> Void) {
         guard let url = URL(string: ConstanstsAPI.base_url + Endpoints.characters.rawValue) else { return }
         
         URLSession.shared.dataTask(with: url) { data, response, error in
@@ -42,7 +42,7 @@ class Service {
         }.resume()
     }
     
-    static func getCharactersById(id: Int, completion: @escaping (Result<AllCharacterResults, NetworkError>) -> Void) {
+    func getCharactersById(id: Int, completion: @escaping (Result<AllCharacterResults, NetworkError>) -> Void) {
         guard let url = URL(string: ConstanstsAPI.base_url + Endpoints.characters.rawValue + "/" + String(id)) else { return }
         URLSession.shared.dataTask(with: url) { data, _, error in
             guard let data = data, error == nil else { return }
@@ -58,7 +58,7 @@ class Service {
         }.resume()
     }
     
-    static func getEpisodesDetails(url: String, completion: @escaping (Result<EpisodeResults, NetworkError>) -> Void) {
+    func getEpisodesDetails(url: String, completion: @escaping (Result<EpisodeResults, NetworkError>) -> Void) {
         guard let url = URL(string: url) else { return }
         URLSession.shared.dataTask(with: url) { data, _, error in
             guard let data = data, error == nil else { return }
@@ -74,7 +74,7 @@ class Service {
         }.resume()
     }
     
-    static func getLocationBy(url: String, completion: @escaping (Result<LocationDetails, NetworkError>) -> Void) {
+    func getLocationBy(url: String, completion: @escaping (Result<LocationDetails, NetworkError>) -> Void) {
         guard let url = URL(string: url) else { return }
         
         URLSession.shared.dataTask(with: url) { data, _, error in

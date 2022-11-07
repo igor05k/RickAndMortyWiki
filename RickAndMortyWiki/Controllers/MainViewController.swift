@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Combine
 
 class MainViewController: UIViewController {
     private var allCharacters: [AllCharacterResults] = [AllCharacterResults]()
@@ -21,8 +20,11 @@ class MainViewController: UIViewController {
         return main
     }()
     
-    init(viewModel: MainViewViewModel) {
+    private var service: Service
+    
+    init(viewModel: MainViewViewModel, service: Service = Service()) {
         self.viewModel = viewModel
+        self.service = service
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -33,18 +35,11 @@ class MainViewController: UIViewController {
     // MARK: Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        viewModel.fetchEpisodeDetails(url: "https://rickandmortyapi.com/api/episode/28") { result in
-            switch result {
-            case .success(let success):
-                print(success)
-            case .failure(let failure):
-                print(failure)
-            }
-        }
-        
-        viewModel.fetchAllCharacters { characterArray in
-            self.allCharacters = characterArray
+        fetchData()
+    }
+    
+    func fetchData() {
+        viewModel.fetchAllCharacters { _ in
             DispatchQueue.main.async {
                 self.mainView.collectionView.reloadData()
             }
@@ -68,23 +63,31 @@ class MainViewController: UIViewController {
 
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return allCharacters.count
+        return viewModel.getCharactersModel?.results.count ?? 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
         
-        viewModel.fetchAllCharacters { [weak self] characterArray in
-            self?.viewModel.fetchEpisodeDetails(url: characterArray[indexPath.row].episode[0]) { result in
-                switch result {
-                case .success(let success):
-                    self?.allEpisodes.append(success)
-                    DispatchQueue.main.async {
-                        cell.configure(with: characterArray[indexPath.row], epName: self?.allEpisodes[indexPath.row])
+        viewModel.fetchAllCharacters { results in
+            switch results {
+            case .success(let characterResults):
+                self.viewModel.fetchEpisodeDetails(indexPath: indexPath) { result in
+                    switch result {
+                    case .success(let episodeDetails):
+                        DispatchQueue.main.async {
+                            self.allCharacters = characterResults
+                            self.allEpisodes = [episodeDetails]
+                            cell.configure(characterInfo: self.allCharacters[indexPath.row],
+                                           epName: self.allEpisodes[0])
+                        }
+                    case .failure(let failure):
+                        print(failure)
                     }
-                case .failure(let failure):
-                    print(failure)
                 }
+                
+            case .failure(let failure):
+                print(failure)
             }
         }
         
@@ -93,21 +96,23 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         return cell
     }
     
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: self.view.bounds.width - 10, height: 200)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        viewModel.fetchAllCharacters { characterArray in
-            self.viewModel.fetchCharactersById(id: characterArray[indexPath.row].id) { result in
-                switch result {
-                case .success(let success):
-                    print(success)
-                case .failure(let failure):
-                    print(failure)
-                }
-            }
+//        print(viewModel.getCharactersModel?.results.count)
+//        viewModel.fetchAllCharacters { characterArray in
+//            self.viewModel.fetchCharactersById(id: characterArray[indexPath.row].id) { result in
+//                switch result {
+//                case .success(let success):
+//                    print(success)
+//                case .failure(let failure):
+//                    print(failure)
+//                }
+//            }
 //            DispatchQueue.main.async {
 //                cell.configure(with: characterArray[indexPath.row], epName: EpisodeResults(id: 1, name: "", airDate: "", episode: "", characters: [""], url: "", created: ""))
 //            }
@@ -150,5 +155,5 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
 //            }
 //        }
     }
-}
+//}
 
