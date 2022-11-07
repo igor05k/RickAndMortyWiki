@@ -69,6 +69,10 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
         
+        // in order to populate the cells right, we need not only charater info but
+        // the episode info aswell, so to do this, another api call is needed.
+        // first we fetch data to get character info (that's where episode details at)
+        // then another request is make to obtain the episode's name.
         viewModel.fetchAllCharacters { results in
             switch results {
             case .success(let characterResults):
@@ -85,7 +89,6 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
                         print(failure)
                     }
                 }
-                
             case .failure(let failure):
                 print(failure)
             }
