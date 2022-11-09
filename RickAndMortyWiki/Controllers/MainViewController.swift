@@ -8,9 +8,6 @@
 import UIKit
 
 class MainViewController: UIViewController {
-    private var allCharacters: [AllCharacterResults] = [AllCharacterResults]()
-    private var allEpisodes: [EpisodeResults] = [EpisodeResults]()
-    
     private var viewModel: MainViewViewModel
     
     lazy var mainView: MainView = {
@@ -20,11 +17,8 @@ class MainViewController: UIViewController {
         return main
     }()
     
-    private var service: Service
-    
-    init(viewModel: MainViewViewModel, service: Service = Service()) {
+    init(viewModel: MainViewViewModel) {
         self.viewModel = viewModel
-        self.service = service
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -35,15 +29,6 @@ class MainViewController: UIViewController {
     // MARK: Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchData()
-    }
-    
-    func fetchData() {
-        viewModel.fetchAllCharacters { _ in
-            DispatchQueue.main.async {
-                self.mainView.collectionView.reloadData()
-            }
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -63,36 +48,39 @@ class MainViewController: UIViewController {
 
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.getCharactersModel?.results.count ?? 1
+        return viewModel.allCharacters.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
         
+        cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row], epName: EpisodeResults(id: 1, name: "", airDate: "", episode: "", characters: [""], url: "", created: ""))
+        
+        
         // in order to populate the cells right, we need not only charater info but
         // the episode info aswell, so to do this, another api call is needed.
         // first we fetch data to get character info (that's where episode details at)
         // then another request is make to obtain the episode's name.
-        viewModel.fetchAllCharacters { results in
-            switch results {
-            case .success(let characterResults):
-                self.viewModel.fetchEpisodeDetails(indexPath: indexPath) { result in
-                    switch result {
-                    case .success(let episodeDetails):
-                        DispatchQueue.main.async {
-                            self.allCharacters = characterResults
-                            self.allEpisodes = [episodeDetails]
-                            cell.configure(characterInfo: self.allCharacters[indexPath.row],
-                                           epName: self.allEpisodes[0])
-                        }
-                    case .failure(let failure):
-                        print(failure)
-                    }
-                }
-            case .failure(let failure):
-                print(failure)
-            }
-        }
+//        viewModel.fetchAllCharacters { results in
+//            switch results {
+//            case .success(let characterResults):
+//                self.viewModel.fetchEpisodeDetails(indexPath: indexPath) { result in
+//                    switch result {
+//                    case .success(let episodeDetails):
+//                        DispatchQueue.main.async {
+//                            self.allCharacters = characterResults
+//                            self.allEpisodes = [episodeDetails]
+//                            cell.configure(characterInfo: self.allCharacters[indexPath.row],
+//                                           epName: self.allEpisodes[0])
+//                        }
+//                    case .failure(let failure):
+//                        print(failure)
+//                    }
+//                }
+//            case .failure(let failure):
+//                print(failure)
+//            }
+//        }
         
         cell.layer.cornerRadius = 15
         cell.clipsToBounds = true
@@ -106,57 +94,15 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-//        print(viewModel.getCharactersModel?.results.count)
-//        viewModel.fetchAllCharacters { characterArray in
-//            self.viewModel.fetchCharactersById(id: characterArray[indexPath.row].id) { result in
-//                switch result {
-//                case .success(let success):
-//                    print(success)
-//                case .failure(let failure):
-//                    print(failure)
-//                }
-//            }
-//            DispatchQueue.main.async {
-//                cell.configure(with: characterArray[indexPath.row], epName: EpisodeResults(id: 1, name: "", airDate: "", episode: "", characters: [""], url: "", created: ""))
-//            }
-        }
-//        let character = allCharacters[indexPath.row]
-//        print(character.id)
-//        Service.getCharacterBy(id: character.id) { result in
-//            switch result {
-//            case .success(let character):
-//                // MARK: Get origin/location details
-//                // if origin is not empty, use origin url; otherwise use location url
-//                if let origin = character[indexPath.row].origin?.url,
-//                   let location = character[indexPath.row].location?.url {
-//                    Service.getLocationBy(url: !origin.isEmpty ? origin : location) { result in
-//                        switch result {
-//                        case .success(let location):
-//                            // MARK: Get Episode Details
-//                            Service.getEpisodesDetails(url: character[indexPath.row].episode[0]) { result in
-//                                switch result {
-//                                case .success(let episodeDetails):
-//                                    DispatchQueue.main.async { [weak self] in
-//                                        let detailvc = DetailsViewController()
-//                                        detailvc.configureEpisodeDetails(with: episodeDetails)
-//                                        detailvc.configure(with: character[indexPath.row])
-//                                        detailvc.configureLocations(with: location)
-//
-//                                        self?.navigationController?.pushViewController(detailvc, animated: true)
-//                                    }
-//                                case .failure(let failure):
-//                                    print(failure)
-//                                }
-//                            }
-//                        case .failure(let failure):
-//                            print(failure)
-//                        }
-//                    }
-//                }
-//            case .failure(let failure):
-//                print(failure)
-//            }
-//        }
+        
+        let item = viewModel.allCharacters[indexPath.row]
+        print(item)
+        
+        
+//        print(allCharacters.count)
+//        print(self.viewModel.getCharactersModel?.results.count)
+//        let detailsViewController = DetailsViewController(item: item)
+//        navigationController?.pushViewController(detailsViewController, animated: true)
     }
-//}
+}
 

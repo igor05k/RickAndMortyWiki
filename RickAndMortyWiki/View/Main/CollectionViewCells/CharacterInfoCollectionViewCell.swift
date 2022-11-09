@@ -32,6 +32,7 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
         characterImageView.downloaded(from: cellViewModel?.getCharacterImage ?? "")
         episodeLabel.text = cellViewModel?.getEpisodeName
         
+        
         if statusLabel.text == "Alive" {
             statusCircle.backgroundColor = .green
         } else {

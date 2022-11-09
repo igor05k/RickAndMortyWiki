@@ -12,10 +12,12 @@ class DetailsViewController: UIViewController {
     private var locationDetailsArray: [LocationDetails] = [LocationDetails]()
     private var episodeDetails: [EpisodeResults] = [EpisodeResults]()
     
-    private var viewModel: MainViewViewModel
+//    private var viewModel: MainViewViewModel
     
-    init(viewModel: MainViewViewModel) {
-        self.viewModel = viewModel
+    private var item: AllCharacterResults
+    
+    init(item: AllCharacterResults) {
+        self.item = item
         super.init(nibName: nil, bundle: nil)
     }
     

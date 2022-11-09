@@ -74,6 +74,22 @@ class Service {
         }.resume()
     }
     
+//    func getEpisodesDetails(url: [String], completion: @escaping (Result<[String], NetworkError>) -> Void) {
+//        guard let url = URL(string: url[0]) else { return }
+//        URLSession.shared.dataTask(with: url) { data, _, error in
+//            guard let data = data, error == nil else { return }
+//            DispatchQueue.main.async {
+//                do {
+//                    let json = try JSONDecoder().decode([String].self, from: data)
+//                    completion(.success(json))
+//                } catch {
+//                    completion(.failure(.decoding))
+//                    print(error)
+//                }
+//            }
+//        }.resume()
+//    }
+    
     func getLocationBy(url: String, completion: @escaping (Result<LocationDetails, NetworkError>) -> Void) {
         guard let url = URL(string: url) else { return }
         
