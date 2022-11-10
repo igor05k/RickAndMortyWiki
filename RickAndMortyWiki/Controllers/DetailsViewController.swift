@@ -8,9 +8,6 @@
 import UIKit
 
 class DetailsViewController: UIViewController {
-    private var characterSelected: [AllCharacterResults] = [AllCharacterResults]()
-    private var locationDetailsArray: [LocationDetails] = [LocationDetails]()
-    private var episodeDetails: [EpisodeResults] = [EpisodeResults]()
     
 //    private var viewModel: MainViewViewModel
     
@@ -28,6 +25,7 @@ class DetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(tableView)
+        print(item)
     }
     
     // MARK: Life cycles
@@ -36,8 +34,8 @@ class DetailsViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
         navigationController?.navigationBar.prefersLargeTitles = false
+        navigationController?.navigationBar.tintColor = .white
     }
     
     lazy var detailsView: DetailsView = {
@@ -51,7 +49,6 @@ class DetailsViewController: UIViewController {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
         table.backgroundColor = .darkGray
-//        table.register(DetailsTableViewCell.self, forCellReuseIdentifier: DetailsTableViewCell.identifier)
         table.register(OriginTableViewCell.self, forCellReuseIdentifier: OriginTableViewCell.identifier)
         table.register(CharacterCollectionViewTableViewCell.self, forCellReuseIdentifier: CharacterCollectionViewTableViewCell.identifier)
         table.register(ResidentsCollectionViewTableViewCell.self, forCellReuseIdentifier: ResidentsCollectionViewTableViewCell.identifier)
@@ -64,18 +61,6 @@ class DetailsViewController: UIViewController {
         super.viewDidLayoutSubviews()
         tableView.frame = view.bounds
     }
-    
-    public func configure(with model: AllCharacterResults) {
-        self.characterSelected = [model]
-    }
-    
-    public func configureLocations(with model: LocationDetails) {
-        self.locationDetailsArray = [model]
-    }
-    
-    public func configureEpisodeDetails(with model: EpisodeResults) {
-        self.episodeDetails = [model]
-    }
 }
 
 extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
@@ -83,11 +68,10 @@ extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.section {
         case Sections.characterDetails.rawValue:
             let cell = tableView.dequeueReusableCell(withIdentifier: CharacterCollectionViewTableViewCell.identifier, for: indexPath) as! CharacterCollectionViewTableViewCell
-            cell.configure(with: characterSelected[0], episodeName: episodeDetails[0])
+            cell.configure(with: item, episodeName: EpisodeResults(id: 1, name: "", airDate: "", episode: "", characters: [""], url: "", created: ""))
             return cell
         case Sections.originDetails.rawValue:
             let cell = tableView.dequeueReusableCell(withIdentifier: OriginTableViewCell.identifier, for: indexPath) as! OriginTableViewCell
-            cell.configure(with: locationDetailsArray[indexPath.row])
             return cell
         case Sections.residentDetails.rawValue:
             let cell = tableView.dequeueReusableCell(withIdentifier: ResidentsCollectionViewTableViewCell.identifier, for: indexPath)

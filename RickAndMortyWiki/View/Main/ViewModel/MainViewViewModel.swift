@@ -12,7 +12,6 @@ final class MainViewViewModel {
     var allCharacters: [AllCharacterResults] = [AllCharacterResults]()
     var firstSeenEpisode: ((EpisodeResults) -> Void)?
     
-    
     private var service: Service
     
     init(_ service: Service = Service()) {
