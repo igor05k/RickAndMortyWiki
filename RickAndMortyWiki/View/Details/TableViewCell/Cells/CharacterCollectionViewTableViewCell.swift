@@ -10,7 +10,9 @@ import UIKit
 class CharacterCollectionViewTableViewCell: UITableViewCell {
     static let identifier = String(describing: CharacterCollectionViewTableViewCell.self)
     private var characterSelected: [AllCharacterResults] = [AllCharacterResults]()
-    private var episodeResults: [EpisodeResults] = [EpisodeResults]()
+    private var episodeResults: EpisodeResults?
+    
+    private var cellViewModel: CharacterCollectionViewTableViewCellViewModel?
     
     lazy var collectionView: UICollectionView = {
         // flow layout
@@ -46,17 +48,22 @@ class CharacterCollectionViewTableViewCell: UITableViewCell {
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5)
         ])
     }
-    
     func configure(with model: AllCharacterResults, episodeName: EpisodeResults) {
-        self.characterSelected = [model]
-        self.episodeResults = [episodeName]
+        cellViewModel = CharacterCollectionViewTableViewCellViewModel(allCharacters: model, episodeResults: episodeName)
+        
+        if let cellViewModel {
+            self.characterSelected = cellViewModel.getAllCharactersModel
+            self.episodeResults = cellViewModel.getAllEpisodesResultsModel
+        }
     }
 }
 
 extension CharacterCollectionViewTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
-        cell.configure(characterInfo: characterSelected[0], epName: episodeResults[0])
+        if let episodeResults {
+            cell.configure(characterInfo: characterSelected[0], epName: episodeResults)
+        }
         return cell
     }
     

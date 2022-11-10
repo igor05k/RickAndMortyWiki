@@ -31,6 +31,7 @@
 		82713FDF2915C3B300930394 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FDE2915C3B300930394 /* Location.swift */; };
 		82713FE22915D1B400930394 /* OriginTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713FE12915D1B400930394 /* OriginTableViewCellViewModel.swift */; };
 		82D52FE3291D7C1200EDB830 /* DetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D52FE2291D7C1200EDB830 /* DetailsViewModel.swift */; };
+		82D52FE5291D7DDA00EDB830 /* CharacterCollectionViewTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D52FE4291D7DD900EDB830 /* CharacterCollectionViewTableViewCellViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +61,7 @@
 		82713FDE2915C3B300930394 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		82713FE12915D1B400930394 /* OriginTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OriginTableViewCellViewModel.swift; sourceTree = "<group>"; };
 		82D52FE2291D7C1200EDB830 /* DetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewModel.swift; sourceTree = "<group>"; };
+		82D52FE4291D7DD900EDB830 /* CharacterCollectionViewTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterCollectionViewTableViewCellViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,8 +148,8 @@
 		82713FB629135F2600930394 /* CollectionViewCells */ = {
 			isa = PBXGroup;
 			children = (
-				82713FB729135F3E00930394 /* CharacterInfoCollectionViewCell.swift */,
-				82713FC4291412E700930394 /* CharacterInfoCollectionViewCellViewModel.swift */,
+				82D52FE8291D7E6600EDB830 /* ViewModel */,
+				82D52FE7291D7E6400EDB830 /* Cells */,
 			);
 			path = CollectionViewCells;
 			sourceTree = "<group>";
@@ -200,11 +202,8 @@
 		82713FD22915A3D100930394 /* TableViewCell */ = {
 			isa = PBXGroup;
 			children = (
+				82D52FE6291D7E2E00EDB830 /* Cells */,
 				82713FE02915D1AD00930394 /* ViewModel */,
-				82713FD32915A3F300930394 /* DetailsTableViewCell.swift */,
-				82713FD52915A8FF00930394 /* OriginTableViewCell.swift */,
-				82713FD72915AEEC00930394 /* CharacterCollectionViewTableViewCell.swift */,
-				82713FD92915B03300930394 /* ResidentsCollectionViewTableViewCell.swift */,
 			);
 			path = TableViewCell;
 			sourceTree = "<group>";
@@ -221,6 +220,7 @@
 			isa = PBXGroup;
 			children = (
 				82713FE12915D1B400930394 /* OriginTableViewCellViewModel.swift */,
+				82D52FE4291D7DD900EDB830 /* CharacterCollectionViewTableViewCellViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -229,6 +229,33 @@
 			isa = PBXGroup;
 			children = (
 				82D52FE2291D7C1200EDB830 /* DetailsViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		82D52FE6291D7E2E00EDB830 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				82713FD32915A3F300930394 /* DetailsTableViewCell.swift */,
+				82713FD52915A8FF00930394 /* OriginTableViewCell.swift */,
+				82713FD72915AEEC00930394 /* CharacterCollectionViewTableViewCell.swift */,
+				82713FD92915B03300930394 /* ResidentsCollectionViewTableViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		82D52FE7291D7E6400EDB830 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				82713FB729135F3E00930394 /* CharacterInfoCollectionViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		82D52FE8291D7E6600EDB830 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				82713FC4291412E700930394 /* CharacterInfoCollectionViewCellViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -324,6 +351,7 @@
 				82713FE22915D1B400930394 /* OriginTableViewCellViewModel.swift in Sources */,
 				82713F9A29134FF900930394 /* AppDelegate.swift in Sources */,
 				82713FD42915A3F300930394 /* DetailsTableViewCell.swift in Sources */,
+				82D52FE5291D7DDA00EDB830 /* CharacterCollectionViewTableViewCellViewModel.swift in Sources */,
 				82713F9C29134FF900930394 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

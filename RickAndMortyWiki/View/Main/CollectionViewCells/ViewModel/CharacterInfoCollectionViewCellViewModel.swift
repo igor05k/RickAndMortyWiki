@@ -43,9 +43,4 @@ struct CharacterInfoCollectionViewCellViewModel {
     public var getSpecies: String {
         return characterInfo.species
     }
-    
-//    public var getEpisode: String {
-//        return episodeInfo.name
-//    }
-    
 }
