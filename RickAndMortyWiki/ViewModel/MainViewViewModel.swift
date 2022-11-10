@@ -6,17 +6,18 @@
 //
 
 import Foundation
+import Combine
 
 final class MainViewViewModel {
     var allCharacters: [AllCharacterResults] = [AllCharacterResults]()
-    var firstSeenEpisode: EpisodeResults?
+    var firstSeenEpisode: ((EpisodeResults) -> Void)?
+    
     
     private var service: Service
     
     init(_ service: Service = Service()) {
         self.service = service
         fetchAllCharacters()
-        fetchEpisodeDetails()
     }
     
     func fetchAllCharacters() {
@@ -30,24 +31,109 @@ final class MainViewViewModel {
         }
     }
     
-    func fetchEpisodeDetails() {
-        service.getAllCharacters { [weak self] result in
+    func fetchEpDetails(index: Int) {
+        service.getEpisodesDetails(url: allCharacters[index].episode[0]) { result in
             switch result {
-            case .success(let success):
-                self?.service.getEpisodesDetails(url: success.results[0].episode[0]) { result in
-                    switch result {
-                    case .success(let success):
-                        self?.firstSeenEpisode = success
-                        print(success)
-                    case .failure(let failure):
-                        print(failure)
-                    }
-                }
+            case .success(let episodeResults):
+                self.firstSeenEpisode?(episodeResults)
             case .failure(let failure):
                 print(failure)
             }
         }
     }
+    
+//    func fetchAllCharacters2() {
+//        service.getAllCharacters { [weak self] result in
+//            switch result {
+//            case .success(let success):
+//                self?.allCharacters = success.results
+//                self?.service.getEpisodesDetails(url: success.results[0].episode[0]) { result in
+//                    switch result {
+//                    case .success(let success):
+//                        self?.firstSeenEpisode = [success]
+//                        print(success)
+//                    case .failure(let failure):
+//                        print(failure)
+//                    }
+//                }
+//            case .failure(let failure):
+//                print(failure)
+//            }
+//        }
+//    }
+    
+//    func fetchEpisodeDetails(index: Int) {
+//        service.getAllCharacters { [weak self] result in
+//            switch result {
+//            case .success(let success):
+//                self?.service.getEpisodesDetails(url: success.results[0].episode[index]) { result in
+//                    switch result {
+//                    case .success(let success):
+//                        DispatchQueue.main.async {
+//                            self?.firstSeenEpisode = [success]
+//                            print(success)
+//                        }
+//                    case .failure(let failure):
+//                        print(failure)
+//                    }
+//                }
+//            case .failure(let failure):
+//                print(failure)
+//            }
+//        }
+//    }
+    
+    //        viewModel.fetchAllCharacters { results in
+    //            switch results {
+    //            case .success(let characterResults):
+    //                self.viewModel.fetchEpisodeDetails(indexPath: indexPath) { result in
+    //                    switch result {
+    //                    case .success(let episodeDetails):
+    //                        DispatchQueue.main.async {
+    //                            self.allCharacters = characterResults
+    //                            self.allEpisodes = [episodeDetails]
+    //                            cell.configure(characterInfo: self.allCharacters[indexPath.row],
+    //                                           epName: self.allEpisodes[0])
+    //                        }
+    //                    case .failure(let failure):
+    //                        print(failure)
+    //                    }
+    //                }
+    //            case .failure(let failure):
+    //                print(failure)
+    //            }
+    //        }
+    
+    /*
+     let service = Service()
+     service.getEpisodesDetails(url: viewModel.allCharacters[indexPath.row].episode[0]) { result in
+         switch result {
+         case .success(let success):
+             print(success)
+         case .failure(let failure):
+             print(failure)
+         }
+     }
+     */
+    
+//    func fetchEpDetails(index: Int) {
+//        service.getAllCharacters { result in
+//            switch result {
+//            case .success(_):
+//                self.service.getEpisodesDetails(url: self.allCharacters[index].episode[0]) { result in
+//                    switch result {
+//                    case .success(let episodeResults):
+//                        self.firstSeenEpisode = episodeResults
+//                        print(self.firstSeenEpisode)
+//                    case .failure(let failure):
+//                        print(failure)
+//                    }
+//                }
+//            case .failure(let failure):
+//                print(failure)
+//            }
+//        }
+//    }
     
 //    func fetchEpisodeDetails() {
 //        service.getAllCharacters { [weak self] result in

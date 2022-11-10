@@ -6,9 +6,17 @@
 //
 
 import UIKit
+//import Combine
 
 class MainViewController: UIViewController {
     private var viewModel: MainViewViewModel
+//    private var anyCancellables: Set<AnyCancellable> = []
+    
+//    var episodeResults: EpisodeResults? {
+//        didSet {
+//            mainView.collectionView.reloadData()
+//        }
+//    }
     
     lazy var mainView: MainView = {
         let main = MainView()
@@ -54,7 +62,76 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
         
-        cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row], epName: EpisodeResults(id: 1, name: "", airDate: "", episode: "", characters: [""], url: "", created: ""))
+        viewModel.fetchEpDetails(index: indexPath.row)
+        
+        DispatchQueue.main.async {
+            self.viewModel.firstSeenEpisode = { episodeResults in
+                cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row],
+                               epName: episodeResults)
+            }
+        }
+        
+//            DispatchQueue.main.async {
+//                print(self.viewModel.firstSeenEpisode)
+//                viewModel.$firstSeenEpisode.sink { episodeResultsObject in
+//                    print(episodeResultsObject)
+//                }.store(in: &anyCancellables)
+//            }
+        
+        
+        
+//        DispatchQueue.main.async {
+//            print(self.viewModel.firstSeenEpisode)
+//            if let episodes = self.viewModel.firstSeenEpisode {
+//                cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row],
+//                               epName: episodes)
+//            }
+//        }
+        
+        
+//        if let episodes = viewModel.firstSeenEpisode {
+//            cell.configure(characterInfo: viewModel.allCharacters[indexPath.row],
+//                           epName: episodes)
+//        }
+        
+                    
+//        DispatchQueue.main.async {
+//            print(self.viewModel.firstSeenEpisode)
+//        }
+
+//        let service = Service()
+//        service.getEpisodesDetails(url: viewModel.allCharacters[indexPath.row].episode[0]) { result in
+//            switch result {
+//            case .success(let success):
+//                print(success)
+//            case .failure(let failure):
+//                print(failure)
+//            }
+//        }
+//        DispatchQueue.main.async {
+//            print(self.viewModel.firstSeenEpisode)
+//            cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row], epName: self.viewModel.firstSeenEpisode[indexPath.row])
+//        }
+        
+        
+        
+//        viewModel.fetchEpDetails(index: indexPath.row)
+//        DispatchQueue.main.async {
+//            cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row], epName: self.viewModel.firstSeenEpisode[0])
+//            print("INDEX PATH====\(indexPath.row) OBJECT/CHARACTER=====\(self.viewModel.firstSeenEpisode)")
+//        }
+        
+//        viewModel.fetchEpDetails(indexPath: indexPath) {
+//            cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row], epName: EpisodeResults(id: 1, name: "", airDate: "", episode: "", characters: [""], url: "", created: ""))
+//            self.mainView.collectionView.reloadData()
+//        }
+//            self.viewModel.fetchEpDetails(indexPath: indexPath)=
+            
+//            cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row], epName: self.viewModel.firstSeenEpisode[indexPath.row])
+//            self.mainView.collectionView.reloadData()
+        
+        
+//        cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row], epName: EpisodeResults(id: 1, name: "", airDate: "", episode: "", characters: [""], url: "", created: ""))
         
         
         // in order to populate the cells right, we need not only charater info but
@@ -95,8 +172,10 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         
-        let item = viewModel.allCharacters[indexPath.row]
-        print(item)
+//        let item = viewModel.allCharacters[indexPath.row]
+//        print(item)
+//        let item = viewModel.firstSeenEpisode
+//        print(item)
         
         
 //        print(allCharacters.count)
