@@ -56,7 +56,6 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
         
         DispatchQueue.main.async {
-            print(self.viewModel.episodeResults.count)
             cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row],
                            epName: self.viewModel.episodeResults[indexPath.row])
         }
@@ -73,11 +72,17 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        
         let character = viewModel.allCharacters[indexPath.row]
-        let episode = viewModel.episodeResults[indexPath.row]
+        let firstSeenEpisode = viewModel.episodeResults[indexPath.row]
         
-        let detailsViewController = DetailsViewController(character: character, firstSeenEpisode: episode)
+
+        let locationFiltered = viewModel.characterLocationDetails.filter({ $0.name == character.origin?.name }).first(where: { $0.name == character.origin?.name })
+
+//        print(filter)
+//
+        
+        let detailsViewController = DetailsViewController(character: character, firstSeenEpisode: firstSeenEpisode, location: locationFiltered ?? nil)
+        
         navigationController?.pushViewController(detailsViewController, animated: true)
     }
 }

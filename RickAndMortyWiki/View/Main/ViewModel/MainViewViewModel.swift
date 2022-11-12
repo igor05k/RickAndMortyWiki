@@ -6,11 +6,11 @@
 //
 
 import Foundation
-import Combine
 
 final class MainViewViewModel {
     var allCharacters: [AllCharacterResults] = [AllCharacterResults]()
     var episodeResults: [EpisodeResults] = [EpisodeResults]()
+    var characterLocationDetails: [LocationDetails] = [LocationDetails]()
     
     private var service: Service
     
@@ -18,6 +18,7 @@ final class MainViewViewModel {
         self.service = service
         fetchAllCharacters()
         fetchEpDetails()
+        fetchLocationDetails()
     }
     
     func fetchAllCharacters() {
@@ -40,6 +41,26 @@ final class MainViewViewModel {
                         switch result {
                         case .success(let episodesResults):
                             self.episodeResults.append(episodesResults)
+                        case .failure(let failure):
+                            print(failure)
+                        }
+                    }
+                }
+            case .failure(let failure):
+                print(failure)
+            }
+        }
+    }
+    
+    func fetchLocationDetails() {
+        service.getAllCharacters { result in
+            switch result {
+            case .success(let success):
+                for episode in success.results {
+                    self.service.getLocationBy(url: episode.origin!.url) { result in
+                        switch result {
+                        case .success(let success):
+                            self.characterLocationDetails.append(success)
                         case .failure(let failure):
                             print(failure)
                         }
