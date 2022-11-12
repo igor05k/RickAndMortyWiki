@@ -8,13 +8,12 @@
 import UIKit
 
 class DetailsViewController: UIViewController {
+    private var firstSeenEpisode: EpisodeResults
+    private var character: AllCharacterResults
     
-//    private var viewModel: MainViewViewModel
-    
-    private var item: AllCharacterResults
-    
-    init(item: AllCharacterResults) {
-        self.item = item
+    init(character: AllCharacterResults, firstSeenEpisode: EpisodeResults) {
+        self.character = character
+        self.firstSeenEpisode = firstSeenEpisode
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -25,7 +24,7 @@ class DetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(tableView)
-        print(item)
+        print(firstSeenEpisode)
     }
     
     // MARK: Life cycles
@@ -68,7 +67,8 @@ extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.section {
         case Sections.characterDetails.rawValue:
             let cell = tableView.dequeueReusableCell(withIdentifier: CharacterCollectionViewTableViewCell.identifier, for: indexPath) as! CharacterCollectionViewTableViewCell
-            cell.configure(with: item, episodeName: EpisodeResults(id: 1, name: "", airDate: "", episode: "", characters: [""], url: "", created: ""))
+                cell.configure(with: self.character,
+                               episodeName: self.firstSeenEpisode)
             return cell
         case Sections.originDetails.rawValue:
             let cell = tableView.dequeueReusableCell(withIdentifier: OriginTableViewCell.identifier, for: indexPath) as! OriginTableViewCell

@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class CharacterCollectionViewTableViewCellViewModel {
+struct CharacterCollectionViewTableViewCellViewModel {
     private var allCharacters: AllCharacterResults
     private var episodeResults: EpisodeResults
     

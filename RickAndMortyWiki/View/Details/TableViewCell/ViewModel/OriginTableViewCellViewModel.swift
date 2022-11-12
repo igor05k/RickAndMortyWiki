@@ -8,7 +8,7 @@
 import Foundation
 
 
-class OriginTableViewCellViewModel {
+struct OriginTableViewCellViewModel {
     var model: LocationDetails
     
     init(model: LocationDetails) {

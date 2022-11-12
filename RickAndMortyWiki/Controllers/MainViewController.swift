@@ -31,7 +31,6 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
     override func viewWillAppear(_ animated: Bool) {
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -56,15 +55,10 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
         
-        viewModel.fetchEpDetails(index: indexPath.row)
-        
-        DispatchQueue.main.async { [weak self] in
-            if let self {
-                self.viewModel.firstSeenEpisode = { episodeResults in
-                    cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row],
-                                   epName: episodeResults)
-                }
-            }
+        DispatchQueue.main.async {
+            print(self.viewModel.episodeResults.count)
+            cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row],
+                           epName: self.viewModel.episodeResults[indexPath.row])
         }
         
         cell.layer.cornerRadius = 15
@@ -80,9 +74,10 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         
-        let item = viewModel.allCharacters[indexPath.row]
+        let character = viewModel.allCharacters[indexPath.row]
+        let episode = viewModel.episodeResults[indexPath.row]
         
-        let detailsViewController = DetailsViewController(item: item)
+        let detailsViewController = DetailsViewController(character: character, firstSeenEpisode: episode)
         navigationController?.pushViewController(detailsViewController, animated: true)
     }
 }

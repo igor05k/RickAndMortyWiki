@@ -12,8 +12,6 @@ final class DetailsViewModel {
     private var locationDetailsArray: [LocationDetails] = [LocationDetails]()
     private var episodeDetails: [EpisodeResults] = [EpisodeResults]()
     
-    
-    
     public func configure(with model: AllCharacterResults) {
         self.characterSelected = [model]
     }
@@ -25,4 +23,7 @@ final class DetailsViewModel {
     public func configureEpisodeDetails(with model: EpisodeResults) {
         self.episodeDetails = [model]
     }
+    
+    
+    
 }
