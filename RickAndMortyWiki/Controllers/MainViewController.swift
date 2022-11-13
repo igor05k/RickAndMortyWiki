@@ -75,13 +75,22 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         let character = viewModel.allCharacters[indexPath.row]
         let firstSeenEpisode = viewModel.episodeResults[indexPath.row]
         
-
-        let locationFiltered = viewModel.characterLocationDetails.filter({ $0.name == character.origin?.name }).first(where: { $0.name == character.origin?.name })
-
-//        print(filter)
-//
+        // first we need to check by name if the origin for the current character does exists
+        // in the character array of locations. if so, take the first index where this occurs
+        // and return a new object
+        guard let filter = viewModel.filterLocationDetails(character: character) else { return }
+//        guard let locationFiltered = viewModel.characterLocationDetails.filter({ $0.name == character.origin?.name }).first(where: { $0.name == character.origin?.name }) else { return }
         
-        let detailsViewController = DetailsViewController(character: character, firstSeenEpisode: firstSeenEpisode, location: locationFiltered ?? nil)
+//        Service.getCharactersSpecific(url: locationFiltered.residents) { result in
+//            switch result {
+//            case .success(let success):
+//                print(success)
+//            case .failure(let failure):
+//                print(failure)
+//            }
+//        }
+        
+        let detailsViewController = DetailsViewController(character: character, firstSeenEpisode: firstSeenEpisode, location: filter)
         
         navigationController?.pushViewController(detailsViewController, animated: true)
     }

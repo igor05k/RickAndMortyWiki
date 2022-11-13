@@ -61,6 +61,7 @@ final class MainViewViewModel {
                         switch result {
                         case .success(let success):
                             self.characterLocationDetails.append(success)
+//                            print(success)
                         case .failure(let failure):
                             print(failure)
                         }
@@ -72,46 +73,25 @@ final class MainViewViewModel {
         }
     }
     
-    //    func fetchCharactersById(id: Int, completion: @escaping (Result<AllCharacterResults, NetworkError>) -> Void) {
-    //        service.getAllCharacters { result in
-    //            switch result {
-    //            case .success(let character):
-    //                self.service.getCharactersById(id: id) { result in
-    //                    switch result {
-    //                    case .success(let allCharacterResults):
-    //                        completion(.success(success))
-    //                    case .failure(let failure):
-    //                        completion(.failure(.invalidData))
-    //                        print(failure)
-    //                    }
-    //                }
-    //            case .failure(let failure):
-    //                print(failure)
-    //            }
-    //        }
-    //    }
+//    var locationDetails: AllCharacterResults {
+//        guard let origin = character.origin else { return }
+//        let locationFiltered = characterLocationDetails.filter({ $0.name == origin.name }).first(where: { $0.name == origin.name })
+//    }
     
-    //    func fetchCharactersById(id: Int, completion: @escaping (Result<AllCharacterResults, NetworkError>) -> Void) {
-    //        service.getCharactersById(id: id) { result in
-    //            switch result {
-    //            case .success(let success):
-    //                completion(.success(success))
-    //            case .failure(let failure):
-    //                completion(.failure(.invalidData))
-    //                print(failure)
-    //            }
-    //        }
-    //    }
+    func filterLocationDetails(character: AllCharacterResults) -> LocationDetails? {
+        guard let origin = character.origin else { return nil }
+        return characterLocationDetails.filter({ $0.name == origin.name }).first(where: { $0.name == origin.name })
+    }
     
-    //    func fetchEpisodeDetails(url: String, completion: @escaping (Result<EpisodeResults, NetworkError>) -> Void) {
-    //        service.getEpisodesDetails(url: url) { result in
-    //            switch result {
-    //            case .success(let success):
-    //                completion(.success(success))
-    //            case .failure(let failure):
-    //                completion(.failure(failure))
-    //            }
-    //        }
-    //    }
+//    func fetchResidents() {
+//        service.getCharactersSpecific(url: locationFiltered.residents) { result in
+//            switch result {
+//            case .success(let success):
+//                print(success)
+//            case .failure(let failure):
+//                print(failure)
+//            }
+//        }
+//    }
 }
 

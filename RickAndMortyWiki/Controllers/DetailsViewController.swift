@@ -26,7 +26,6 @@ class DetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(tableView)
-        print(firstSeenEpisode)
     }
     
     // MARK: Life cycles
