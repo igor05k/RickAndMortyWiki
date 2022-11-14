@@ -9,6 +9,7 @@ import UIKit
 
 class ResidentsCollectionViewTableViewCell: UITableViewCell {
     static let identifier = String(describing: ResidentsCollectionViewTableViewCell.self)
+    private var residents: AllCharacterResults?
     
     lazy var collectionView: UICollectionView = {
         // flow layout
@@ -25,6 +26,11 @@ class ResidentsCollectionViewTableViewCell: UITableViewCell {
         collection.register(ResidentsCollectionViewCell.self, forCellWithReuseIdentifier: ResidentsCollectionViewCell.identifier)
         return collection
     }()
+    
+    // MARK: Configure
+    func configure(with residents: AllCharacterResults) {
+        self.residents = residents
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -49,7 +55,10 @@ class ResidentsCollectionViewTableViewCell: UITableViewCell {
 
 extension ResidentsCollectionViewTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ResidentsCollectionViewCell.identifier, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ResidentsCollectionViewCell.identifier, for: indexPath) as! ResidentsCollectionViewCell
+        if let residents {
+            cell.configure(with: residents)
+        }
         return cell
     }
     

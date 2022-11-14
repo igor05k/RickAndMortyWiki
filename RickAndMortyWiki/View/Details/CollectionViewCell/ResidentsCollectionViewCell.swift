@@ -10,6 +10,24 @@ import UIKit
 class ResidentsCollectionViewCell: UICollectionViewCell {
     static let identifier = String(describing: ResidentsCollectionViewCell.self)
     
+    private var viewModel: ResidentsCollectionViewCellViewModel?
+    
+    // MARK: Setup
+    func configure(with residents: AllCharacterResults) {
+        viewModel = ResidentsCollectionViewCellViewModel(allCharacters: residents)
+        
+        characterName.text = viewModel?.getCharacterName
+        statusLabel.text = viewModel?.getCharacterStatus
+        speciesLabel.text = "- \(viewModel?.getCharacterSpecies ?? "Unknown")"
+        characterImageView.downloaded(from: viewModel?.getCharacterImage ?? "")
+        
+        if statusLabel.text == "Alive" {
+            statusCircle.backgroundColor = .green
+        } else {
+            statusCircle.backgroundColor = .red
+        }
+    }
+    
     lazy var characterImageView: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill

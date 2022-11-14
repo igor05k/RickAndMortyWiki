@@ -11,6 +11,8 @@ final class MainViewViewModel {
     var allCharacters: [AllCharacterResults] = [AllCharacterResults]()
     var episodeResults: [EpisodeResults] = [EpisodeResults]()
     var characterLocationDetails: [LocationDetails] = [LocationDetails]()
+
+    var residentsArray: [AllCharacterResults] = [AllCharacterResults]()
     
     private var service: Service
     
@@ -57,11 +59,12 @@ final class MainViewViewModel {
             switch result {
             case .success(let success):
                 for episode in success.results {
-                    self.service.getLocationBy(url: episode.origin!.url) { result in
+                    guard let origin = episode.origin else { return }
+                    self.service.getLocationBy(url: origin.url) { result in
                         switch result {
                         case .success(let success):
                             self.characterLocationDetails.append(success)
-//                            print(success)
+                            print(self.characterLocationDetails)
                         case .failure(let failure):
                             print(failure)
                         }
@@ -73,25 +76,22 @@ final class MainViewViewModel {
         }
     }
     
-//    var locationDetails: AllCharacterResults {
-//        guard let origin = character.origin else { return }
-//        let locationFiltered = characterLocationDetails.filter({ $0.name == origin.name }).first(where: { $0.name == origin.name })
-//    }
-    
+    /// fetch character origin if it exists.
     func filterLocationDetails(character: AllCharacterResults) -> LocationDetails? {
         guard let origin = character.origin else { return nil }
         return characterLocationDetails.filter({ $0.name == origin.name }).first(where: { $0.name == origin.name })
     }
     
-//    func fetchResidents() {
-//        service.getCharactersSpecific(url: locationFiltered.residents) { result in
-//            switch result {
-//            case .success(let success):
-//                print(success)
-//            case .failure(let failure):
-//                print(failure)
-//            }
-//        }
-//    }
+    func fetchResidents(locationFiltered: LocationDetails) {
+        service.getCharactersSpecific(url: locationFiltered.residents) { result in
+            switch result {
+            case .success(let characterResult):
+                self.residentsArray.append(characterResult)
+//                print(self.residentsArray)
+            case .failure(let failure):
+                print(failure)
+            }
+        }
+    }
 }
 

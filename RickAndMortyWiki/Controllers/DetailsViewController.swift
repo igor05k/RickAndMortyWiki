@@ -12,10 +12,13 @@ class DetailsViewController: UIViewController {
     private var character: AllCharacterResults
     private var location: LocationDetails
     
+    
+    
     init(character: AllCharacterResults, firstSeenEpisode: EpisodeResults, location: LocationDetails) {
         self.character = character
         self.firstSeenEpisode = firstSeenEpisode
         self.location = location
+        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -76,7 +79,8 @@ extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
             cell.configure(with: location)
             return cell
         case Sections.residentDetails.rawValue:
-            let cell = tableView.dequeueReusableCell(withIdentifier: ResidentsCollectionViewTableViewCell.identifier, for: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: ResidentsCollectionViewTableViewCell.identifier, for: indexPath) as! ResidentsCollectionViewTableViewCell
+//            cell.configure(with: residents)
             return cell
         default:
             return UITableViewCell()

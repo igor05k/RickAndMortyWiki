@@ -6,10 +6,13 @@
 //
 
 import UIKit
-//import Combine
+import Combine
 
 class MainViewController: UIViewController {
     private var viewModel: MainViewViewModel
+    var cancellables: Set<AnyCancellable> = []
+    
+    var residents: AllCharacterResults?
     
     lazy var mainView: MainView = {
         let main = MainView()
@@ -30,6 +33,7 @@ class MainViewController: UIViewController {
     // MARK: Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupBinders()
     }
     override func viewWillAppear(_ animated: Bool) {
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
@@ -45,6 +49,12 @@ class MainViewController: UIViewController {
     override func loadView() {
         self.view = mainView
     }
+    
+    func setupBinders() {
+//        viewModel.allResidentsFromCertainOrigin2 = { origin in
+//            self.residents = origin
+//        }
+    }
 }
 
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -55,9 +65,11 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
         
-        DispatchQueue.main.async {
-            cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row],
-                           epName: self.viewModel.episodeResults[indexPath.row])
+        DispatchQueue.main.async { [weak self] in
+            if let self {
+                cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row],
+                               epName: self.viewModel.episodeResults[indexPath.row])
+            }
         }
         
         cell.layer.cornerRadius = 15
@@ -78,21 +90,11 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         // first we need to check by name if the origin for the current character does exists
         // in the character array of locations. if so, take the first index where this occurs
         // and return a new object
-        guard let filter = viewModel.filterLocationDetails(character: character) else { return }
-//        guard let locationFiltered = viewModel.characterLocationDetails.filter({ $0.name == character.origin?.name }).first(where: { $0.name == character.origin?.name }) else { return }
+        guard let location = viewModel.filterLocationDetails(character: character) else { return }
+        viewModel.fetchResidents(locationFiltered: location)
         
-//        Service.getCharactersSpecific(url: locationFiltered.residents) { result in
-//            switch result {
-//            case .success(let success):
-//                print(success)
-//            case .failure(let failure):
-//                print(failure)
-//            }
-//        }
-        
-        let detailsViewController = DetailsViewController(character: character, firstSeenEpisode: firstSeenEpisode, location: filter)
-        
-        navigationController?.pushViewController(detailsViewController, animated: true)
+        let detailsViewController = DetailsViewController(character: character, firstSeenEpisode: firstSeenEpisode, location: location)
+        self.navigationController?.pushViewController(detailsViewController, animated: true)
     }
 }
 
