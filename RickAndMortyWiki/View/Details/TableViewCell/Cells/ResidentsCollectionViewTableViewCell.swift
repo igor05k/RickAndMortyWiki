@@ -14,9 +14,10 @@ class ResidentsCollectionViewTableViewCell: UITableViewCell {
     lazy var collectionView: UICollectionView = {
         // flow layout
         let layout = UICollectionViewFlowLayout()
-        layout.estimatedItemSize = .zero
+//        layout.estimatedItemSize = .zero
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 150, height: 190)
+        layout.minimumInteritemSpacing = 4
+        layout.itemSize = CGSize(width: 135, height: 190)
         
         // create collection
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -61,6 +62,9 @@ extension ResidentsCollectionViewTableViewCell: UICollectionViewDataSource, UICo
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if residents.count > 20 {
+            return 20
+        }
         return residents.count
     }
 }

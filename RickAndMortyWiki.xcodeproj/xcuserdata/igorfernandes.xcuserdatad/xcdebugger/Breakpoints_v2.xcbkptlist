@@ -373,7 +373,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "9690695C-025D-40F8-846B-C07C2EA2AD33"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RickAndMortyWiki/View/Details/CollectionViewCell/ResidentsCollectionViewCell.swift"

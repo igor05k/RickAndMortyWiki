@@ -31,6 +31,7 @@ class ResidentsCollectionViewCell: UICollectionViewCell {
     lazy var characterImageView: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
+        image.backgroundColor = .yellow
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
@@ -39,6 +40,7 @@ class ResidentsCollectionViewCell: UICollectionViewCell {
         let character = UILabel()
         character.text = "Rick Sanchez"
         character.textColor = .white
+        character.numberOfLines = 0
         character.textAlignment = .center
         character.translatesAutoresizingMaskIntoConstraints = false
         return character
@@ -69,9 +71,20 @@ class ResidentsCollectionViewCell: UICollectionViewCell {
         return status
     }()
     
+    lazy var topContainer: LabelContainer = LabelContainer()
+    lazy var bottomContainer: LabelContainer = LabelContainer()
+    
+    lazy var labelsContainer: UIView = {
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.backgroundColor = .init(red: 41 / 255, green: 43 / 255, blue: 49 / 255, alpha: 0.20)
+        return container
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupVisualElements()
+        self.clipsToBounds = true
     }
     
     required init?(coder: NSCoder) {
@@ -80,9 +93,34 @@ class ResidentsCollectionViewCell: UICollectionViewCell {
     
     func setupVisualElements() {
         setupImageView()
+        setupTopLabelContainer()
+        setupBottomLabelContainer()
         setupNameLabelConstraints()
         setupStatusCircle()
     }
+    
+    func setupTopLabelContainer() {
+        characterImageView.addSubview(topContainer)
+        
+        NSLayoutConstraint.activate([
+            topContainer.topAnchor.constraint(equalTo: characterImageView.topAnchor, constant: 4),
+            topContainer.leadingAnchor.constraint(equalTo: characterImageView.leadingAnchor, constant: 8),
+            topContainer.trailingAnchor.constraint(equalTo: characterImageView.trailingAnchor, constant: -4),
+            topContainer.heightAnchor.constraint(equalToConstant: 25)
+        ])
+    }
+    
+    func setupBottomLabelContainer() {
+        characterImageView.addSubview(bottomContainer)
+        
+        NSLayoutConstraint.activate([
+            bottomContainer.bottomAnchor.constraint(equalTo: characterImageView.bottomAnchor, constant: -4),
+            bottomContainer.leadingAnchor.constraint(equalTo: characterImageView.leadingAnchor),
+            bottomContainer.trailingAnchor.constraint(equalTo: characterImageView.trailingAnchor),
+            bottomContainer.heightAnchor.constraint(equalToConstant: 25)
+        ])
+    }
+    
     
     func setupImageView() {
         contentView.addSubview(characterImageView)
@@ -96,33 +134,32 @@ class ResidentsCollectionViewCell: UICollectionViewCell {
     }
     
     func setupNameLabelConstraints() {
-        contentView.addSubview(characterName)
+        bottomContainer.addSubview(characterName)
         
         NSLayoutConstraint.activate([
-            characterName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
-            characterName.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
-            characterName.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            characterName.centerXAnchor.constraint(equalTo: bottomContainer.centerXAnchor),
+            characterName.centerYAnchor.constraint(equalTo: bottomContainer.centerYAnchor)
         ])
     }
     
     func setupStatusCircle() {
-        contentView.addSubview(statusCircle)
-        contentView.addSubview(statusLabel)
-        contentView.addSubview(speciesLabel)
+        topContainer.addSubview(statusCircle)
+        topContainer.addSubview(statusLabel)
+        topContainer.addSubview(speciesLabel)
         
         NSLayoutConstraint.activate([
-            statusCircle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 13),
-            statusCircle.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+            statusCircle.topAnchor.constraint(equalTo: topContainer.topAnchor, constant: 13),
+            statusCircle.leadingAnchor.constraint(equalTo: topContainer.leadingAnchor, constant: 12),
             statusCircle.widthAnchor.constraint(equalToConstant: 10),
             statusCircle.heightAnchor.constraint(equalToConstant: 10),
             statusCircle.centerYAnchor.constraint(equalTo: statusLabel.centerYAnchor),
             
-            statusLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            statusLabel.topAnchor.constraint(equalTo: topContainer.topAnchor, constant: 8),
             statusLabel.leadingAnchor.constraint(equalTo: statusCircle.trailingAnchor, constant: 5),
             
-            speciesLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            speciesLabel.topAnchor.constraint(equalTo: topContainer.topAnchor, constant: 8),
             speciesLabel.leadingAnchor.constraint(equalTo: statusLabel.trailingAnchor, constant: 4),
-            speciesLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            speciesLabel.trailingAnchor.constraint(equalTo: topContainer.trailingAnchor, constant: -8),
         ])
     }
 }
