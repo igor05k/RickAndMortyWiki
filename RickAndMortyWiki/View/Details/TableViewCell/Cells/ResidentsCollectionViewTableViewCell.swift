@@ -9,7 +9,7 @@ import UIKit
 
 class ResidentsCollectionViewTableViewCell: UITableViewCell {
     static let identifier = String(describing: ResidentsCollectionViewTableViewCell.self)
-    private var residents: AllCharacterResults?
+    private var residents: [AllCharacterResults] = [AllCharacterResults]()
     
     lazy var collectionView: UICollectionView = {
         // flow layout
@@ -28,7 +28,7 @@ class ResidentsCollectionViewTableViewCell: UITableViewCell {
     }()
     
     // MARK: Configure
-    func configure(with residents: AllCharacterResults) {
+    func configure(with residents: [AllCharacterResults]) {
         self.residents = residents
     }
     
@@ -56,13 +56,11 @@ class ResidentsCollectionViewTableViewCell: UITableViewCell {
 extension ResidentsCollectionViewTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ResidentsCollectionViewCell.identifier, for: indexPath) as! ResidentsCollectionViewCell
-        if let residents {
-            cell.configure(with: residents)
-        }
+        cell.configure(with: residents[indexPath.row])
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return residents.count
     }
 }

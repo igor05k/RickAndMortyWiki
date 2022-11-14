@@ -86,7 +86,6 @@ final class MainViewViewModel {
             switch result {
             case .success(let characterResult):
                 self.residentsArray.append(characterResult)
-                print(self.residentsArray.count)
             case .failure(let failure):
                 print(failure)
             }

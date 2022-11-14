@@ -71,7 +71,6 @@ class ResidentsCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .black
         setupVisualElements()
     }
     
@@ -80,6 +79,7 @@ class ResidentsCollectionViewCell: UICollectionViewCell {
     }
     
     func setupVisualElements() {
+        setupImageView()
         setupNameLabelConstraints()
         setupStatusCircle()
     }
@@ -90,7 +90,7 @@ class ResidentsCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             characterImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             characterImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            characterImageView.leadingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            characterImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             characterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
     }

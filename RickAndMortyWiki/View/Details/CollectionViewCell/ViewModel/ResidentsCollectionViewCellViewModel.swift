@@ -29,7 +29,4 @@ final class ResidentsCollectionViewCellViewModel {
     public var getCharacterImage: String {
         allCharacters.image
     }
-    
-    
-    
 }

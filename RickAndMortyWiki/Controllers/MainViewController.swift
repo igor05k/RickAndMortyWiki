@@ -91,16 +91,26 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         // in the character array of locations. if so, take the first index where this occurs
         // and return a new object
         guard let location = viewModel.filterLocationDetails(character: character) else { return }
-//        viewModel.fetchResidents(locationFiltered: location)
+
         if viewModel.residentsArray.isEmpty {
             viewModel.fetchResidents(locationFiltered: location)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                let residents = self.viewModel.residentsArray
+                print(residents)
+                let detailsViewController = DetailsViewController(character: character, firstSeenEpisode: firstSeenEpisode, location: location, residents: residents)
+                self.navigationController?.pushViewController(detailsViewController, animated: true)
+            }
         } else {
             viewModel.residentsArray.removeAll()
             viewModel.fetchResidents(locationFiltered: location)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                let residents = self.viewModel.residentsArray
+//                print(residents)
+                let detailsViewController = DetailsViewController(character: character, firstSeenEpisode: firstSeenEpisode, location:
+                                                                    location, residents: residents)
+                self.navigationController?.pushViewController(detailsViewController, animated: true)
+            }
         }
-        
-        let detailsViewController = DetailsViewController(character: character, firstSeenEpisode: firstSeenEpisode, location: location)
-        self.navigationController?.pushViewController(detailsViewController, animated: true)
     }
 }
 
