@@ -126,4 +126,8 @@ extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
         header.textLabel?.frame = header.bounds
         header.textLabel?.textAlignment = .left
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
 }

@@ -12,7 +12,6 @@ final class DetailsViewModel {
     var location: LocationDetails
     var firstSeenEpisode: EpisodeResults
     
-//    var residentsClosure: ((AllCharacterResults) -> Void)?
     @Published var residents: [AllCharacterResults] = [AllCharacterResults]()
     
     private let service: Service
@@ -22,16 +21,16 @@ final class DetailsViewModel {
         self.character = characters
         self.location = location
         self.firstSeenEpisode = firstSeenEpisode
-        fetchResidentsVIEWMODEL()
+        fetchResidents()
     }
     
-    func fetchResidentsVIEWMODEL() {
+    func fetchResidents() {
         guard let origin = character.origin?.url else { return }
         service.getLocationBy(url: origin) { result in
             switch result {
             case .success(let locationDetails):
                 for residents in locationDetails.residents {
-                    self.service.getCharactersSpecific2(url: residents) { result in
+                    self.service.getSpecificCharacterBy(url: residents) { result in
                         switch result {
                         case .success(let residents):
                             if self.residents.count < 20 {

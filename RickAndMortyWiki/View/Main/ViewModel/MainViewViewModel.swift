@@ -11,8 +11,6 @@ final class MainViewViewModel {
     var allCharacters: [AllCharacterResults] = [AllCharacterResults]()
     var episodeResults: [EpisodeResults] = [EpisodeResults]()
     var characterLocationDetails: [LocationDetails] = [LocationDetails]()
-
-//    var residentsArray: [AllCharacterResults] = [AllCharacterResults]()
     
     private var service: Service
     
@@ -80,60 +78,5 @@ final class MainViewViewModel {
             }
         }
     }
-    
-//    func fetchResidents(locationFiltered: LocationDetails) {
-//        service.getCharactersSpecific(url: locationFiltered.residents) { result in
-//            switch result {
-//            case .success(let characterResult):
-//                self.residentsArray.append(characterResult)
-//            case .failure(let failure):
-//                print(failure)
-//            }
-//        }
-//    }
-    
-    /*
-     service.getAllCharacters { result in
-         switch result {
-         case .success(let success):
-             for episode in success.results {
-                 guard let origin = episode.origin else { return }
-                 self.service.getLocationBy(url: origin.url) { result in
-                     switch result {
-                     case .success(let success):
-                         self.characterLocationDetails.append(success)
-                     case .failure(let failure):
-                         print(failure)
-                     }
-                 }
-             }
-         case .failure(let failure):
-             print(failure)
-         }
-     }
-     */
-    
-//    func fetchResidents2(character: AllCharacterResults) {
-//        guard let origin = character.origin?.url else { return }
-//        service.getLocationBy(url: origin) { result in
-//            switch result {
-//            case .success(let locationDetails):
-//                for residents in locationDetails.residents {
-//                    self.service.getCharactersSpecific2(url: residents) { result in
-//                        switch result {
-//                        case .success(let residents):
-//                            DispatchQueue.main.async {
-//                                self.residentsArray.append(residents)
-//                            }
-//                        case .failure(let failure):
-//                            print(failure)
-//                        }
-//                    }
-//                }
-//            case .failure(let failure):
-//                print(failure)
-//            }
-//        }
-//    }
 }
 

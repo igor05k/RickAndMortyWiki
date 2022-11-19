@@ -95,25 +95,6 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         let viewModel = DetailsViewModel(characters: character, location: location, firstSeenEpisode: firstSeenEpisode)
         let detailsViewController = DetailsViewController(viewModel: viewModel)
         self.navigationController?.pushViewController(detailsViewController, animated: true)
-       
-//        if viewModel.residentsArray.isEmpty {
-//            viewModel.fetchResidents(locationFiltered: location)
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-//                let residents = self.viewModel.residentsArray
-//                print(residents)
-//                let detailsViewController = DetailsViewController(character: character, firstSeenEpisode: firstSeenEpisode, location: location, residents: residents)
-//                self.navigationController?.pushViewController(detailsViewController, animated: true)
-//            }
-//        } else {
-//            viewModel.residentsArray.removeAll()
-//            viewModel.fetchResidents(locationFiltered: location)
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-//                let residents = self.viewModel.residentsArray
-//                let detailsViewController = DetailsViewController(character: character, firstSeenEpisode: firstSeenEpisode, location:
-//                                                                    location, residents: residents)
-//                self.navigationController?.pushViewController(detailsViewController, animated: true)
-//            }
-//        }
     }
 }
 
