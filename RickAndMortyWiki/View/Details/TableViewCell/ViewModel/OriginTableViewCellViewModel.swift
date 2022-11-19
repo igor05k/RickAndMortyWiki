@@ -7,8 +7,7 @@
 
 import Foundation
 
-
-class OriginTableViewCellViewModel {
+struct OriginTableViewCellViewModel {
     var model: LocationDetails
     
     init(model: LocationDetails) {
@@ -26,5 +25,4 @@ class OriginTableViewCellViewModel {
     public var getDimensionName: String {
         return model.dimension
     }
-    
 }

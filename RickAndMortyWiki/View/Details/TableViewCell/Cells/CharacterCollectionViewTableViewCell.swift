@@ -9,8 +9,10 @@ import UIKit
 
 class CharacterCollectionViewTableViewCell: UITableViewCell {
     static let identifier = String(describing: CharacterCollectionViewTableViewCell.self)
-    private var characterSelected: [CharacterResults] = [CharacterResults]()
-    private var episodeResults: [EpisodeResults] = [EpisodeResults]()
+    private var characterSelected: [AllCharacterResults] = [AllCharacterResults]()
+    private var episodeResults: EpisodeResults?
+    
+    private var cellViewModel: CharacterCollectionViewTableViewCellViewModel?
     
     lazy var collectionView: UICollectionView = {
         // flow layout
@@ -23,6 +25,7 @@ class CharacterCollectionViewTableViewCell: UITableViewCell {
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.delegate = self
         collection.dataSource = self
+        collection.backgroundColor = .darkGray
         collection.register(CharacterInfoCollectionViewCell.self, forCellWithReuseIdentifier: CharacterInfoCollectionViewCell.identifier)
         return collection
     }()
@@ -40,23 +43,28 @@ class CharacterCollectionViewTableViewCell: UITableViewCell {
         contentView.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
-            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
-            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5)
+            collectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
-    
-    func configure(with model: CharacterResults, episodeName: EpisodeResults) {
-        self.characterSelected = [model]
-        self.episodeResults = [episodeName]
+    func configure(with model: AllCharacterResults, episodeName: EpisodeResults) {
+        cellViewModel = CharacterCollectionViewTableViewCellViewModel(allCharacters: model, episodeResults: episodeName)
+        
+        if let cellViewModel {
+            self.characterSelected = cellViewModel.getAllCharactersModel
+            self.episodeResults = cellViewModel.getAllEpisodesResultsModel
+        }
     }
 }
 
 extension CharacterCollectionViewTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
-        cell.configure(with: characterSelected[0], epName: episodeResults[0])
+        if let episodeResults {
+            cell.configure(characterInfo: characterSelected[0], epName: episodeResults)
+        }
         return cell
     }
     

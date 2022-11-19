@@ -6,32 +6,21 @@
 //
 
 import UIKit
+import Combine
 
 class DetailsViewController: UIViewController {
-    private var characterSelected: [CharacterResults] = [CharacterResults]()
-    private var locationDetailsArray: [LocationDetails] = [LocationDetails]()
-    private var episodeDetails: [EpisodeResults] = [EpisodeResults]()
+    private var viewModel: DetailsViewModel
     
-    lazy var detailsView: DetailsView = {
-        let details = DetailsView()
-        return details
-    }()
+    private var cancellables: Set<AnyCancellable> = []
     
-    // MARK: Create visual elements
+    init(viewModel: DetailsViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
     
-    lazy var tableView: UITableView = {
-        let table = UITableView()
-        table.translatesAutoresizingMaskIntoConstraints = false
-        table.backgroundColor = .darkGray
-//        table.register(DetailsTableViewCell.self, forCellReuseIdentifier: DetailsTableViewCell.identifier)
-        table.register(OriginTableViewCell.self, forCellReuseIdentifier: OriginTableViewCell.identifier)
-        table.register(CharacterCollectionViewTableViewCell.self, forCellReuseIdentifier: CharacterCollectionViewTableViewCell.identifier)
-        table.register(ResidentsCollectionViewTableViewCell.self, forCellReuseIdentifier: ResidentsCollectionViewTableViewCell.identifier)
-        table.delegate = self
-        table.dataSource = self
-        return table
-    }()
-    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,25 +33,32 @@ class DetailsViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
         navigationController?.navigationBar.prefersLargeTitles = false
+        navigationController?.navigationBar.tintColor = .white
     }
+    
+    lazy var detailsView: DetailsView = {
+        let details = DetailsView()
+        return details
+    }()
+    
+    // MARK: Create visual elements
+    
+    lazy var tableView: UITableView = {
+        let table = UITableView()
+        table.translatesAutoresizingMaskIntoConstraints = false
+        table.backgroundColor = .darkGray
+        table.register(OriginTableViewCell.self, forCellReuseIdentifier: OriginTableViewCell.identifier)
+        table.register(CharacterCollectionViewTableViewCell.self, forCellReuseIdentifier: CharacterCollectionViewTableViewCell.identifier)
+        table.register(ResidentsCollectionViewTableViewCell.self, forCellReuseIdentifier: ResidentsCollectionViewTableViewCell.identifier)
+        table.delegate = self
+        table.dataSource = self
+        return table
+    }()
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.frame = view.bounds
-    }
-    
-    public func configure(with model: CharacterResults) {
-        self.characterSelected = [model]
-    }
-    
-    public func configureLocations(with model: LocationDetails) {
-        self.locationDetailsArray = [model]
-    }
-    
-    public func configureEpisodeDetails(with model: EpisodeResults) {
-        self.episodeDetails = [model]
     }
 }
 
@@ -71,14 +67,18 @@ extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.section {
         case Sections.characterDetails.rawValue:
             let cell = tableView.dequeueReusableCell(withIdentifier: CharacterCollectionViewTableViewCell.identifier, for: indexPath) as! CharacterCollectionViewTableViewCell
-            cell.configure(with: characterSelected[0], episodeName: episodeDetails[0])
+            cell.configure(with: viewModel.character,
+                           episodeName: viewModel.firstSeenEpisode)
             return cell
         case Sections.originDetails.rawValue:
             let cell = tableView.dequeueReusableCell(withIdentifier: OriginTableViewCell.identifier, for: indexPath) as! OriginTableViewCell
-            cell.configure(with: locationDetailsArray[indexPath.row])
+            cell.configure(with: viewModel.location)
             return cell
         case Sections.residentDetails.rawValue:
-            let cell = tableView.dequeueReusableCell(withIdentifier: ResidentsCollectionViewTableViewCell.identifier, for: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: ResidentsCollectionViewTableViewCell.identifier, for: indexPath) as! ResidentsCollectionViewTableViewCell
+            viewModel.$residents.sink { residents in
+                cell.configure(with: residents)
+            }.store(in: &cancellables)
             return cell
         default:
             return UITableViewCell()
@@ -125,5 +125,9 @@ extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
         header.textLabel?.font = UIFont.boldSystemFont(ofSize: 24)
         header.textLabel?.frame = header.bounds
         header.textLabel?.textAlignment = .left
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }

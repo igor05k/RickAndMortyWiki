@@ -9,13 +9,14 @@ import UIKit
 
 class ResidentsCollectionViewTableViewCell: UITableViewCell {
     static let identifier = String(describing: ResidentsCollectionViewTableViewCell.self)
+    private var residents: [AllCharacterResults] = [AllCharacterResults]()
     
     lazy var collectionView: UICollectionView = {
         // flow layout
         let layout = UICollectionViewFlowLayout()
-        layout.estimatedItemSize = .zero
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 150, height: 190)
+        layout.minimumInteritemSpacing = 4
+        layout.itemSize = CGSize(width: 135, height: 190)
         
         // create collection
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -25,6 +26,16 @@ class ResidentsCollectionViewTableViewCell: UITableViewCell {
         collection.register(ResidentsCollectionViewCell.self, forCellWithReuseIdentifier: ResidentsCollectionViewCell.identifier)
         return collection
     }()
+    
+    // MARK: Configure
+    func configure(with residents: [AllCharacterResults]) {
+        self.residents = residents
+        DispatchQueue.main.async { [weak self] in
+            if let self {
+                self.collectionView.reloadData()
+            }
+        }
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -49,11 +60,15 @@ class ResidentsCollectionViewTableViewCell: UITableViewCell {
 
 extension ResidentsCollectionViewTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ResidentsCollectionViewCell.identifier, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ResidentsCollectionViewCell.identifier, for: indexPath) as! ResidentsCollectionViewCell
+        cell.configure(with: residents[indexPath.row])
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        if residents.count > 20 {
+            return 20
+        }
+        return residents.count
     }
 }
