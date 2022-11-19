@@ -76,6 +76,23 @@ class Service {
         }
     }
     
+    func getCharactersSpecific2(url: String, completion: @escaping (Result<AllCharacterResults, NetworkError>) -> Void) {
+        guard let url = URL(string: url) else { return }
+        URLSession.shared.dataTask(with: url) { data, _, error in
+            guard let data = data, error == nil else { return }
+            DispatchQueue.main.async {
+                do {
+                    let json = try JSONDecoder().decode(AllCharacterResults.self, from: data)
+                    completion(.success(json))
+                } catch {
+                    completion(.failure(.decoding))
+                    print(error)
+                }
+            }
+        }.resume()
+    }
+
+    
     func getEpisodesDetails(url: String, completion: @escaping (Result<EpisodeResults, NetworkError>) -> Void) {
         guard let url = URL(string: url) else { return }
         URLSession.shared.dataTask(with: url) { data, _, error in

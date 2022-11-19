@@ -91,5 +91,47 @@ final class MainViewViewModel {
             }
         }
     }
+    
+    /*
+     service.getAllCharacters { result in
+         switch result {
+         case .success(let success):
+             for episode in success.results {
+                 guard let origin = episode.origin else { return }
+                 self.service.getLocationBy(url: origin.url) { result in
+                     switch result {
+                     case .success(let success):
+                         self.characterLocationDetails.append(success)
+                     case .failure(let failure):
+                         print(failure)
+                     }
+                 }
+             }
+         case .failure(let failure):
+             print(failure)
+         }
+     }
+     */
+    
+    func fetchResidents2(character: AllCharacterResults) {
+        guard let origin = character.origin?.url else { return }
+        service.getLocationBy(url: origin) { result in
+            switch result {
+            case .success(let locationDetails):
+                for residents in locationDetails.residents {
+                    self.service.getCharactersSpecific2(url: residents) { result in
+                        switch result {
+                        case .success(let success):
+                            print(success)
+                        case .failure(let failure):
+                            print(failure)
+                        }
+                    }
+                }
+            case .failure(let failure):
+                print(failure)
+            }
+        }
+    }
 }
 
