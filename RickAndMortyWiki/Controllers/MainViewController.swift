@@ -6,13 +6,11 @@
 //
 
 import UIKit
-import Combine
 
 class MainViewController: UIViewController {
     private var viewModel: MainViewViewModel
-    var cancellables: Set<AnyCancellable> = []
     
-    var residents: AllCharacterResults?
+    private let refreshControl: UIRefreshControl = UIRefreshControl()
     
     lazy var mainView: MainView = {
         let main = MainView()
@@ -33,7 +31,7 @@ class MainViewController: UIViewController {
     // MARK: Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupBinders()
+        setRefreshControl()
     }
     override func viewWillAppear(_ animated: Bool) {
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
@@ -50,10 +48,17 @@ class MainViewController: UIViewController {
         self.view = mainView
     }
     
-    func setupBinders() {
-//        viewModel.allResidentsFromCertainOrigin2 = { origin in
-//            self.residents = origin
-//        }
+    func setRefreshControl() {
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        mainView.collectionView.addSubview(refreshControl)
+    }
+    
+    @objc func refresh() {
+        DispatchQueue.main.async { [weak self] in
+            self?.viewModel.fetchAllCharacters()
+            self?.mainView.collectionView.reloadData()
+            self?.refreshControl.endRefreshing()
+        }
     }
 }
 
@@ -67,8 +72,10 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         
         DispatchQueue.main.async { [weak self] in
             if let self {
-                cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row],
-                               epName: self.viewModel.episodeResults[indexPath.row])
+                print(indexPath.row)
+                print(self.viewModel.allCharacters[indexPath.row])
+//                cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row],
+//                               epName: self.viewModel.episodeResults[indexPath.row])
             }
         }
         
