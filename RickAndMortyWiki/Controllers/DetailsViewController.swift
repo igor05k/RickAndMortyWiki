@@ -73,10 +73,10 @@ extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         case Sections.residentDetails.rawValue:
             let cell = tableView.dequeueReusableCell(withIdentifier: ResidentsCollectionViewTableViewCell.identifier, for: indexPath) as! ResidentsCollectionViewTableViewCell
-//            print(viewModel.residents.count)
-//            DispatchQueue.main.async {
-//                cell.configure(with: viewModel.residents[indexPath.row])
-//            }
+            DispatchQueue.main.async {
+                print(self.viewModel.residents.count)
+                cell.configure(with: self.viewModel.residents)
+            }
 
             return cell
         default:

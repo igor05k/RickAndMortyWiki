@@ -397,8 +397,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "124"
             endingLineNumber = "124"
-            landmarkName = "fetchResidents2(character:)"
-            landmarkType = "7">
+            landmarkName = "MainViewViewModel"
+            landmarkType = "3">
             <Locations>
                <Location
                   uuid = "FED3B53E-FE31-4D91-B758-0800EF431339 - 4af325f1db8cb113"
@@ -445,8 +445,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "117"
             endingLineNumber = "117"
-            landmarkName = "fetchResidents2(character:)"
-            landmarkType = "7">
+            landmarkName = "MainViewViewModel"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -461,8 +461,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "118"
             endingLineNumber = "118"
-            landmarkName = "fetchResidents2(character:)"
-            landmarkType = "7">
+            landmarkName = "MainViewViewModel"
+            landmarkType = "3">
             <Locations>
                <Location
                   uuid = "249A71DD-6FFC-4596-9E40-BB2FD3095F47 - 393ca13bcf6d39fa"
@@ -509,8 +509,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "120"
             endingLineNumber = "120"
-            landmarkName = "fetchResidents2(character:)"
-            landmarkType = "7">
+            landmarkName = "MainViewViewModel"
+            landmarkType = "3">
             <Locations>
                <Location
                   uuid = "B145EE41-83B4-40DF-8E8E-50916BBE1363 - 4978a504c1d6782e"
@@ -557,8 +557,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "122"
             endingLineNumber = "122"
-            landmarkName = "fetchResidents2(character:)"
-            landmarkType = "7">
+            landmarkName = "MainViewViewModel"
+            landmarkType = "3">
             <Locations>
                <Location
                   uuid = "E5E7E1FE-5204-4B7E-8F82-17C9880CE11E - 4978a504c1d678ec"

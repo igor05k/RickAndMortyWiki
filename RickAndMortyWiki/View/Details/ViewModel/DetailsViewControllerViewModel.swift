@@ -34,7 +34,6 @@ final class DetailsViewModel {
                         switch result {
                         case .success(let residents):
                             self.residents.append(residents)
-                            print(self.residents.count)
                         case .failure(let failure):
                             print(failure)
                         }

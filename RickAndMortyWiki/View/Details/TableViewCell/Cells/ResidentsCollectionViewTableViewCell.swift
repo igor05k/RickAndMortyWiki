@@ -14,7 +14,6 @@ class ResidentsCollectionViewTableViewCell: UITableViewCell {
     lazy var collectionView: UICollectionView = {
         // flow layout
         let layout = UICollectionViewFlowLayout()
-//        layout.estimatedItemSize = .zero
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 4
         layout.itemSize = CGSize(width: 135, height: 190)
@@ -31,6 +30,11 @@ class ResidentsCollectionViewTableViewCell: UITableViewCell {
     // MARK: Configure
     func configure(with residents: [AllCharacterResults]) {
         self.residents = residents
+        DispatchQueue.main.async { [weak self] in
+            if let self {
+                self.collectionView.reloadData()
+            }
+        }
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
