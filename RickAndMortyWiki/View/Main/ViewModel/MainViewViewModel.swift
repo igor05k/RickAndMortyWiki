@@ -81,16 +81,16 @@ final class MainViewViewModel {
         return characterLocationDetails.filter({ $0.name == origin.name }).first(where: { $0.name == origin.name })
     }
     
-    func fetchResidents(locationFiltered: LocationDetails) {
-        service.getCharactersSpecific(url: locationFiltered.residents) { result in
-            switch result {
-            case .success(let characterResult):
-                self.residentsArray.append(characterResult)
-            case .failure(let failure):
-                print(failure)
-            }
-        }
-    }
+//    func fetchResidents(locationFiltered: LocationDetails) {
+//        service.getCharactersSpecific(url: locationFiltered.residents) { result in
+//            switch result {
+//            case .success(let characterResult):
+//                self.residentsArray.append(characterResult)
+//            case .failure(let failure):
+//                print(failure)
+//            }
+//        }
+//    }
     
     /*
      service.getAllCharacters { result in
@@ -121,8 +121,10 @@ final class MainViewViewModel {
                 for residents in locationDetails.residents {
                     self.service.getCharactersSpecific2(url: residents) { result in
                         switch result {
-                        case .success(let success):
-                            print(success)
+                        case .success(let residents):
+                            DispatchQueue.main.async {
+                                self.residentsArray.append(residents)
+                            }
                         case .failure(let failure):
                             print(failure)
                         }

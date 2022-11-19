@@ -204,8 +204,8 @@
             filePath = "RickAndMortyWiki/Controllers/DetailsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "26"
-            endingLineNumber = "26"
+            startingLineNumber = "19"
+            endingLineNumber = "19"
             landmarkName = "init?(coder:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -220,8 +220,8 @@
             filePath = "RickAndMortyWiki/Controllers/DetailsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
             landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -236,8 +236,8 @@
             filePath = "RickAndMortyWiki/Controllers/DetailsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "72"
-            endingLineNumber = "72"
+            startingLineNumber = "65"
+            endingLineNumber = "65"
             landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -252,8 +252,8 @@
             filePath = "RickAndMortyWiki/Controllers/DetailsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
+            startingLineNumber = "66"
+            endingLineNumber = "66"
             landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -268,9 +268,9 @@
             filePath = "RickAndMortyWiki/Controllers/DetailsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "17"
-            endingLineNumber = "17"
-            landmarkName = "init(character:firstSeenEpisode:location:residents:)"
+            startingLineNumber = "13"
+            endingLineNumber = "13"
+            landmarkName = "init(viewModel:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -383,6 +383,214 @@
             endingLineNumber = "22"
             landmarkName = "configure(with:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FED3B53E-FE31-4D91-B758-0800EF431339"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RickAndMortyWiki/View/Main/ViewModel/MainViewViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "124"
+            endingLineNumber = "124"
+            landmarkName = "fetchResidents2(character:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "FED3B53E-FE31-4D91-B758-0800EF431339 - 4af325f1db8cb113"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;RickAndMortyWiki.AllCharacterResults, RickAndMortyWiki.NetworkError&gt;) -&gt; () in closure #1 (Swift.Result&lt;RickAndMortyWiki.LocationDetails, RickAndMortyWiki.NetworkError&gt;) -&gt; () in RickAndMortyWiki.MainViewViewModel.fetchResidents2(character: RickAndMortyWiki.AllCharacterResults) -&gt; ()"
+                  moduleName = "RickAndMortyWiki"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/igorfernandes/Desktop/Developer/RickAndMortyWiki/RickAndMortyWiki/View/Main/ViewModel/MainViewViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "124"
+                  endingLineNumber = "124"
+                  offsetFromSymbolStart = "93">
+               </Location>
+               <Location
+                  uuid = "FED3B53E-FE31-4D91-B758-0800EF431339 - 4af325f1db8cb113"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;RickAndMortyWiki.AllCharacterResults, RickAndMortyWiki.NetworkError&gt;) -&gt; () in closure #1 (Swift.Result&lt;RickAndMortyWiki.LocationDetails, RickAndMortyWiki.NetworkError&gt;) -&gt; () in RickAndMortyWiki.MainViewViewModel.fetchResidents2(character: RickAndMortyWiki.AllCharacterResults) -&gt; ()"
+                  moduleName = "RickAndMortyWiki"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/igorfernandes/Desktop/Developer/RickAndMortyWiki/RickAndMortyWiki/View/Main/ViewModel/MainViewViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "124"
+                  endingLineNumber = "124"
+                  offsetFromSymbolStart = "295">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D38301B6-1CA8-410A-AB82-3C32992272DC"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RickAndMortyWiki/View/Main/ViewModel/MainViewViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "117"
+            endingLineNumber = "117"
+            landmarkName = "fetchResidents2(character:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "249A71DD-6FFC-4596-9E40-BB2FD3095F47"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RickAndMortyWiki/View/Main/ViewModel/MainViewViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "118"
+            endingLineNumber = "118"
+            landmarkName = "fetchResidents2(character:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "249A71DD-6FFC-4596-9E40-BB2FD3095F47 - 393ca13bcf6d39fa"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "RickAndMortyWiki.MainViewViewModel.fetchResidents2(character: RickAndMortyWiki.AllCharacterResults) -&gt; ()"
+                  moduleName = "RickAndMortyWiki"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/igorfernandes/Desktop/Developer/RickAndMortyWiki/RickAndMortyWiki/View/Main/ViewModel/MainViewViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "118"
+                  endingLineNumber = "118"
+                  offsetFromSymbolStart = "347">
+               </Location>
+               <Location
+                  uuid = "249A71DD-6FFC-4596-9E40-BB2FD3095F47 - 4978a504c1d6782e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;RickAndMortyWiki.LocationDetails, RickAndMortyWiki.NetworkError&gt;) -&gt; () in RickAndMortyWiki.MainViewViewModel.fetchResidents2(character: RickAndMortyWiki.AllCharacterResults) -&gt; ()"
+                  moduleName = "RickAndMortyWiki"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/igorfernandes/Desktop/Developer/RickAndMortyWiki/RickAndMortyWiki/View/Main/ViewModel/MainViewViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "120"
+                  endingLineNumber = "120"
+                  offsetFromSymbolStart = "131">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B145EE41-83B4-40DF-8E8E-50916BBE1363"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RickAndMortyWiki/View/Main/ViewModel/MainViewViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
+            landmarkName = "fetchResidents2(character:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "B145EE41-83B4-40DF-8E8E-50916BBE1363 - 4978a504c1d6782e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;RickAndMortyWiki.LocationDetails, RickAndMortyWiki.NetworkError&gt;) -&gt; () in RickAndMortyWiki.MainViewViewModel.fetchResidents2(character: RickAndMortyWiki.AllCharacterResults) -&gt; ()"
+                  moduleName = "RickAndMortyWiki"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/igorfernandes/Desktop/Developer/RickAndMortyWiki/RickAndMortyWiki/View/Main/ViewModel/MainViewViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "120"
+                  endingLineNumber = "120"
+                  offsetFromSymbolStart = "131">
+               </Location>
+               <Location
+                  uuid = "B145EE41-83B4-40DF-8E8E-50916BBE1363 - 4978a504c1d6782e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;RickAndMortyWiki.LocationDetails, RickAndMortyWiki.NetworkError&gt;) -&gt; () in RickAndMortyWiki.MainViewViewModel.fetchResidents2(character: RickAndMortyWiki.AllCharacterResults) -&gt; ()"
+                  moduleName = "RickAndMortyWiki"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/igorfernandes/Desktop/Developer/RickAndMortyWiki/RickAndMortyWiki/View/Main/ViewModel/MainViewViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "120"
+                  endingLineNumber = "120"
+                  offsetFromSymbolStart = "623">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E5E7E1FE-5204-4B7E-8F82-17C9880CE11E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RickAndMortyWiki/View/Main/ViewModel/MainViewViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "122"
+            endingLineNumber = "122"
+            landmarkName = "fetchResidents2(character:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "E5E7E1FE-5204-4B7E-8F82-17C9880CE11E - 4978a504c1d678ec"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;RickAndMortyWiki.LocationDetails, RickAndMortyWiki.NetworkError&gt;) -&gt; () in RickAndMortyWiki.MainViewViewModel.fetchResidents2(character: RickAndMortyWiki.AllCharacterResults) -&gt; ()"
+                  moduleName = "RickAndMortyWiki"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/igorfernandes/Desktop/Developer/RickAndMortyWiki/RickAndMortyWiki/View/Main/ViewModel/MainViewViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "122"
+                  endingLineNumber = "122"
+                  offsetFromSymbolStart = "465">
+               </Location>
+               <Location
+                  uuid = "E5E7E1FE-5204-4B7E-8F82-17C9880CE11E - 4af325f1db8cb113"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;RickAndMortyWiki.AllCharacterResults, RickAndMortyWiki.NetworkError&gt;) -&gt; () in closure #1 (Swift.Result&lt;RickAndMortyWiki.LocationDetails, RickAndMortyWiki.NetworkError&gt;) -&gt; () in RickAndMortyWiki.MainViewViewModel.fetchResidents2(character: RickAndMortyWiki.AllCharacterResults) -&gt; ()"
+                  moduleName = "RickAndMortyWiki"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/igorfernandes/Desktop/Developer/RickAndMortyWiki/RickAndMortyWiki/View/Main/ViewModel/MainViewViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "124"
+                  endingLineNumber = "124"
+                  offsetFromSymbolStart = "93">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

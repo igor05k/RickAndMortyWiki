@@ -86,13 +86,16 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         collectionView.deselectItem(at: indexPath, animated: true)
         let character = viewModel.allCharacters[indexPath.row]
         let firstSeenEpisode = viewModel.episodeResults[indexPath.row]
-        viewModel.fetchResidents2(character: character)
         
         // first we need to check by name if the origin for the current character does exists
         // in the character array of locations. if so, take the first index where this occurs
         // and return a new object
-//        guard let location = viewModel.filterLocationDetails(character: character) else { return }
-
+        guard let location = viewModel.filterLocationDetails(character: character) else { return }
+        
+        let viewModel = DetailsViewModel(characters: character, location: location, firstSeenEpisode: firstSeenEpisode)
+        let detailsViewController = DetailsViewController(viewModel: viewModel)
+        self.navigationController?.pushViewController(detailsViewController, animated: true)
+       
 //        if viewModel.residentsArray.isEmpty {
 //            viewModel.fetchResidents(locationFiltered: location)
 //            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {

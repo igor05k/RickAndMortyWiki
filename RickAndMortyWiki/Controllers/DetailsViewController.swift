@@ -8,17 +8,10 @@
 import UIKit
 
 class DetailsViewController: UIViewController {
-    private var firstSeenEpisode: EpisodeResults
-    private var character: AllCharacterResults
-    private var location: LocationDetails
-    private var residents: [AllCharacterResults]
+    private var viewModel: DetailsViewModel
     
-    
-    init(character: AllCharacterResults, firstSeenEpisode: EpisodeResults, location: LocationDetails, residents: [AllCharacterResults]) {
-        self.character = character
-        self.firstSeenEpisode = firstSeenEpisode
-        self.location = location
-        self.residents = residents
+    init(viewModel: DetailsViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -71,16 +64,20 @@ extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.section {
         case Sections.characterDetails.rawValue:
             let cell = tableView.dequeueReusableCell(withIdentifier: CharacterCollectionViewTableViewCell.identifier, for: indexPath) as! CharacterCollectionViewTableViewCell
-                cell.configure(with: self.character,
-                               episodeName: self.firstSeenEpisode)
+            cell.configure(with: viewModel.character,
+                           episodeName: viewModel.firstSeenEpisode)
             return cell
         case Sections.originDetails.rawValue:
             let cell = tableView.dequeueReusableCell(withIdentifier: OriginTableViewCell.identifier, for: indexPath) as! OriginTableViewCell
-            cell.configure(with: location)
+            cell.configure(with: viewModel.location)
             return cell
         case Sections.residentDetails.rawValue:
             let cell = tableView.dequeueReusableCell(withIdentifier: ResidentsCollectionViewTableViewCell.identifier, for: indexPath) as! ResidentsCollectionViewTableViewCell
-            cell.configure(with: residents)
+//            print(viewModel.residents.count)
+//            DispatchQueue.main.async {
+//                cell.configure(with: viewModel.residents[indexPath.row])
+//            }
+
             return cell
         default:
             return UITableViewCell()
