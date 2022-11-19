@@ -6,9 +6,12 @@
 //
 
 import UIKit
+import Combine
 
 class DetailsViewController: UIViewController {
     private var viewModel: DetailsViewModel
+    
+    private var cancellables: Set<AnyCancellable> = []
     
     init(viewModel: DetailsViewModel) {
         self.viewModel = viewModel
@@ -73,11 +76,9 @@ extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         case Sections.residentDetails.rawValue:
             let cell = tableView.dequeueReusableCell(withIdentifier: ResidentsCollectionViewTableViewCell.identifier, for: indexPath) as! ResidentsCollectionViewTableViewCell
-            DispatchQueue.main.async {
-                print(self.viewModel.residents.count)
-                cell.configure(with: self.viewModel.residents)
-            }
-
+            viewModel.$residents.sink { residents in
+                cell.configure(with: residents)
+            }.store(in: &cancellables)
             return cell
         default:
             return UITableViewCell()

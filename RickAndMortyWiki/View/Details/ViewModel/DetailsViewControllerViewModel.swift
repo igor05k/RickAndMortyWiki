@@ -12,7 +12,8 @@ final class DetailsViewModel {
     var location: LocationDetails
     var firstSeenEpisode: EpisodeResults
     
-    var residents: [AllCharacterResults] = [AllCharacterResults]()
+//    var residentsClosure: ((AllCharacterResults) -> Void)?
+    @Published var residents: [AllCharacterResults] = [AllCharacterResults]()
     
     private let service: Service
     
@@ -33,7 +34,11 @@ final class DetailsViewModel {
                     self.service.getCharactersSpecific2(url: residents) { result in
                         switch result {
                         case .success(let residents):
-                            self.residents.append(residents)
+                            if self.residents.count < 20 {
+                                self.residents.append(residents)
+                            } else {
+                                break
+                            }
                         case .failure(let failure):
                             print(failure)
                         }
