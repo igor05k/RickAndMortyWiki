@@ -74,8 +74,8 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
             if let self {
                 print(indexPath.row)
                 print(self.viewModel.allCharacters[indexPath.row])
-//                cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row],
-//                               epName: self.viewModel.episodeResults[indexPath.row])
+                cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row],
+                               epName: self.viewModel.episodeResults[indexPath.row])
             }
         }
         
