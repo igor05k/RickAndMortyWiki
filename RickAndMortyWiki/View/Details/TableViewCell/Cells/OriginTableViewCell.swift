@@ -15,9 +15,9 @@ class OriginTableViewCell: UITableViewCell {
     // MARK: Configure method
     func configure(with model: LocationDetails) {
         viewModel = OriginTableViewCellViewModel(model: model)
-        originPlanetLabel.text = viewModel?.getPlanetName
-        originTypeLabel.text = viewModel?.getTypeName
-        dimensionLabel.text = viewModel?.getDimensionName
+        originPlanetLabel.text = "Planet: \(viewModel?.getPlanetName ?? "Unknown")"
+        originTypeLabel.text = "Type: \(viewModel?.getTypeName ?? "Unknown")"
+        dimensionLabel.text = "Dimension: \(viewModel?.getDimensionName ?? "Unknown")"
     }
     
     lazy var originPlanetLabel: UILabel = {

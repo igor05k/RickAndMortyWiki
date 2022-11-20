@@ -25,8 +25,8 @@ struct ConstanstsAPI {
 
 class Service {
     func getAllCharacters(completion: @escaping (Result<Character, NetworkError>) -> Void) {
-//        guard let url = URL(string: ConstanstsAPI.base_url + Endpoints.characters.rawValue + "/?page=" + String(Int.random(in: 1...42))) else { return }
-        guard let url = URL(string: ConstanstsAPI.base_url + Endpoints.characters.rawValue + "/?page=2") else { return }
+        guard let url = URL(string: ConstanstsAPI.base_url + Endpoints.characters.rawValue + "/?page=" + String(Int.random(in: 1...42))) else { return }
+//        guard let url = URL(string: ConstanstsAPI.base_url + Endpoints.characters.rawValue + "/?page=41") else { return }
         
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else {
@@ -68,7 +68,7 @@ class Service {
                     completion(.success(json))
                 } catch {
                     completion(.failure(.decoding))
-                    print(error)
+                    print("getSpecificCharacterBy ======== ", error)
                 }
         }.resume()
     }

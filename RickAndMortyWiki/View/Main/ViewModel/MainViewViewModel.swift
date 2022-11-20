@@ -17,8 +17,8 @@ final class MainViewViewModel {
     init(_ service: Service = Service()) {
         self.service = service
         fetchAllCharacters()
-        fetchEpDetails()
-        fetchLocationDetails()
+//        fetchEpDetails()
+//        fetchLocationDetails()
     }
     
     /// fetch character origin if it exists.
@@ -28,10 +28,12 @@ final class MainViewViewModel {
     }
     
     func fetchAllCharacters() {
-        service.getAllCharacters { result in
+        service.getAllCharacters { [weak self] result in
             switch result {
             case .success(let success):
-                self.allCharacters = success.results
+                self?.allCharacters = success.results
+                self?.fetchEpDetails()
+                self?.fetchLocationDetails()
             case .failure(let failure):
                 print(failure)
             }
@@ -39,44 +41,73 @@ final class MainViewViewModel {
     }
     
     func fetchEpDetails() {
-        service.getAllCharacters { result in
-            switch result {
-            case .success(let success):
-                for episode in success.results {
-                    self.service.getEpisodesDetails(url: episode.episode[0]) { result in
-                        switch result {
-                        case .success(let episodesResults):
-                            self.episodeResults.append(episodesResults)
-                        case .failure(let failure):
-                            print(failure)
-                        }
-                    }
+        for episode in allCharacters {
+            self.service.getEpisodesDetails(url: episode.episode[0]) { result in
+                switch result {
+                case .success(let episodesResults):
+                    self.episodeResults.append(episodesResults)
+                case .failure(let failure):
+                    print(failure)
                 }
-            case .failure(let failure):
-                print(failure)
             }
         }
     }
     
     func fetchLocationDetails() {
-        service.getAllCharacters { result in
-            switch result {
-            case .success(let success):
-                for episode in success.results {
-                    guard let origin = episode.origin else { return }
-                    self.service.getLocationBy(url: origin.url) { result in
-                        switch result {
-                        case .success(let success):
-                            self.characterLocationDetails.append(success)
-                        case .failure(let failure):
-                            print(failure)
-                        }
-                    }
+        for episode in allCharacters {
+            guard let origin = episode.origin else { return }
+            self.service.getLocationBy(url: origin.url) { result in
+                switch result {
+                case .success(let success):
+                    self.characterLocationDetails.append(success)
+                    print(self.characterLocationDetails.count)
+                case .failure(let failure):
+                    print(failure)
                 }
-            case .failure(let failure):
-                print(failure)
             }
         }
     }
+    
+//    func fetchEpDetails() {
+//        service.getAllCharacters { result in
+//            switch result {
+//            case .success(let success):
+//                for episode in success.results {
+//                    self.service.getEpisodesDetails(url: episode.episode[0]) { result in
+//                        switch result {
+//                        case .success(let episodesResults):
+//                            self.episodeResults.append(episodesResults)
+//                        case .failure(let failure):
+//                            print(failure)
+//                        }
+//                    }
+//                }
+//            case .failure(let failure):
+//                print(failure)
+//            }
+//        }
+//    }
+    
+//    func fetchLocationDetails() {
+//        service.getAllCharacters { result in
+//            switch result {
+//            case .success(let success):
+//                for episode in success.results {
+//                    guard let origin = episode.origin else { return }
+//                    self.service.getLocationBy(url: origin.url) { result in
+//                        switch result {
+//                        case .success(let success):
+//                            self.characterLocationDetails.append(success)
+//                            print(self.characterLocationDetails)
+//                        case .failure(let failure):
+//                            print(failure)
+//                        }
+//                    }
+//                }
+//            case .failure(let failure):
+//                print(failure)
+//            }
+//        }
+//    }
 }
 

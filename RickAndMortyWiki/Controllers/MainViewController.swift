@@ -19,6 +19,14 @@ class MainViewController: UIViewController {
         return main
     }()
     
+    lazy var retry: UIButton = {
+        let btn = UIButton()
+        btn.setTitle("Retry", for: .normal)
+        btn.setTitleColor(.black, for: .normal)
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        return btn
+    }()
+    
     init(viewModel: MainViewViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -31,8 +39,25 @@ class MainViewController: UIViewController {
     // MARK: Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.addSubview(retry)
+        retry.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        retry.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+        retry.addTarget(self, action: #selector(refreshBtn), for: .touchUpInside)
         setRefreshControl()
+//        if viewModel.allCharacters.isEmpty {
+//            DispatchQueue.main.async { [weak self] in
+//                self?.viewModel.fetchAllCharacters()
+//                self?.mainView.collectionView.reloadData()
+//            }
+//        }
     }
+    
+    @objc func refreshBtn() {
+        DispatchQueue.main.async { [weak self] in
+            self?.mainView.collectionView.reloadData()
+        }
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -54,8 +79,8 @@ class MainViewController: UIViewController {
     }
     
     @objc func refresh() {
+        viewModel.fetchAllCharacters()
         DispatchQueue.main.async { [weak self] in
-            self?.viewModel.fetchAllCharacters()
             self?.mainView.collectionView.reloadData()
             self?.refreshControl.endRefreshing()
         }
@@ -72,8 +97,8 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         
         DispatchQueue.main.async { [weak self] in
             if let self {
-                print(indexPath.row)
-                print(self.viewModel.allCharacters[indexPath.row])
+//                print(self.viewModel.characterLocationDetails)
+//                print(self.viewModel.allCharacters[indexPath.row])
                 cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row],
                                epName: self.viewModel.episodeResults[indexPath.row])
             }
