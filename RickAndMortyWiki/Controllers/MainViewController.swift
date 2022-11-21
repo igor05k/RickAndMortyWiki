@@ -33,7 +33,6 @@ class MainViewController: UIViewController {
     // MARK: Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupBinders()
     }
     override func viewWillAppear(_ animated: Bool) {
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
@@ -48,12 +47,6 @@ class MainViewController: UIViewController {
     
     override func loadView() {
         self.view = mainView
-    }
-    
-    func setupBinders() {
-//        viewModel.allResidentsFromCertainOrigin2 = { origin in
-//            self.residents = origin
-//        }
     }
 }
 
