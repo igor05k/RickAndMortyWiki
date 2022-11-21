@@ -157,8 +157,8 @@
             filePath = "RickAndMortyWiki/Network/Service.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "29"
-            endingLineNumber = "29"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
             landmarkName = "getAllCharacters(completion:)"
             landmarkType = "7">
             <Locations>
@@ -205,8 +205,8 @@
             filePath = "RickAndMortyWiki/Network/Service.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
             landmarkName = "getAllCharacters(completion:)"
             landmarkType = "7">
             <Locations>

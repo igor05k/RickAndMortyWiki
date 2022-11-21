@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		82604FC1292C1AD900AF3F72 /* EmptyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82604FC0292C1AD900AF3F72 /* EmptyCollectionViewCell.swift */; };
 		82713F9A29134FF900930394 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713F9929134FF900930394 /* AppDelegate.swift */; };
 		82713F9C29134FF900930394 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713F9B29134FF900930394 /* SceneDelegate.swift */; };
 		82713F9E29134FF900930394 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82713F9D29134FF900930394 /* MainViewController.swift */; };
@@ -36,6 +37,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		82604FC0292C1AD900AF3F72 /* EmptyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCollectionViewCell.swift; sourceTree = "<group>"; };
 		82713F9629134FF900930394 /* RickAndMortyWiki.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RickAndMortyWiki.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		82713F9929134FF900930394 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		82713F9B29134FF900930394 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -91,6 +93,14 @@
 				82713FBC2913FE5900930394 /* DetailsView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		82604FBF292C1ACF00AF3F72 /* EmptyState */ = {
+			isa = PBXGroup;
+			children = (
+				82604FC0292C1AD900AF3F72 /* EmptyCollectionViewCell.swift */,
+			);
+			path = EmptyState;
 			sourceTree = "<group>";
 		};
 		82713F8D29134FF900930394 = {
@@ -166,6 +176,7 @@
 		82713FB629135F2600930394 /* CollectionViewCells */ = {
 			isa = PBXGroup;
 			children = (
+				82604FBF292C1ACF00AF3F72 /* EmptyState */,
 				82D52FE8291D7E6600EDB830 /* ViewModel */,
 				82D52FE7291D7E6400EDB830 /* Cells */,
 			);
@@ -365,6 +376,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82604FC1292C1AD900AF3F72 /* EmptyCollectionViewCell.swift in Sources */,
 				82713FC829141C0F00930394 /* UIImageView+.swift in Sources */,
 				827E5ECE2921A0C80014730B /* DetailsViewControllerViewModel.swift in Sources */,
 				82713FCA2914213700930394 /* Episodes.swift in Sources */,

@@ -33,6 +33,10 @@ class MainViewController: UIViewController {
     // MARK: Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(viewModel.allCharacters.count)
+        print(viewModel.allCharacters.isEmpty)
+        print(viewModel.characterLocationDetails.count)
+        print(viewModel.episodeResults.count)
     }
     override func viewWillAppear(_ animated: Bool) {
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
@@ -52,10 +56,16 @@ class MainViewController: UIViewController {
 
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.allCharacters.count
+        return viewModel.allCharacters.isEmpty ? 1 : viewModel.allCharacters.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if viewModel.allCharacters.isEmpty {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmptyCollectionViewCell.identifier, for: indexPath) as! EmptyCollectionViewCell
+            cell.delegate = self
+            return cell
+        }
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
         
         DispatchQueue.main.async { [weak self] in
@@ -72,7 +82,9 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.view.bounds.width - 10, height: 200)
+        return viewModel.allCharacters.isEmpty
+        ? CGSize(width: collectionView.frame.width - 20, height: collectionView.frame.height - 100)
+        : CGSize(width: self.view.bounds.width - 10, height: 200)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -91,3 +103,8 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     }
 }
 
+extension MainViewController: RetryDelegate {
+    func didTapRetry() {
+        mainView.collectionView.reloadData()
+    }
+}
