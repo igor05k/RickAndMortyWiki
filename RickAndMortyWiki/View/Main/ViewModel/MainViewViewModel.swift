@@ -9,15 +9,18 @@ import Foundation
 
 final class MainViewViewModel {
     var allCharacters: [AllCharacterResults] = [AllCharacterResults]()
-    var episodeResults: [EpisodeResults] = [EpisodeResults]()
+    var firstSeenEpisode: [EpisodeResults] = [EpisodeResults]()
     var characterLocationDetails: [LocationDetails] = [LocationDetails]()
+    
+    @Published var arrayOfCharacters: [AllCharacterResults] = [AllCharacterResults]()
+    var closureCharacter: (([AllCharacterResults]) -> Void)?
+    
     
     private var service: Service
     
     init(_ service: Service = Service()) {
         self.service = service
         fetchAllCharacters()
-        fetchEpDetails()
         fetchLocationDetails()
     }
     
@@ -28,25 +31,32 @@ final class MainViewViewModel {
     }
     
     func fetchAllCharacters() {
-        service.getAllCharacters { result in
+        service.getAllCharacters { [weak self] result in
             switch result {
             case .success(let success):
-                self.allCharacters = success.results
+                /// default array
+                self?.allCharacters = success.results
+                /// combine
+                self?.arrayOfCharacters = success.results
+                self?.fetchFirstSeenEpisode()
+                print("ALL CHARACTERS: \(String(describing: self?.allCharacters.count))")
             case .failure(let failure):
                 print(failure)
             }
         }
     }
     
-    func fetchEpDetails() {
+    func fetchFirstSeenEpisode() {
         service.getAllCharacters { result in
             switch result {
             case .success(let success):
-                for episode in success.results {
-                    self.service.getEpisodesDetails(url: episode.episode[0]) { result in
+                for character in success.results {
+                    guard let firstEpisode = character.episode.first else { return }
+                    self.service.getEpisodesDetails(url: firstEpisode) { result in
                         switch result {
                         case .success(let episodesResults):
-                            self.episodeResults.append(episodesResults)
+                            self.firstSeenEpisode.append(episodesResults)
+                            print("EPISODE DETAILS: \(self.firstSeenEpisode.count)")
                         case .failure(let failure):
                             print(failure)
                         }
@@ -68,6 +78,7 @@ final class MainViewViewModel {
                         switch result {
                         case .success(let success):
                             self.characterLocationDetails.append(success)
+                            print("LOCATION DETAILS \(self.characterLocationDetails.count)")
                         case .failure(let failure):
                             print(failure)
                         }

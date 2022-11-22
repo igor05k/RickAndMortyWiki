@@ -33,11 +33,15 @@ class MainViewController: UIViewController {
     // MARK: Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(viewModel.allCharacters.count)
-        print(viewModel.allCharacters.isEmpty)
-        print(viewModel.characterLocationDetails.count)
-        print(viewModel.episodeResults.count)
+        
+        DispatchQueue.main.async { [weak self] in
+            print("VIEWDIDLOAD======\(self?.viewModel.allCharacters.count)")
+            print("VIEWDIDLOAD======\(self?.viewModel.allCharacters.isEmpty)")
+            print("VIEWDIDLOAD======\(self?.viewModel.characterLocationDetails.count)")
+            print("VIEWDIDLOAD======\(self?.viewModel.firstSeenEpisode.count)")
+        }
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -56,22 +60,37 @@ class MainViewController: UIViewController {
 
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.allCharacters.isEmpty ? 1 : viewModel.allCharacters.count
+        return viewModel.firstSeenEpisode.count < 3 ||
+        viewModel.allCharacters.count < 3 ||
+        viewModel.characterLocationDetails.count < 3 ? 1 : viewModel.allCharacters.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if viewModel.allCharacters.isEmpty {
+        if !viewModel.firstSeenEpisode.isEmpty {
+            DispatchQueue.main.async { [weak self] in
+                print("CELLFORROWAT======\(String(describing: self?.viewModel.allCharacters.count))")
+                print("CELLFORROWAT======\(String(describing: self?.viewModel.allCharacters.isEmpty))")
+                print("CELLFORROWAT======\(String(describing: self?.viewModel.characterLocationDetails.count))")
+                print("CELLFORROWAT======\(String(describing: self?.viewModel.firstSeenEpisode.count))")
+            }
+        }
+        
+        if viewModel.firstSeenEpisode.count < 3 || viewModel.allCharacters.count < 3 || viewModel.characterLocationDetails.count < 3 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmptyCollectionViewCell.identifier, for: indexPath) as! EmptyCollectionViewCell
             cell.delegate = self
             return cell
         }
+        
+        viewModel.$arrayOfCharacters.sink { characters in
+            print("COMBINE/CELLFORROWAT=======\(characters.count)")
+        }.store(in: &cancellables)
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
         
         DispatchQueue.main.async { [weak self] in
             if let self {
                 cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row],
-                               epName: self.viewModel.episodeResults[indexPath.row])
+                               epName: self.viewModel.firstSeenEpisode[indexPath.row])
             }
         }
         
@@ -90,16 +109,17 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         let character = viewModel.allCharacters[indexPath.row]
-        let firstSeenEpisode = viewModel.episodeResults[indexPath.row]
+//        let firstSeenEpisode = viewModel.episodeResults[indexPath.row]
+        print(character)
         
         // first we need to check by name if the origin for the current character does exists
         // in the character array of locations. if so, take the first index where this occurs
         // and return a new object
-        guard let location = viewModel.filterLocationDetails(character: character) else { return }
+//        guard let location = viewModel.filterLocationDetails(character: character) else { return }
         
-        let viewModel = DetailsViewModel(characters: character, location: location, firstSeenEpisode: firstSeenEpisode)
-        let detailsViewController = DetailsViewController(viewModel: viewModel)
-        self.navigationController?.pushViewController(detailsViewController, animated: true)
+//        let viewModel = DetailsViewModel(characters: character, location: location, firstSeenEpisode: firstSeenEpisode)
+//        let detailsViewController = DetailsViewController(viewModel: viewModel)
+//        self.navigationController?.pushViewController(detailsViewController, animated: true)
     }
 }
 
