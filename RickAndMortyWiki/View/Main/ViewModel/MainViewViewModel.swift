@@ -7,14 +7,17 @@
 
 import Foundation
 
+protocol MainViewDelegate: AnyObject {
+    func showLoading()
+    func stopLoading()
+}
+
 final class MainViewViewModel {
     var allCharacters: [AllCharacterResults] = [AllCharacterResults]()
     var firstSeenEpisode: [EpisodeResults] = [EpisodeResults]()
     var characterLocationDetails: [LocationDetails] = [LocationDetails]()
     
-    @Published var arrayOfCharacters: [AllCharacterResults] = [AllCharacterResults]()
-    var closureCharacter: (([AllCharacterResults]) -> Void)?
-    
+    weak var delegate: MainViewDelegate?
     
     private var service: Service
     
@@ -32,14 +35,13 @@ final class MainViewViewModel {
     
     func fetchAllCharacters() {
         service.getAllCharacters { [weak self] result in
+            self?.delegate?.showLoading()
             switch result {
             case .success(let success):
-                /// default array
                 self?.allCharacters = success.results
-                /// combine
-                self?.arrayOfCharacters = success.results
                 self?.fetchFirstSeenEpisode()
                 print("ALL CHARACTERS: \(String(describing: self?.allCharacters.count))")
+                self?.delegate?.stopLoading()
             case .failure(let failure):
                 print(failure)
             }

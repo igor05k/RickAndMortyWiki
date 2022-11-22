@@ -10,6 +10,8 @@ import UIKit
 class ResidentsCollectionViewCell: UICollectionViewCell {
     static let identifier = String(describing: ResidentsCollectionViewCell.self)
     
+//    lazy var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .large)
+    
     private var viewModel: ResidentsCollectionViewCellViewModel?
     
     // MARK: Setup
@@ -31,7 +33,7 @@ class ResidentsCollectionViewCell: UICollectionViewCell {
     lazy var characterImageView: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
-        image.backgroundColor = .yellow
+//        image.backgroundColor = .yellow
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
