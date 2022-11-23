@@ -34,10 +34,11 @@ final class MainViewViewModel {
     }
     
     func fetchAllCharacters() {
+        self.allCharacters.removeAll()
         service.getAllCharacters { [weak self] result in
             self?.delegate?.showLoading()
             switch result {
-            case .success(let success):
+            case .success(let success):    
                 self?.allCharacters = success.results
                 self?.fetchFirstSeenEpisode()
                 print("ALL CHARACTERS: \(String(describing: self?.allCharacters.count))")
@@ -49,16 +50,18 @@ final class MainViewViewModel {
     }
     
     func fetchFirstSeenEpisode() {
-        service.getAllCharacters { result in
+        self.firstSeenEpisode.removeAll()
+        service.getAllCharacters { [weak self] result in
             switch result {
             case .success(let success):
                 for character in success.results {
                     guard let firstEpisode = character.episode.first else { return }
-                    self.service.getEpisodesDetails(url: firstEpisode) { result in
+                    self?.service.getEpisodesDetails(url: firstEpisode) { result in
                         switch result {
                         case .success(let episodesResults):
-                            self.firstSeenEpisode.append(episodesResults)
-                            print("EPISODE DETAILS: \(self.firstSeenEpisode.count)")
+                            
+                            self?.firstSeenEpisode.append(episodesResults)
+                            print("EPISODE DETAILS: \(String(describing: self?.firstSeenEpisode.count))")
                         case .failure(let failure):
                             print(failure)
                         }
@@ -71,6 +74,7 @@ final class MainViewViewModel {
     }
     
     func fetchLocationDetails() {
+        self.characterLocationDetails.removeAll()
         service.getAllCharacters { result in
             switch result {
             case .success(let success):

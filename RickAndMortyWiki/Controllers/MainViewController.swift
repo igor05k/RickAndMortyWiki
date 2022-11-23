@@ -72,45 +72,29 @@ class MainViewController: UIViewController {
     
     @objc func refresh() {
         mainView.collectionView.refreshControl?.beginRefreshing()
-        // remove all items in order to populate it again
-        viewModel.allCharacters.removeAll()
-        viewModel.firstSeenEpisode.removeAll()
-        viewModel.characterLocationDetails.removeAll()
+        
+        mainView.collectionView.isHidden = true
+        activityIndicator.startAnimating()
         
         viewModel.fetchAllCharacters()
         viewModel.fetchLocationDetails()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
             self?.mainView.collectionView.reloadData()
+            self?.activityIndicator.stopAnimating()
             self?.mainView.collectionView.refreshControl?.endRefreshing()
+            self?.mainView.collectionView.isHidden = false
+
         }
     }
 }
 
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return viewModel.firstSeenEpisode.count < 3 ||
-//        viewModel.allCharacters.count < 3 ||
-//        viewModel.characterLocationDetails.count < 3 ? 1 : viewModel.allCharacters.count
         return viewModel.allCharacters.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        if !viewModel.firstSeenEpisode.isEmpty {
-//            DispatchQueue.main.async { [weak self] in
-//                print("CELLFORROWAT======\(String(describing: self?.viewModel.allCharacters.count))")
-//                print("CELLFORROWAT======\(String(describing: self?.viewModel.allCharacters.isEmpty))")
-//                print("CELLFORROWAT======\(String(describing: self?.viewModel.characterLocationDetails.count))")
-//                print("CELLFORROWAT======\(String(describing: self?.viewModel.firstSeenEpisode.count))")
-//            }
-//        }
-        
-//        if viewModel.firstSeenEpisode.count < 3 || viewModel.allCharacters.count < 3 || viewModel.characterLocationDetails.count < 3 {
-//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmptyCollectionViewCell.identifier, for: indexPath) as! EmptyCollectionViewCell
-//            cell.delegate = self
-//            return cell
-//        }
-        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
         
         DispatchQueue.main.async { [weak self] in
@@ -127,9 +111,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return viewModel.allCharacters.isEmpty
-        ? CGSize(width: collectionView.frame.width - 20, height: collectionView.frame.height - 100)
-        : CGSize(width: self.view.bounds.width - 10, height: 200)
+        return CGSize(width: self.view.bounds.width - 10, height: 200)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -157,22 +139,22 @@ extension MainViewController: RetryDelegate {
 
 extension MainViewController: MainViewDelegate {
     func showLoading() {
-        print("SHOW LOADING...")
-        DispatchQueue.main.async { [weak self] in
-            if let self {
-                while self.viewModel.allCharacters.count < 3 ||
-                        self.viewModel.characterLocationDetails.count < 3 ||
-                        self.viewModel.firstSeenEpisode.count < 3 {
-                    self.activityIndicator.startAnimating()
-                }
-            }
-        }
+//        print("SHOW LOADING...")
+//        DispatchQueue.main.async { [weak self] in
+//            if let self {
+//                while self.viewModel.allCharacters.count < 3 ||
+//                        self.viewModel.characterLocationDetails.count < 3 ||
+//                        self.viewModel.firstSeenEpisode.count < 3 {
+//                    self.activityIndicator.startAnimating()
+//                }
+//            }
+//        }
     }
     
     func stopLoading() {
-        print("STOP LOADING...")
-        DispatchQueue.main.async { [weak self] in
-            self?.activityIndicator.stopAnimating()
-        }
+//        print("STOP LOADING...")
+//        DispatchQueue.main.async { [weak self] in
+//            self?.activityIndicator.stopAnimating()
+//        }
     }
 }
