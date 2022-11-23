@@ -80,7 +80,7 @@ class MainViewController: UIViewController {
         viewModel.fetchAllCharacters()
         viewModel.fetchLocationDetails()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
             self?.mainView.collectionView.reloadData()
             self?.mainView.collectionView.refreshControl?.endRefreshing()
         }
