@@ -7,11 +7,6 @@
 
 import Foundation
 
-protocol MainViewDelegate: AnyObject {
-    func showLoading()
-    func stopLoading()
-}
-
 final class MainViewViewModel {
     var allCharacters: [CharacterResults] = [CharacterResults]()
     var firstSeenEpisode: [EpisodeResults] = [EpisodeResults]()
@@ -21,14 +16,11 @@ final class MainViewViewModel {
     var charactersSearched: [CharacterResults] = [CharacterResults]()
     var firstSeenEpisodeSearched: [EpisodeResults] = [EpisodeResults]()
     
-    weak var delegate: MainViewDelegate?
-    
     private var service: Service
     
     init(_ service: Service = Service()) {
         self.service = service
-//        fetchAllCharacters()
-//        charactersSearched = allCharacters
+        fetchAllCharacters()
     }
     
     /// fetch character location if it exists.
@@ -39,7 +31,6 @@ final class MainViewViewModel {
     
     func fetchAllCharacters() {
         service.getAllCharacters { [weak self] result in
-            self?.delegate?.showLoading()
             switch result {
             case .success(let success):
                 // remove all items in order to populate again
@@ -53,7 +44,6 @@ final class MainViewViewModel {
                 self?.fetchFirstSeenEpisode()
                 self?.fetchLocationDetails()
 //                print("ALL CHARACTERS: \(String(describing: self?.allCharacters.count))")
-                self?.delegate?.stopLoading()
             case .failure(let failure):
                 print(failure)
             }

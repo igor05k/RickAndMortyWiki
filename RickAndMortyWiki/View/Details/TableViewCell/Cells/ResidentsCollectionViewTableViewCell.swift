@@ -9,7 +9,13 @@ import UIKit
 
 class ResidentsCollectionViewTableViewCell: UITableViewCell {
     static let identifier = String(describing: ResidentsCollectionViewTableViewCell.self)
-    private var residents: [CharacterResults] = [CharacterResults]()
+//    private var residents: [CharacterResults] = [CharacterResults]()
+    
+    private var residents: [CharacterResults] = [CharacterResults]() {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
     
     lazy var collectionView: UICollectionView = {
         // flow layout
@@ -31,11 +37,12 @@ class ResidentsCollectionViewTableViewCell: UITableViewCell {
     func configure(with residents: [CharacterResults]) {
         self.residents = residents
 //        self.collectionView.reloadData()
-        DispatchQueue.main.async { [weak self] in
-            if let self {
-                self.collectionView.reloadData()
-            }
-        }
+//        DispatchQueue.main.async { [weak self] in
+//            if let self {
+//                self.collectionView.reloadData()
+//            }
+//        }
+//
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
