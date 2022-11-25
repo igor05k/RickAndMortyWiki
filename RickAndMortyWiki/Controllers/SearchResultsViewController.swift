@@ -9,6 +9,7 @@ import UIKit
 
 class SearchResultsViewController: UIViewController {
     var charactersSearched: [CharacterResults] = [CharacterResults]()
+    var firstSeenEpisodeSearched: [EpisodeResults] = [EpisodeResults]()
     
     lazy var collectionView: UICollectionView = {
         // flow layout
@@ -58,10 +59,11 @@ extension SearchResultsViewController: UICollectionViewDelegate, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as? CharacterInfoCollectionViewCell else { return UICollectionViewCell() }
-        print(charactersSearched.count)
         
-        DispatchQueue.main.async {
-            cell.configure(characterInfo: self.charactersSearched[indexPath.row], epName: EpisodeResults(id: 1, name: "", airDate: "", episode: "", characters: [""], url: "", created: ""))
+        DispatchQueue.main.async { [weak self] in
+            if let self {
+                cell.configure(characterInfo: self.charactersSearched[indexPath.row], epName: self.firstSeenEpisodeSearched[indexPath.row])
+            }
         }
         
         return cell
@@ -69,5 +71,9 @@ extension SearchResultsViewController: UICollectionViewDelegate, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: self.view.bounds.width - 10, height: 200)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
     }
 }

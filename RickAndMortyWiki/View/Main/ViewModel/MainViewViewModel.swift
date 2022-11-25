@@ -17,7 +17,9 @@ final class MainViewViewModel {
     var firstSeenEpisode: [EpisodeResults] = [EpisodeResults]()
     var characterLocationDetails: [LocationDetails] = [LocationDetails]()
     
+    // empty array so the results shows correctly
     var charactersSearched: [CharacterResults] = [CharacterResults]()
+    var firstSeenEpisodeSearched: [EpisodeResults] = [EpisodeResults]()
     
     weak var delegate: MainViewDelegate?
     
@@ -25,8 +27,8 @@ final class MainViewViewModel {
     
     init(_ service: Service = Service()) {
         self.service = service
-        fetchAllCharacters()
-        charactersSearched = allCharacters
+//        fetchAllCharacters()
+//        charactersSearched = allCharacters
     }
     
     /// fetch character location if it exists.
@@ -50,7 +52,7 @@ final class MainViewViewModel {
                 // fetch additional data for the characters
                 self?.fetchFirstSeenEpisode()
                 self?.fetchLocationDetails()
-                print("ALL CHARACTERS: \(String(describing: self?.allCharacters.count))")
+//                print("ALL CHARACTERS: \(String(describing: self?.allCharacters.count))")
                 self?.delegate?.stopLoading()
             case .failure(let failure):
                 print(failure)
@@ -65,7 +67,7 @@ final class MainViewViewModel {
                 switch result {
                 case .success(let episodesResults):
                     self.firstSeenEpisode.append(episodesResults)
-                    print("EPISODE DETAILS: \(String(describing: self.firstSeenEpisode.count))")
+//                    print("EPISODE DETAILS: \(String(describing: self.firstSeenEpisode.count))")
                 case .failure(let failure):
                     print(failure)
                 }
@@ -80,7 +82,7 @@ final class MainViewViewModel {
                 switch result {
                 case .success(let success):
                     self.characterLocationDetails.append(success)
-                    print("LOCATION DETAILS \(self.characterLocationDetails.count)")
+//                    print("LOCATION DETAILS \(self.characterLocationDetails.count)")
                 case .failure(let failure):
                     print(failure)
                 }
@@ -94,6 +96,18 @@ final class MainViewViewModel {
             case .success(let success):
                 if let self {
                     self.charactersSearched = success.results
+                }
+                for character in success.results {
+                    guard let firstEpisode = character.episode.first else { return }
+                    self?.service.getEpisodesDetails(url: firstEpisode) { result in
+                        switch result {
+                        case .success(let episodesResults):
+                            self?.firstSeenEpisodeSearched.append(episodesResults)
+//                            print("EPISODE DETAILS: \(String(describing: self?.firstSeenEpisodeSearched.count))")
+                        case .failure(let failure):
+                            print(failure)
+                        }
+                    }
                 }
             case .failure(let failure):
                 print(failure)
