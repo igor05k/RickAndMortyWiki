@@ -34,6 +34,7 @@
 		827E5ED1292290C20014730B /* LabelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827E5ED0292290C20014730B /* LabelContainer.swift */; };
 		82D52FE3291D7C1200EDB830 /* ResidentsCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D52FE2291D7C1200EDB830 /* ResidentsCollectionViewCellViewModel.swift */; };
 		82D52FE5291D7DDA00EDB830 /* CharacterCollectionViewTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D52FE4291D7DD900EDB830 /* CharacterCollectionViewTableViewCellViewModel.swift */; };
+		82FEB70129313708006B256F /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82FEB70029313708006B256F /* SearchResultsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,7 @@
 		827E5ED0292290C20014730B /* LabelContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelContainer.swift; sourceTree = "<group>"; };
 		82D52FE2291D7C1200EDB830 /* ResidentsCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResidentsCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
 		82D52FE4291D7DD900EDB830 /* CharacterCollectionViewTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterCollectionViewTableViewCellViewModel.swift; sourceTree = "<group>"; };
+		82FEB70029313708006B256F /* SearchResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,6 +140,7 @@
 			children = (
 				82713F9D29134FF900930394 /* MainViewController.swift */,
 				82713FB92913FE2600930394 /* DetailsViewController.swift */,
+				82FEB70029313708006B256F /* SearchResultsViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -377,6 +380,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				82604FC1292C1AD900AF3F72 /* EmptyCollectionViewCell.swift in Sources */,
+				82FEB70129313708006B256F /* SearchResultsViewController.swift in Sources */,
 				82713FC829141C0F00930394 /* UIImageView+.swift in Sources */,
 				827E5ECE2921A0C80014730B /* DetailsViewControllerViewModel.swift in Sources */,
 				82713FCA2914213700930394 /* Episodes.swift in Sources */,

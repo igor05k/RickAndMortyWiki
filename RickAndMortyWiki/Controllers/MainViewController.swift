@@ -32,10 +32,6 @@ class MainViewController: UIViewController {
         setActivityIndicator()
         setRefreshControl()
         setSearchBar()
-        
-        Service.searchCharacter(by: "rick") { _ in
-            
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -55,6 +51,8 @@ class MainViewController: UIViewController {
     
     func setSearchBar() {
         navigationItem.searchController = mainView.searchController
+        mainView.searchController.searchResultsUpdater = self
+        mainView.searchController.searchBar.delegate = self
     }
     
     func setRefreshControl() {
@@ -84,7 +82,6 @@ class MainViewController: UIViewController {
             self?.mainView.activityIndicator.stopAnimating()
             self?.mainView.collectionView.refreshControl?.endRefreshing()
             self?.mainView.collectionView.isHidden = false
-
         }
     }
 }
@@ -128,5 +125,24 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         let viewModel = DetailsViewModel(characters: character, location: location, firstSeenEpisode: firstSeenEpisode)
         let detailsViewController = DetailsViewController(viewModel: viewModel)
         self.navigationController?.pushViewController(detailsViewController, animated: true)
+    }
+}
+
+extension MainViewController: UISearchResultsUpdating, UISearchBarDelegate {
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchBarText = mainView.searchController.searchBar
+        
+        guard let searchText = searchBarText.text,
+              !searchText.trimmingCharacters(in: .whitespaces).isEmpty,
+              searchText.trimmingCharacters(in: .whitespaces).count >= 3,
+              let resultController = mainView.searchController.searchResultsController as? SearchResultsViewController else { return }
+        
+        viewModel.search(name: searchText)
+        DispatchQueue.main.async { [weak self] in
+            if let self {
+                resultController.charactersSearched = self.viewModel.charactersSearched
+                resultController.collectionView.reloadData()
+            }
+        }
     }
 }

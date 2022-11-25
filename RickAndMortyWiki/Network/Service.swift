@@ -110,7 +110,7 @@ class Service {
         }.resume()
     }
     
-    static func searchCharacter(by name: String, completion: @escaping (Result<CharacterResults, NetworkError>) -> Void) {
+    func searchCharacter(by name: String, completion: @escaping (Result<Character, NetworkError>) -> Void) {
         guard let url = URL(string: ConstanstsAPI.base_url + Endpoints.characters.rawValue + "/?name=\(name)") else { return }
         
         URLSession.shared.dataTask(with: url) { data, _, error in
@@ -120,11 +120,10 @@ class Service {
             }
             
             do {
-//                let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
                 let json = try JSONDecoder().decode(Character.self, from: data)
-                print(json)
+                completion(.success(json))
             } catch {
-                print(error)
+                completion(.failure(.decoding))
             }
         }.resume()
     }

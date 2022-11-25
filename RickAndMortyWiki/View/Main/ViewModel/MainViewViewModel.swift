@@ -17,6 +17,8 @@ final class MainViewViewModel {
     var firstSeenEpisode: [EpisodeResults] = [EpisodeResults]()
     var characterLocationDetails: [LocationDetails] = [LocationDetails]()
     
+    var charactersSearched: [CharacterResults] = [CharacterResults]()
+    
     weak var delegate: MainViewDelegate?
     
     private var service: Service
@@ -24,7 +26,7 @@ final class MainViewViewModel {
     init(_ service: Service = Service()) {
         self.service = service
         fetchAllCharacters()
-//        fetchLocationDetails()
+        charactersSearched = allCharacters
     }
     
     /// fetch character location if it exists.
@@ -82,6 +84,19 @@ final class MainViewViewModel {
                 case .failure(let failure):
                     print(failure)
                 }
+            }
+        }
+    }
+    
+    func search(name: String) {
+        service.searchCharacter(by: name) { [weak self] result in
+            switch result {
+            case .success(let success):
+                if let self {
+                    self.charactersSearched = success.results
+                }
+            case .failure(let failure):
+                print(failure)
             }
         }
     }

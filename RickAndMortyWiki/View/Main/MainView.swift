@@ -24,6 +24,7 @@ class MainView: UIView {
         return collection
     }()
     
+    // MARK: Refresh and Activity indicator
     lazy var refreshControl: UIRefreshControl = UIRefreshControl()
     lazy var activityIndicator: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .large)
@@ -31,12 +32,12 @@ class MainView: UIView {
         return spinner
     }()
     
+    
+    // MARK: Search bar
     lazy var searchController: UISearchController = {
-        let search = UISearchController(searchResultsController: nil)
+        let search = UISearchController(searchResultsController: SearchResultsViewController())
         search.searchBar.placeholder = "Character name..."
         search.searchBar.searchBarStyle = .minimal
-        search.searchResultsUpdater = self
-        search.searchBar.delegate = self
         return search
     }()
     
@@ -53,24 +54,6 @@ class MainView: UIView {
     
     func setupElements() {
         collectionViewConstraints()
-    }
-}
-
-extension MainView: UISearchResultsUpdating, UISearchBarDelegate {
-    func updateSearchResults(for searchController: UISearchController) {
-//        guard let searchText = searchController.searchBar.text else { return }
-//
-//        filterResults(with: searchText)
-//
-//        if searchText.count == 0 {
-//            currentDataSource = foodData
-//            tableView.reloadData()
-//        }
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-//        currentDataSource = foodData
-//        tableView.reloadData()
     }
 }
 
