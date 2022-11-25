@@ -25,8 +25,8 @@ final class DetailsViewModel {
     }
     
     func fetchResidents() {
-        guard let origin = character.origin?.url else { return }
-        service.getLocationBy(url: origin) { result in
+        guard let location = character.location?.url else { return }
+        service.getLocationBy(url: location) { result in
             switch result {
             case .success(let locationDetails):
                 for residents in locationDetails.residents {

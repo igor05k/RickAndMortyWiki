@@ -27,7 +27,6 @@ class MainViewController: UIViewController {
     init(viewModel: MainViewViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        viewModel.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -119,45 +118,14 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         let character = viewModel.allCharacters[indexPath.row]
         let firstSeenEpisode = viewModel.firstSeenEpisode[indexPath.row]
         
-//        let charloc = viewModel.characterLocationDetails[indexPath.row]
-//        print(charloc)
-        
         // first we need to check by name if the origin for the current character does exists
         // in the character array of locations. if so, take the first index where this occurs
         // and return a new object
         guard let location = viewModel.filterLocationDetails(character: character) else { return }
         print(location)
         
-//        let viewModel = DetailsViewModel(characters: character, location: location, firstSeenEpisode: firstSeenEpisode)
-//        let detailsViewController = DetailsViewController(viewModel: viewModel)
-//        self.navigationController?.pushViewController(detailsViewController, animated: true)
-    }
-}
-
-extension MainViewController: RetryDelegate {
-    func didTapRetry() {
-        mainView.collectionView.reloadData()
-    }
-}
-
-extension MainViewController: MainViewDelegate {
-    func showLoading() {
-//        print("SHOW LOADING...")
-//        DispatchQueue.main.async { [weak self] in
-//            if let self {
-//                while self.viewModel.allCharacters.count < 3 ||
-//                        self.viewModel.characterLocationDetails.count < 3 ||
-//                        self.viewModel.firstSeenEpisode.count < 3 {
-//                    self.activityIndicator.startAnimating()
-//                }
-//            }
-//        }
-    }
-    
-    func stopLoading() {
-//        print("STOP LOADING...")
-//        DispatchQueue.main.async { [weak self] in
-//            self?.activityIndicator.stopAnimating()
-//        }
+        let viewModel = DetailsViewModel(characters: character, location: location, firstSeenEpisode: firstSeenEpisode)
+        let detailsViewController = DetailsViewController(viewModel: viewModel)
+        self.navigationController?.pushViewController(detailsViewController, animated: true)
     }
 }
