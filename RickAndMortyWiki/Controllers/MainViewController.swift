@@ -32,6 +32,10 @@ class MainViewController: UIViewController {
         setActivityIndicator()
         setRefreshControl()
         setSearchBar()
+        
+        Service.searchCharacter(by: "rick") { _ in
+            
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

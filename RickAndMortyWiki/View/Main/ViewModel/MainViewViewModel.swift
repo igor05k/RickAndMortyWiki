@@ -13,7 +13,7 @@ protocol MainViewDelegate: AnyObject {
 }
 
 final class MainViewViewModel {
-    var allCharacters: [AllCharacterResults] = [AllCharacterResults]()
+    var allCharacters: [CharacterResults] = [CharacterResults]()
     var firstSeenEpisode: [EpisodeResults] = [EpisodeResults]()
     var characterLocationDetails: [LocationDetails] = [LocationDetails]()
     
@@ -28,7 +28,7 @@ final class MainViewViewModel {
     }
     
     /// fetch character location if it exists.
-    func filterLocationDetails(character: AllCharacterResults) -> LocationDetails? {
+    func filterLocationDetails(character: CharacterResults) -> LocationDetails? {
         guard let location = character.location else { return nil }
         return characterLocationDetails.filter({ $0.name == location.name }).first(where: { $0.name == location.name })
     }

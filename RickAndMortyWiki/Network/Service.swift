@@ -43,13 +43,13 @@ class Service {
         }.resume()
     }
     
-    func getCharactersById(id: Int, completion: @escaping (Result<AllCharacterResults, NetworkError>) -> Void) {
+    func getCharactersById(id: Int, completion: @escaping (Result<CharacterResults, NetworkError>) -> Void) {
         guard let url = URL(string: ConstanstsAPI.base_url + Endpoints.characters.rawValue + "/" + String(id)) else { return }
         URLSession.shared.dataTask(with: url) { data, _, error in
             guard let data = data, error == nil else { return }
             DispatchQueue.main.async {
                 do {
-                    let json = try JSONDecoder().decode(AllCharacterResults.self, from: data)
+                    let json = try JSONDecoder().decode(CharacterResults.self, from: data)
                     completion(.success(json))
                 } catch {
                     completion(.failure(.decoding))
@@ -59,12 +59,12 @@ class Service {
         }.resume()
     }
     
-    func getSpecificCharacterBy(url: String, completion: @escaping (Result<AllCharacterResults, NetworkError>) -> Void) {
+    func getSpecificCharacterBy(url: String, completion: @escaping (Result<CharacterResults, NetworkError>) -> Void) {
         guard let url = URL(string: url) else { return }
         URLSession.shared.dataTask(with: url) { data, _, error in
             guard let data = data, error == nil else { return }
                 do {
-                    let json = try JSONDecoder().decode(AllCharacterResults.self, from: data)
+                    let json = try JSONDecoder().decode(CharacterResults.self, from: data)
                     completion(.success(json))
                 } catch {
                     completion(.failure(.decoding))
@@ -106,6 +106,25 @@ class Service {
                 completion(.success(json))
             } catch {
                 completion(.failure(.decoding))
+            }
+        }.resume()
+    }
+    
+    static func searchCharacter(by name: String, completion: @escaping (Result<CharacterResults, NetworkError>) -> Void) {
+        guard let url = URL(string: ConstanstsAPI.base_url + Endpoints.characters.rawValue + "/?name=\(name)") else { return }
+        
+        URLSession.shared.dataTask(with: url) { data, _, error in
+            guard let data = data, error == nil else {
+                completion(.failure(.invalidData))
+                return
+            }
+            
+            do {
+//                let json = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
+                let json = try JSONDecoder().decode(Character.self, from: data)
+                print(json)
+            } catch {
+                print(error)
             }
         }.resume()
     }

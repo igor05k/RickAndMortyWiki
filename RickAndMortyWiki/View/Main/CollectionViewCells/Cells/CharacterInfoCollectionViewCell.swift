@@ -22,7 +22,7 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: Configure method
-    func configure(characterInfo: AllCharacterResults, epName: EpisodeResults) {
+    func configure(characterInfo: CharacterResults, epName: EpisodeResults) {
         cellViewModel = CharacterInfoCollectionViewCellViewModel(characterInfo: characterInfo, episodeResults: epName)
 
         characterName.text = cellViewModel?.getName
