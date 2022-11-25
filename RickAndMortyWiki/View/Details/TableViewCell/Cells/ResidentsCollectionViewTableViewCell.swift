@@ -30,11 +30,12 @@ class ResidentsCollectionViewTableViewCell: UITableViewCell {
     // MARK: Configure
     func configure(with residents: [AllCharacterResults]) {
         self.residents = residents
-        DispatchQueue.main.async { [weak self] in
-            if let self {
-                self.collectionView.reloadData()
-            }
-        }
+        self.collectionView.reloadData()
+//        DispatchQueue.main.async { [weak self] in
+//            if let self {
+//                self.collectionView.reloadData()
+//            }
+//        }
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

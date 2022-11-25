@@ -76,7 +76,6 @@ class MainViewController: UIViewController {
         activityIndicator.startAnimating()
         
         viewModel.fetchAllCharacters()
-//        viewModel.fetchLocationDetails()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
             self?.mainView.collectionView.reloadData()
