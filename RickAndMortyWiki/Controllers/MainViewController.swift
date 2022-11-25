@@ -10,13 +10,6 @@ import UIKit
 class MainViewController: UIViewController {
     private var viewModel: MainViewViewModel
     
-    lazy var refreshControl: UIRefreshControl = UIRefreshControl()
-    lazy var activityIndicator: UIActivityIndicatorView = {
-        let spinner = UIActivityIndicatorView(style: .large)
-        spinner.translatesAutoresizingMaskIntoConstraints = false
-        return spinner
-    }()
-    
     lazy var mainView: MainView = {
         let main = MainView()
         main.collectionView.delegate = self
@@ -38,6 +31,7 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         setActivityIndicator()
         setRefreshControl()
+        setSearchBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -55,17 +49,21 @@ class MainViewController: UIViewController {
         self.view = mainView
     }
     
+    func setSearchBar() {
+        navigationItem.searchController = mainView.searchController
+    }
+    
     func setRefreshControl() {
-        mainView.collectionView.refreshControl = refreshControl
-        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        mainView.collectionView.refreshControl = mainView.refreshControl
+        mainView.refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }
     
     func setActivityIndicator() {
-        self.view.addSubview(activityIndicator)
+        self.view.addSubview(mainView.activityIndicator)
         
         NSLayoutConstraint.activate([
-            activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+            mainView.activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            mainView.activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
         ])
     }
     
@@ -73,13 +71,13 @@ class MainViewController: UIViewController {
         mainView.collectionView.refreshControl?.beginRefreshing()
         
         mainView.collectionView.isHidden = true
-        activityIndicator.startAnimating()
+        mainView.activityIndicator.startAnimating()
         
         viewModel.fetchAllCharacters()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
             self?.mainView.collectionView.reloadData()
-            self?.activityIndicator.stopAnimating()
+            self?.mainView.activityIndicator.stopAnimating()
             self?.mainView.collectionView.refreshControl?.endRefreshing()
             self?.mainView.collectionView.isHidden = false
 
