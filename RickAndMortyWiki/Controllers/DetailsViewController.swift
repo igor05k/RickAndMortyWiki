@@ -111,7 +111,7 @@ extension DetailsViewController: UITableViewDelegate, UITableViewDataSource {
         case Sections.characterDetails.rawValue:
             return nil
         case Sections.originDetails.rawValue:
-            return "Origin"
+            return "Location"
         case Sections.residentDetails.rawValue:
             return "Residents"
         default:
