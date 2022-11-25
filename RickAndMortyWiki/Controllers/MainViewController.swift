@@ -6,13 +6,16 @@
 //
 
 import UIKit
-import Combine
 
 class MainViewController: UIViewController {
     private var viewModel: MainViewViewModel
-    var cancellables: Set<AnyCancellable> = []
     
-    var residents: AllCharacterResults?
+    lazy var refreshControl: UIRefreshControl = UIRefreshControl()
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        return spinner
+    }()
     
     lazy var mainView: MainView = {
         let main = MainView()
@@ -33,7 +36,10 @@ class MainViewController: UIViewController {
     // MARK: Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
+        setActivityIndicator()
+        setRefreshControl()
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -48,6 +54,37 @@ class MainViewController: UIViewController {
     override func loadView() {
         self.view = mainView
     }
+    
+    func setRefreshControl() {
+        mainView.collectionView.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+    }
+    
+    func setActivityIndicator() {
+        self.view.addSubview(activityIndicator)
+        
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+        ])
+    }
+    
+    @objc func refresh() {
+        mainView.collectionView.refreshControl?.beginRefreshing()
+        
+        mainView.collectionView.isHidden = true
+        activityIndicator.startAnimating()
+        
+        viewModel.fetchAllCharacters()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            self?.mainView.collectionView.reloadData()
+            self?.activityIndicator.stopAnimating()
+            self?.mainView.collectionView.refreshControl?.endRefreshing()
+            self?.mainView.collectionView.isHidden = false
+
+        }
+    }
 }
 
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -61,7 +98,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         DispatchQueue.main.async { [weak self] in
             if let self {
                 cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row],
-                               epName: self.viewModel.episodeResults[indexPath.row])
+                               epName: self.viewModel.firstSeenEpisode[indexPath.row])
             }
         }
         
@@ -78,16 +115,16 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         let character = viewModel.allCharacters[indexPath.row]
-        let firstSeenEpisode = viewModel.episodeResults[indexPath.row]
+        let firstSeenEpisode = viewModel.firstSeenEpisode[indexPath.row]
         
         // first we need to check by name if the origin for the current character does exists
         // in the character array of locations. if so, take the first index where this occurs
         // and return a new object
         guard let location = viewModel.filterLocationDetails(character: character) else { return }
+        print(location)
         
         let viewModel = DetailsViewModel(characters: character, location: location, firstSeenEpisode: firstSeenEpisode)
         let detailsViewController = DetailsViewController(viewModel: viewModel)
         self.navigationController?.pushViewController(detailsViewController, animated: true)
     }
 }
-
