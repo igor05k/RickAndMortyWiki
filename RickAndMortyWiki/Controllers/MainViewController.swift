@@ -77,7 +77,7 @@ class MainViewController: UIViewController {
         activityIndicator.startAnimating()
         
         viewModel.fetchAllCharacters()
-        viewModel.fetchLocationDetails()
+//        viewModel.fetchLocationDetails()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
             self?.mainView.collectionView.reloadData()
@@ -118,16 +118,19 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         collectionView.deselectItem(at: indexPath, animated: true)
         let character = viewModel.allCharacters[indexPath.row]
         let firstSeenEpisode = viewModel.firstSeenEpisode[indexPath.row]
-        print(character)
+        
+//        let charloc = viewModel.characterLocationDetails[indexPath.row]
+//        print(charloc)
         
         // first we need to check by name if the origin for the current character does exists
         // in the character array of locations. if so, take the first index where this occurs
         // and return a new object
         guard let location = viewModel.filterLocationDetails(character: character) else { return }
+        print(location)
         
-        let viewModel = DetailsViewModel(characters: character, location: location, firstSeenEpisode: firstSeenEpisode)
-        let detailsViewController = DetailsViewController(viewModel: viewModel)
-        self.navigationController?.pushViewController(detailsViewController, animated: true)
+//        let viewModel = DetailsViewModel(characters: character, location: location, firstSeenEpisode: firstSeenEpisode)
+//        let detailsViewController = DetailsViewController(viewModel: viewModel)
+//        self.navigationController?.pushViewController(detailsViewController, animated: true)
     }
 }
 
