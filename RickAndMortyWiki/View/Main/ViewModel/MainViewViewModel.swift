@@ -34,7 +34,6 @@ final class MainViewViewModel {
     }
     
     func fetchAllCharacters() {
-        self.allCharacters.removeAll()
         service.getAllCharacters { [weak self] result in
             self?.delegate?.showLoading()
             switch result {
@@ -50,8 +49,8 @@ final class MainViewViewModel {
     }
     
     func fetchFirstSeenEpisode() {
-        self.firstSeenEpisode.removeAll()
         service.getAllCharacters { [weak self] result in
+            self?.firstSeenEpisode.removeAll()
             switch result {
             case .success(let success):
                 for character in success.results {
@@ -74,17 +73,17 @@ final class MainViewViewModel {
     }
     
     func fetchLocationDetails() {
-        self.characterLocationDetails.removeAll()
-        service.getAllCharacters { result in
+        service.getAllCharacters { [weak self] result in
+            self?.characterLocationDetails.removeAll()
             switch result {
             case .success(let success):
                 for episode in success.results {
                     guard let origin = episode.origin else { return }
-                    self.service.getLocationBy(url: origin.url) { result in
+                    self?.service.getLocationBy(url: origin.url) { result in
                         switch result {
                         case .success(let success):
-                            self.characterLocationDetails.append(success)
-                            print("LOCATION DETAILS \(self.characterLocationDetails.count)")
+                            self?.characterLocationDetails.append(success)
+                            print("LOCATION DETAILS \(self?.characterLocationDetails.count)")
                         case .failure(let failure):
                             print(failure)
                         }
