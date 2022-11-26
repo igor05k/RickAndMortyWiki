@@ -155,8 +155,9 @@ extension MainViewController: UISearchResultsUpdating, UISearchBarDelegate {
             viewModel.search(name: searchText)
             DispatchQueue.main.async { [weak self] in
                 if let self {
-                    resultController.charactersSearched = self.viewModel.charactersSearched
-                    resultController.firstSeenEpisodeSearched = self.viewModel.firstSeenEpisodeSearched
+                    resultController.configure(characters: self.viewModel.charactersSearched, firstSeenEpisode: self.viewModel.firstSeenEpisode)
+//                    resultController.charactersSearched = self.viewModel.charactersSearched
+//                    resultController.firstSeenEpisodeSearched = self.viewModel.firstSeenEpisodeSearched
                     resultController.collectionView.reloadData()
                 }
             }

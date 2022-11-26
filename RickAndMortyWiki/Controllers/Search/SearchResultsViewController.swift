@@ -8,15 +8,22 @@
 import UIKit
 
 class SearchResultsViewController: UIViewController {
-    var charactersSearched: [CharacterResults] = [CharacterResults]()
-    var firstSeenEpisodeSearched: [EpisodeResults] = [EpisodeResults]()
+    private var viewModel: SearchResultsViewModel
+    
+    init(viewModel: SearchResultsViewModel = SearchResultsViewModel()) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     lazy var collectionView: UICollectionView = {
         // flow layout
         let layout = UICollectionViewFlowLayout()
         layout.estimatedItemSize = .zero
         layout.sectionInset = .init(top: 0, left: 0, bottom: 0, right: 0)
-//        layout.itemSize = .init(width: view.bounds.width / 3 - 10, height: 200)
         
         // create collection
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -49,12 +56,17 @@ class SearchResultsViewController: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -5)
         ])
     }
+    
+    public func configure(characters: [CharacterResults], firstSeenEpisode: [EpisodeResults]) {
+        self.viewModel.charactersSearched = characters
+        self.viewModel.firstSeenEpisodeSearched = firstSeenEpisode
+    }
 }
 
 
 extension SearchResultsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return charactersSearched.count
+        return viewModel.charactersSearched.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -62,7 +74,7 @@ extension SearchResultsViewController: UICollectionViewDelegate, UICollectionVie
         
         DispatchQueue.main.async { [weak self] in
             if let self {
-                cell.configure(characterInfo: self.charactersSearched[indexPath.row], epName: self.firstSeenEpisodeSearched[indexPath.row])
+                cell.configure(characterInfo: self.viewModel.charactersSearched[indexPath.row], epName: self.viewModel.firstSeenEpisodeSearched[indexPath.row])
             }
         }
         
@@ -75,5 +87,11 @@ extension SearchResultsViewController: UICollectionViewDelegate, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+        
+        let character = viewModel.charactersSearched[indexPath.row]
+        let firstSeenEpisode = viewModel.firstSeenEpisodeSearched[indexPath.row]
+        
+        print(character)
+        print(firstSeenEpisode)
     }
 }
