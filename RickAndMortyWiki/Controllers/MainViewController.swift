@@ -10,13 +10,6 @@ import UIKit
 class MainViewController: UIViewController {
     private var viewModel: MainViewViewModel
     
-    lazy var refreshControl: UIRefreshControl = UIRefreshControl()
-    lazy var activityIndicator: UIActivityIndicatorView = {
-        let spinner = UIActivityIndicatorView(style: .large)
-        spinner.translatesAutoresizingMaskIntoConstraints = false
-        return spinner
-    }()
-    
     lazy var mainView: MainView = {
         let main = MainView()
         main.collectionView.delegate = self
@@ -38,6 +31,8 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         setActivityIndicator()
         setRefreshControl()
+        setSearchBar()
+        retryIfConnectionFails()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -55,17 +50,39 @@ class MainViewController: UIViewController {
         self.view = mainView
     }
     
+    func setSearchBar() {
+        navigationItem.searchController = mainView.searchController
+        mainView.searchController.searchResultsUpdater = self
+        mainView.searchController.searchBar.delegate = self
+    }
+    
+    func retryIfConnectionFails() {
+        if viewModel.allCharacters.count == 0 ||
+            viewModel.firstSeenEpisode.count == 0 ||
+            viewModel.characterLocationDetails.count == 0 {
+            
+            mainView.activityIndicator.startAnimating()
+            
+            viewModel.fetchAllCharacters()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+                self?.mainView.activityIndicator.stopAnimating()
+                self?.mainView.collectionView.reloadData()
+            }
+        }
+    }
+    
     func setRefreshControl() {
-        mainView.collectionView.refreshControl = refreshControl
-        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        mainView.collectionView.refreshControl = mainView.refreshControl
+        mainView.refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }
     
     func setActivityIndicator() {
-        self.view.addSubview(activityIndicator)
+        self.view.addSubview(mainView.activityIndicator)
         
         NSLayoutConstraint.activate([
-            activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+            mainView.activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            mainView.activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
         ])
     }
     
@@ -73,16 +90,15 @@ class MainViewController: UIViewController {
         mainView.collectionView.refreshControl?.beginRefreshing()
         
         mainView.collectionView.isHidden = true
-        activityIndicator.startAnimating()
+        mainView.activityIndicator.startAnimating()
         
         viewModel.fetchAllCharacters()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
             self?.mainView.collectionView.reloadData()
-            self?.activityIndicator.stopAnimating()
+            self?.mainView.activityIndicator.stopAnimating()
             self?.mainView.collectionView.refreshControl?.endRefreshing()
             self?.mainView.collectionView.isHidden = false
-
         }
     }
 }
@@ -117,14 +133,45 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         let character = viewModel.allCharacters[indexPath.row]
         let firstSeenEpisode = viewModel.firstSeenEpisode[indexPath.row]
         
-        // first we need to check by name if the origin for the current character does exists
+        // first we need to check by name if the location for the current character does exists
         // in the character array of locations. if so, take the first index where this occurs
         // and return a new object
         guard let location = viewModel.filterLocationDetails(character: character) else { return }
-        print(location)
         
         let viewModel = DetailsViewModel(characters: character, location: location, firstSeenEpisode: firstSeenEpisode)
         let detailsViewController = DetailsViewController(viewModel: viewModel)
         self.navigationController?.pushViewController(detailsViewController, animated: true)
+    }
+}
+
+extension MainViewController: UISearchResultsUpdating, UISearchBarDelegate {
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchBarText = mainView.searchController.searchBar
+        
+        if let searchText = searchBarText.text,
+              !searchText.trimmingCharacters(in: .whitespaces).isEmpty,
+              searchText.trimmingCharacters(in: .whitespaces).count >= 3,
+           let resultController = mainView.searchController.searchResultsController as? SearchResultsViewController {
+            
+            resultController.delegate = self
+            viewModel.search(name: searchText)
+            
+            DispatchQueue.main.async { [weak self] in
+                if let self {
+                    resultController.configure(characters: self.viewModel.charactersSearched, firstSeenEpisode: self.viewModel.firstSeenEpisode, location: self.viewModel.characterLocationSearched)
+                    resultController.collectionView.reloadData()
+                }
+            }
+        }
+    }
+}
+
+extension MainViewController: SearchDelegate {
+    func didTapCharacter(character: CharacterResults, firstSeenEpisode: EpisodeResults, location: LocationDetails) {
+        DispatchQueue.main.async {
+            let viewModel = DetailsViewModel(characters: character, location: location, firstSeenEpisode: firstSeenEpisode)
+            let detailsViewController = DetailsViewController(viewModel: viewModel)
+            self.navigationController?.pushViewController(detailsViewController, animated: true)
+        }
     }
 }

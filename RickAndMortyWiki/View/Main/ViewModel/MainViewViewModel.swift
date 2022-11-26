@@ -7,35 +7,31 @@
 
 import Foundation
 
-protocol MainViewDelegate: AnyObject {
-    func showLoading()
-    func stopLoading()
-}
-
 final class MainViewViewModel {
-    var allCharacters: [AllCharacterResults] = [AllCharacterResults]()
+    var allCharacters: [CharacterResults] = [CharacterResults]()
     var firstSeenEpisode: [EpisodeResults] = [EpisodeResults]()
     var characterLocationDetails: [LocationDetails] = [LocationDetails]()
     
-    weak var delegate: MainViewDelegate?
+    // empty array so the results shows correctly
+    var charactersSearched: [CharacterResults] = [CharacterResults]()
+    var firstSeenEpisodeSearched: [EpisodeResults] = [EpisodeResults]()
+    var characterLocationSearched: [LocationDetails] = [LocationDetails]()
     
     private var service: Service
     
     init(_ service: Service = Service()) {
         self.service = service
         fetchAllCharacters()
-//        fetchLocationDetails()
     }
     
     /// fetch character location if it exists.
-    func filterLocationDetails(character: AllCharacterResults) -> LocationDetails? {
+    func filterLocationDetails(character: CharacterResults) -> LocationDetails? {
         guard let location = character.location else { return nil }
         return characterLocationDetails.filter({ $0.name == location.name }).first(where: { $0.name == location.name })
     }
     
     func fetchAllCharacters() {
         service.getAllCharacters { [weak self] result in
-            self?.delegate?.showLoading()
             switch result {
             case .success(let success):
                 // remove all items in order to populate again
@@ -48,8 +44,6 @@ final class MainViewViewModel {
                 // fetch additional data for the characters
                 self?.fetchFirstSeenEpisode()
                 self?.fetchLocationDetails()
-                print("ALL CHARACTERS: \(String(describing: self?.allCharacters.count))")
-                self?.delegate?.stopLoading()
             case .failure(let failure):
                 print(failure)
             }
@@ -63,7 +57,6 @@ final class MainViewViewModel {
                 switch result {
                 case .success(let episodesResults):
                     self.firstSeenEpisode.append(episodesResults)
-                    print("EPISODE DETAILS: \(String(describing: self.firstSeenEpisode.count))")
                 case .failure(let failure):
                     print(failure)
                 }
@@ -78,10 +71,48 @@ final class MainViewViewModel {
                 switch result {
                 case .success(let success):
                     self.characterLocationDetails.append(success)
-                    print("LOCATION DETAILS \(self.characterLocationDetails.count)")
                 case .failure(let failure):
                     print(failure)
                 }
+            }
+        }
+    }
+    
+    func search(name: String) {
+        service.searchCharacter(by: name) { [weak self] result in
+            switch result {
+            case .success(let success):
+                if let self {
+                    self.charactersSearched = success.results
+                }
+                
+                for character in success.results {
+                    guard let firstEpisode = character.episode.first else { return }
+                    self?.service.getEpisodesDetails(url: firstEpisode) { result in
+                        switch result {
+                        case .success(let episodesResults):
+                            self?.firstSeenEpisodeSearched.append(episodesResults)
+//                            print("EPISODE DETAILS: \(String(describing: self?.firstSeenEpisodeSearched.count))")
+                        case .failure(let failure):
+                            print(failure)
+                        }
+                    }
+                }
+                
+                for episode in success.results {
+                    guard let location = episode.location else { return }
+                    self?.service.getLocationBy(url: location.url) { result in
+                        switch result {
+                        case .success(let success):
+                            self?.characterLocationSearched.append(success)
+        //                    print("LOCATION DETAILS \(self.characterLocationDetails.count)")
+                        case .failure(let failure):
+                            print(failure)
+                        }
+                    }
+                }
+            case .failure(let failure):
+                print(failure)
             }
         }
     }

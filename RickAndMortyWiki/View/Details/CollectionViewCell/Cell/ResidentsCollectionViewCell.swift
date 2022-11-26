@@ -13,7 +13,7 @@ class ResidentsCollectionViewCell: UICollectionViewCell {
     private var viewModel: ResidentsCollectionViewCellViewModel?
     
     // MARK: Setup
-    func configure(with residents: AllCharacterResults) {
+    func configure(with residents: CharacterResults) {
         viewModel = ResidentsCollectionViewCellViewModel(allCharacters: residents)
         
         characterName.text = viewModel?.getCharacterName
