@@ -152,10 +152,13 @@ extension MainViewController: UISearchResultsUpdating, UISearchBarDelegate {
               !searchText.trimmingCharacters(in: .whitespaces).isEmpty,
               searchText.trimmingCharacters(in: .whitespaces).count >= 3,
            let resultController = mainView.searchController.searchResultsController as? SearchResultsViewController {
+            
             viewModel.search(name: searchText)
+            
             DispatchQueue.main.async { [weak self] in
                 if let self {
-                    resultController.configure(characters: self.viewModel.charactersSearched, firstSeenEpisode: self.viewModel.firstSeenEpisode)
+                    resultController.configure(characters: self.viewModel.charactersSearched, firstSeenEpisode: self.viewModel.firstSeenEpisode, location: self.viewModel.characterLocationSearched)
+                    print(self.viewModel.characterLocationSearched)
 //                    resultController.charactersSearched = self.viewModel.charactersSearched
 //                    resultController.firstSeenEpisodeSearched = self.viewModel.firstSeenEpisodeSearched
                     resultController.collectionView.reloadData()
@@ -164,6 +167,7 @@ extension MainViewController: UISearchResultsUpdating, UISearchBarDelegate {
         } else {
             viewModel.firstSeenEpisodeSearched = []
             viewModel.charactersSearched = []
+            viewModel.characterLocationSearched = []
         }
     }
 }

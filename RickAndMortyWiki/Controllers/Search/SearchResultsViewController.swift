@@ -57,9 +57,10 @@ class SearchResultsViewController: UIViewController {
         ])
     }
     
-    public func configure(characters: [CharacterResults], firstSeenEpisode: [EpisodeResults]) {
+    public func configure(characters: [CharacterResults], firstSeenEpisode: [EpisodeResults], location: [LocationDetails]) {
         self.viewModel.charactersSearched = characters
         self.viewModel.firstSeenEpisodeSearched = firstSeenEpisode
+        self.viewModel.characterLocationSearched = location
     }
 }
 
@@ -91,7 +92,14 @@ extension SearchResultsViewController: UICollectionViewDelegate, UICollectionVie
         let character = viewModel.charactersSearched[indexPath.row]
         let firstSeenEpisode = viewModel.firstSeenEpisodeSearched[indexPath.row]
         
-        print(character)
-        print(firstSeenEpisode)
+        // first we need to check by name if the location for the current character does exists
+        // in the character array of locations. if so, take the first index where this occurs
+        // and return a new object
+        guard let location = viewModel.filterLocationDetails(character: character) else { return }
+        print(location)
+        
+        let viewModel = DetailsViewModel(characters: character, location: location, firstSeenEpisode: firstSeenEpisode)
+        let detailsViewController = DetailsViewController(viewModel: viewModel)
+        self.navigationController?.pushViewController(detailsViewController, animated: true)
     }
 }
