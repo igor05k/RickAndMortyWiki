@@ -153,21 +153,25 @@ extension MainViewController: UISearchResultsUpdating, UISearchBarDelegate {
               searchText.trimmingCharacters(in: .whitespaces).count >= 3,
            let resultController = mainView.searchController.searchResultsController as? SearchResultsViewController {
             
+            resultController.delegate = self
             viewModel.search(name: searchText)
             
             DispatchQueue.main.async { [weak self] in
                 if let self {
                     resultController.configure(characters: self.viewModel.charactersSearched, firstSeenEpisode: self.viewModel.firstSeenEpisode, location: self.viewModel.characterLocationSearched)
-                    print(self.viewModel.characterLocationSearched)
-//                    resultController.charactersSearched = self.viewModel.charactersSearched
-//                    resultController.firstSeenEpisodeSearched = self.viewModel.firstSeenEpisodeSearched
                     resultController.collectionView.reloadData()
                 }
             }
-        } else {
-            viewModel.firstSeenEpisodeSearched = []
-            viewModel.charactersSearched = []
-            viewModel.characterLocationSearched = []
+        }
+    }
+}
+
+extension MainViewController: SearchDelegate {
+    func didTapCharacter(character: CharacterResults, firstSeenEpisode: EpisodeResults, location: LocationDetails) {
+        DispatchQueue.main.async {
+            let viewModel = DetailsViewModel(characters: character, location: location, firstSeenEpisode: firstSeenEpisode)
+            let detailsViewController = DetailsViewController(viewModel: viewModel)
+            self.navigationController?.pushViewController(detailsViewController, animated: true)
         }
     }
 }

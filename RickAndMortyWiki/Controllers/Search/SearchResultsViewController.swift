@@ -7,8 +7,14 @@
 
 import UIKit
 
+protocol SearchDelegate: AnyObject {
+    func didTapCharacter(character: CharacterResults, firstSeenEpisode: EpisodeResults, location: LocationDetails)
+}
+
 class SearchResultsViewController: UIViewController {
     private var viewModel: SearchResultsViewModel
+    
+    weak var delegate: SearchDelegate?
     
     init(viewModel: SearchResultsViewModel = SearchResultsViewModel()) {
         self.viewModel = viewModel
@@ -64,7 +70,6 @@ class SearchResultsViewController: UIViewController {
     }
 }
 
-
 extension SearchResultsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.charactersSearched.count
@@ -96,10 +101,11 @@ extension SearchResultsViewController: UICollectionViewDelegate, UICollectionVie
         // in the character array of locations. if so, take the first index where this occurs
         // and return a new object
         guard let location = viewModel.filterLocationDetails(character: character) else { return }
-        print(location)
         
-        let viewModel = DetailsViewModel(characters: character, location: location, firstSeenEpisode: firstSeenEpisode)
-        let detailsViewController = DetailsViewController(viewModel: viewModel)
-        self.navigationController?.pushViewController(detailsViewController, animated: true)
+        delegate?.didTapCharacter(character: character, firstSeenEpisode: firstSeenEpisode, location: location)
+        
+//        let viewModel = DetailsViewModel(characters: character, location: location, firstSeenEpisode: firstSeenEpisode)
+//        let detailsViewController = DetailsViewController(viewModel: viewModel)
+//        self.navigationController?.pushViewController(detailsViewController, animated: true)
     }
 }
