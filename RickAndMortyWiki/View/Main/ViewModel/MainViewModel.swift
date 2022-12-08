@@ -7,6 +7,11 @@
 
 import Foundation
 
+protocol MainViewModelProtocol: AnyObject {
+    func startLoading()
+    func stopLoading()
+}
+
 final class MainViewModel {
     private var allCharacters: [CharacterResults] = [CharacterResults]()
     private var firstSeenEpisode: [EpisodeResults] = [EpisodeResults]()
@@ -19,42 +24,43 @@ final class MainViewModel {
     
     private var service: Service
     
+    weak var delegate: MainViewModelProtocol?
+    
     init(_ service: Service = Service()) {
         self.service = service
         fetchAllCharacters()
-//        retryIfConnectionFails2()
     }
     
-    func retryIfConnectionFails2() {
-        if allCharacters.count == 0 ||
-            firstSeenEpisode.count == 0 ||
-            characterLocationDetails.count == 0 {
-            print("characters", allCharacters.count)
-            print("firstSeenEpisode", firstSeenEpisode.count)
-            print("characterLocationDetails", characterLocationDetails.count)
-            fetchAllCharacters()
-            print("characters", allCharacters.count)
+    func fetchAllCharacters() {
+        service.getAllCharacters { [weak self] result in
+            self?.delegate?.startLoading()
+            switch result {
+            case .success(let success):
+                // remove all items in order to populate again
+                self?.firstSeenEpisode.removeAll()
+                self?.characterLocationDetails.removeAll()
+
+                // assign the result to a list
+                self?.allCharacters = success.results
+
+                // fetch additional data for the characters
+                self?.fetchFirstSeenEpisode()
+                self?.fetchLocationDetails()
+
+                self?.delegate?.stopLoading()
+            case .failure(let failure):
+                print(failure)
+            }
         }
     }
     
-    /*
-     func retryIfConnectionFails() {
-         if viewModel.numberOfCharacters == 0 ||
-             viewModel.numberOfFirstSeenEpisodes == 0 ||
-             viewModel.numberOfCharacterLocationDetails == 0 {
-             
-             mainView.activityIndicator.startAnimating()
-             
-             viewModel.fetchAllCharacters()
-             
-             DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-                 self?.mainView.activityIndicator.stopAnimating()
-                 self?.mainView.collectionView.reloadData()
-             }
-         }
-     }
-     */
+    public var isCharacterArrayEmpty: Bool {
+        return allCharacters.isEmpty
+    }
     
+    public var isFirstSeenEpisodeEmpty: Bool {
+        return firstSeenEpisode.isEmpty
+    }
     
     public var getCharactersSearched: [CharacterResults] {
         return charactersSearched
@@ -118,26 +124,6 @@ final class MainViewModel {
     func filterLocationDetails(character: CharacterResults) -> LocationDetails? {
         guard let location = character.location else { return nil }
         return characterLocationDetails.filter({ $0.name == location.name }).first(where: { $0.name == location.name })
-    }
-    
-    func fetchAllCharacters() {
-        service.getAllCharacters { [weak self] result in
-            switch result {
-            case .success(let success):
-                // remove all items in order to populate again
-                self?.firstSeenEpisode.removeAll()
-                self?.characterLocationDetails.removeAll()
-                
-                // assign the result to a list
-                self?.allCharacters = success.results
-                
-                // fetch additional data for the characters
-                self?.fetchFirstSeenEpisode()
-                self?.fetchLocationDetails()
-            case .failure(let failure):
-                print(failure)
-            }
-        }
     }
     
     func fetchFirstSeenEpisode() {
