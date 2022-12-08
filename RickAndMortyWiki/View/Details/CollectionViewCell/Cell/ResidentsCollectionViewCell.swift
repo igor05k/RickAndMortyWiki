@@ -19,7 +19,8 @@ class ResidentsCollectionViewCell: UICollectionViewCell {
         characterName.text = viewModel?.getCharacterName
         statusLabel.text = viewModel?.getCharacterStatus
         speciesLabel.text = "\(viewModel?.getCharacterSpecies ?? "Unknown")"
-        characterImageView.downloaded(from: viewModel?.getCharacterImage ?? "")
+        characterImageView.loadImageUsingCache(withUrl: viewModel?.getCharacterImage ?? "")
+//        characterImageView.downloaded(from: viewModel?.getCharacterImage ?? "")
         
         if statusLabel.text == "Alive" {
             statusCircle.backgroundColor = .green
