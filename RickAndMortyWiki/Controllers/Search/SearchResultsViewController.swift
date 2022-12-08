@@ -64,24 +64,24 @@ class SearchResultsViewController: UIViewController {
     }
     
     public func configure(characters: [CharacterResults], firstSeenEpisode: [EpisodeResults], location: [LocationDetails]) {
-        self.viewModel.charactersSearched = characters
-        self.viewModel.firstSeenEpisodeSearched = firstSeenEpisode
-        self.viewModel.characterLocationSearched = location
+        viewModel.set(characters: characters)
+        viewModel.set(firstSeenEpisode: firstSeenEpisode)
+        viewModel.set(locationDetails: location)
     }
 }
 
 extension SearchResultsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.charactersSearched.count
+        return viewModel.numberOfItemsInSection
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as? CharacterInfoCollectionViewCell else { return UICollectionViewCell() }
         
-        if !viewModel.charactersSearched.isEmpty && !viewModel.firstSeenEpisodeSearched.isEmpty {
+        if !viewModel.isCharactersSearchedEmpty && !viewModel.isFirstSeenEpisodeSearchedEmpty {
             DispatchQueue.main.async { [weak self] in
                 if let self {
-                    cell.configure(characterInfo: self.viewModel.charactersSearched[indexPath.row], epName: self.viewModel.firstSeenEpisodeSearched[indexPath.row])
+                    cell.configure(characterInfo: self.viewModel.getCurrentCharacter(indexPath: indexPath), epName: self.viewModel.getCurrentFirstSeenEpisode(indexPath: indexPath))
                 }
             }
         }
@@ -96,8 +96,8 @@ extension SearchResultsViewController: UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         
-        let character = viewModel.charactersSearched[indexPath.row]
-        let firstSeenEpisode = viewModel.firstSeenEpisodeSearched[indexPath.row]
+        let character = viewModel.getCurrentCharacter(indexPath: indexPath)
+        let firstSeenEpisode = viewModel.getCurrentFirstSeenEpisode(indexPath: indexPath)
         
         // first we need to check by name if the location for the current character does exists
         // in the character array of locations. if so, take the first index where this occurs
