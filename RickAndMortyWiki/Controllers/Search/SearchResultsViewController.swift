@@ -105,9 +105,5 @@ extension SearchResultsViewController: UICollectionViewDelegate, UICollectionVie
         guard let location = viewModel.filterLocationDetails(character: character) else { return }
         
         delegate?.didTapCharacter(character: character, firstSeenEpisode: firstSeenEpisode, location: location)
-        
-//        let viewModel = DetailsViewModel(characters: character, location: location, firstSeenEpisode: firstSeenEpisode)
-//        let detailsViewController = DetailsViewController(viewModel: viewModel)
-//        self.navigationController?.pushViewController(detailsViewController, animated: true)
     }
 }
