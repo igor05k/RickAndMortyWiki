@@ -6,12 +6,9 @@
 //
 
 import UIKit
-import Combine
 
 class MainViewController: UIViewController {
     private var viewModel: MainViewModel
-    
-    private var anyCancellables: Set<AnyCancellable> = []
     
     lazy var mainView: MainView = {
         let main = MainView()
@@ -36,13 +33,7 @@ class MainViewController: UIViewController {
         setActivityIndicator()
         setRefreshControl()
         setSearchBar()
-        
-//        DispatchQueue.main.async {
-//            print("viewModel.numberOfCharacters", self.viewModel.numberOfCharacters)
-//            print("viewModel.numberOfFirstSeenEpisodes", self.viewModel.numberOfFirstSeenEpisodes)
-//            print("viewModel.numberOfCharacterLocationDetails", self.viewModel.numberOfCharacterLocationDetails)
-//        }
-//        retryIfConnectionFails()
+        retryIfFails()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -66,7 +57,7 @@ class MainViewController: UIViewController {
         mainView.searchController.searchBar.delegate = self
     }
     
-    func retryIfConnectionFails() {
+    func retryIfFails() {
         if viewModel.numberOfCharacters == 0 ||
             viewModel.numberOfFirstSeenEpisodes == 0 ||
             viewModel.numberOfCharacterLocationDetails == 0 {
@@ -78,10 +69,6 @@ class MainViewController: UIViewController {
             DispatchQueue.main.async { [weak self] in
                 self?.mainView.activityIndicator.stopAnimating()
                 self?.mainView.collectionView.reloadData()
-                print("RETRY!!!!")
-//                print("viewModel.numberOfCharacters", self?.viewModel.numberOfCharacters)
-//                print("viewModel.numberOfFirstSeenEpisodes", self?.viewModel.numberOfFirstSeenEpisodes)
-//                print("viewModel.numberOfCharacterLocationDetails", self?.viewModel.numberOfCharacterLocationDetails)
             }
         }
     }
@@ -111,7 +98,6 @@ class MainViewController: UIViewController {
         DispatchQueue.main.async { [weak self] in
             self?.mainView.activityIndicator.stopAnimating()
             self?.mainView.collectionView.refreshControl?.endRefreshing()
-//            self?.mainView.collectionView.reloadData()
             self?.mainView.collectionView.isHidden = false
         }
     }
@@ -124,11 +110,6 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
-        
-
-        print("viewModel.numberOfCharacters", viewModel.numberOfCharacters)
-        print("viewModel.numberOfFirstSeenEpisodes", viewModel.numberOfFirstSeenEpisodes)
-        print("viewModel.numberOfCharacterLocationDetails", viewModel.numberOfCharacterLocationDetails)
         
         if !viewModel.isCharacterArrayEmpty && !viewModel.isFirstSeenEpisodeEmpty {
             DispatchQueue.main.async { [weak self] in
@@ -170,8 +151,8 @@ extension MainViewController: UISearchResultsUpdating, UISearchBarDelegate {
         let searchBarText = mainView.searchController.searchBar
         
         if let searchText = searchBarText.text,
-              !searchText.trimmingCharacters(in: .whitespaces).isEmpty,
-              searchText.trimmingCharacters(in: .whitespaces).count >= 3,
+              !searchText.isEmpty,
+              searchText.count >= 3,
            let resultController = mainView.searchController.searchResultsController as? SearchResultsViewController {
             
             resultController.delegate = self
@@ -185,6 +166,11 @@ extension MainViewController: UISearchResultsUpdating, UISearchBarDelegate {
                     resultController.collectionView.reloadData()
                 }
             }
+        }
+        
+        if searchBarText.text?.count == 0 {
+            print("count", searchBarText.text?.count)
+            viewModel.cleanAllArraysAfterSearch()
         }
     }
 }

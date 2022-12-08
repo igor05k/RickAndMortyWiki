@@ -39,14 +39,14 @@ final class MainViewModel {
                 // remove all items in order to populate again
                 self?.firstSeenEpisode.removeAll()
                 self?.characterLocationDetails.removeAll()
-
+                
                 // assign the result to a list
                 self?.allCharacters = success.results
-
+                
                 // fetch additional data for the characters
                 self?.fetchFirstSeenEpisode()
                 self?.fetchLocationDetails()
-
+                
                 self?.delegate?.stopLoading()
             case .failure(let failure):
                 print(failure)
@@ -75,9 +75,9 @@ final class MainViewModel {
     }
     
     func cleanAllArraysAfterSearch() {
-        charactersSearched.removeAll()
-        firstSeenEpisode.removeAll()
-        characterLocationDetails.removeAll()
+//        charactersSearched.removeAll()
+        firstSeenEpisodeSearched.removeAll()
+        characterLocationSearched.removeAll()
     }
     
     // get number of items
@@ -101,11 +101,11 @@ final class MainViewModel {
     func currentFirstSeenEpisode(indexPath: IndexPath) -> EpisodeResults {
         return firstSeenEpisode[indexPath.row]
     }
-
+    
     func currentCharacterLocationDetails(indexPath: IndexPath) -> LocationDetails {
         return characterLocationDetails[indexPath.row]
     }
-
+    
     
     // SEARCH
     func currentCharactersSearched(indexPath: IndexPath) -> CharacterResults {
@@ -115,7 +115,7 @@ final class MainViewModel {
     func currentFirstSeenEpisodeSearched(indexPath: IndexPath) -> EpisodeResults {
         return firstSeenEpisodeSearched[indexPath.row]
     }
-
+    
     func currentCharacterLocationSearched(indexPath: IndexPath) -> LocationDetails {
         return characterLocationSearched[indexPath.row]
     }
@@ -160,30 +160,30 @@ final class MainViewModel {
             case .success(let success):
                 if let self {
                     self.charactersSearched = success.results
-                }
-                
-                for character in success.results {
-                    guard let firstEpisode = character.episode.first else { return }
-                    self?.service.getEpisodesDetails(url: firstEpisode) { result in
-                        switch result {
-                        case .success(let episodesResults):
-                            self?.firstSeenEpisodeSearched.append(episodesResults)
-//                            print("EPISODE DETAILS: \(String(describing: self?.firstSeenEpisodeSearched.count))")
-                        case .failure(let failure):
-                            print(failure)
+                    
+                    for character in success.results {
+                        guard let firstEpisode = character.episode.first else { return }
+                        self.service.getEpisodesDetails(url: firstEpisode) { result in
+                            switch result {
+                            case .success(let episodesResults):
+                                self.firstSeenEpisodeSearched.append(episodesResults)
+                                print("EPISODE DETAILS: \(String(describing: self.firstSeenEpisodeSearched.count))")
+                            case .failure(let failure):
+                                print(failure)
+                            }
                         }
                     }
-                }
-                
-                for episode in success.results {
-                    guard let location = episode.location else { return }
-                    self?.service.getLocationBy(url: location.url) { result in
-                        switch result {
-                        case .success(let success):
-                            self?.characterLocationSearched.append(success)
-//                            print("LOCATION DETAILS \(String(describing: self?.characterLocationSearched.count))")
-                        case .failure(let failure):
-                            print(failure)
+                    
+                    for episode in success.results {
+                        guard let location = episode.location else { return }
+                        self.service.getLocationBy(url: location.url) { result in
+                            switch result {
+                            case .success(let success):
+                                self.characterLocationSearched.append(success)
+                                print("LOCATION DETAILS \(String(describing: self.characterLocationSearched.count))")
+                            case .failure(let failure):
+                                print(failure)
+                            }
                         }
                     }
                 }
