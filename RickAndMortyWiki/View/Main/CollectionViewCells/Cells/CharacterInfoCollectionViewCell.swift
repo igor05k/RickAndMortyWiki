@@ -29,7 +29,8 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
         statusLabel.text = cellViewModel?.getStatus
         speciesLabel.text = "- \(cellViewModel?.getSpecies ?? "Unknown")"
         locationLabel.text = cellViewModel?.getLastKnownLocation.name
-        characterImageView.downloaded(from: cellViewModel?.getCharacterImage ?? "")
+        characterImageView.loadImageUsingCache(withUrl: cellViewModel?.getCharacterImage ?? "")
+//        characterImageView.downloaded(from: cellViewModel?.getCharacterImage ?? "")
         episodeLabel.text = cellViewModel?.getEpisodeName
         
         

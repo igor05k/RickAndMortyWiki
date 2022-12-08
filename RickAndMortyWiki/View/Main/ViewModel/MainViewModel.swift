@@ -7,10 +7,10 @@
 
 import Foundation
 
-final class MainViewViewModel {
-    var allCharacters: [CharacterResults] = [CharacterResults]()
-    var firstSeenEpisode: [EpisodeResults] = [EpisodeResults]()
-    var characterLocationDetails: [LocationDetails] = [LocationDetails]()
+final class MainViewModel {
+    private var allCharacters: [CharacterResults] = [CharacterResults]()
+    private var firstSeenEpisode: [EpisodeResults] = [EpisodeResults]()
+    private var characterLocationDetails: [LocationDetails] = [LocationDetails]()
     
     // empty array so the results shows correctly
     var charactersSearched: [CharacterResults] = [CharacterResults]()
@@ -22,6 +22,96 @@ final class MainViewViewModel {
     init(_ service: Service = Service()) {
         self.service = service
         fetchAllCharacters()
+//        retryIfConnectionFails2()
+    }
+    
+    func retryIfConnectionFails2() {
+        if allCharacters.count == 0 ||
+            firstSeenEpisode.count == 0 ||
+            characterLocationDetails.count == 0 {
+            print("characters", allCharacters.count)
+            print("firstSeenEpisode", firstSeenEpisode.count)
+            print("characterLocationDetails", characterLocationDetails.count)
+            fetchAllCharacters()
+            print("characters", allCharacters.count)
+        }
+    }
+    
+    /*
+     func retryIfConnectionFails() {
+         if viewModel.numberOfCharacters == 0 ||
+             viewModel.numberOfFirstSeenEpisodes == 0 ||
+             viewModel.numberOfCharacterLocationDetails == 0 {
+             
+             mainView.activityIndicator.startAnimating()
+             
+             viewModel.fetchAllCharacters()
+             
+             DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+                 self?.mainView.activityIndicator.stopAnimating()
+                 self?.mainView.collectionView.reloadData()
+             }
+         }
+     }
+     */
+    
+    
+    public var getCharactersSearched: [CharacterResults] {
+        return charactersSearched
+    }
+    
+    public var getFirstSeenEpisodeSearched: [EpisodeResults] {
+        return firstSeenEpisodeSearched
+    }
+    
+    public var getCharacterLocationSearched: [LocationDetails] {
+        return characterLocationSearched
+    }
+    
+    func cleanAllArraysAfterSearch() {
+        charactersSearched.removeAll()
+        firstSeenEpisode.removeAll()
+        characterLocationDetails.removeAll()
+    }
+    
+    // get number of items
+    public var numberOfCharacters: Int {
+        return allCharacters.count
+    }
+    
+    public var numberOfFirstSeenEpisodes: Int {
+        return firstSeenEpisode.count
+    }
+    
+    public var numberOfCharacterLocationDetails: Int {
+        return characterLocationDetails.count
+    }
+    
+    // fetch items
+    func currentCharacter(indexPath: IndexPath) -> CharacterResults {
+        return allCharacters[indexPath.row]
+    }
+    
+    func currentFirstSeenEpisode(indexPath: IndexPath) -> EpisodeResults {
+        return firstSeenEpisode[indexPath.row]
+    }
+
+    func currentCharacterLocationDetails(indexPath: IndexPath) -> LocationDetails {
+        return characterLocationDetails[indexPath.row]
+    }
+
+    
+    // SEARCH
+    func currentCharactersSearched(indexPath: IndexPath) -> CharacterResults {
+        return charactersSearched[indexPath.row]
+    }
+    
+    func currentFirstSeenEpisodeSearched(indexPath: IndexPath) -> EpisodeResults {
+        return firstSeenEpisodeSearched[indexPath.row]
+    }
+
+    func currentCharacterLocationSearched(indexPath: IndexPath) -> LocationDetails {
+        return characterLocationSearched[indexPath.row]
     }
     
     /// fetch character location if it exists.
@@ -105,7 +195,7 @@ final class MainViewViewModel {
                         switch result {
                         case .success(let success):
                             self?.characterLocationSearched.append(success)
-        //                    print("LOCATION DETAILS \(self.characterLocationDetails.count)")
+//                            print("LOCATION DETAILS \(String(describing: self?.characterLocationSearched.count))")
                         case .failure(let failure):
                             print(failure)
                         }

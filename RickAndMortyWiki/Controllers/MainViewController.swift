@@ -8,7 +8,7 @@
 import UIKit
 
 class MainViewController: UIViewController {
-    private var viewModel: MainViewViewModel
+    private var viewModel: MainViewModel
     
     lazy var mainView: MainView = {
         let main = MainView()
@@ -17,7 +17,7 @@ class MainViewController: UIViewController {
         return main
     }()
     
-    init(viewModel: MainViewViewModel) {
+    init(viewModel: MainViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -32,6 +32,8 @@ class MainViewController: UIViewController {
         setActivityIndicator()
         setRefreshControl()
         setSearchBar()
+//        viewModel.retryIfConnectionFails2()
+//        mainView.collectionView.reloadData()
         retryIfConnectionFails()
     }
     
@@ -57,9 +59,9 @@ class MainViewController: UIViewController {
     }
     
     func retryIfConnectionFails() {
-        if viewModel.allCharacters.count == 0 ||
-            viewModel.firstSeenEpisode.count == 0 ||
-            viewModel.characterLocationDetails.count == 0 {
+        if viewModel.numberOfCharacters == 0 ||
+            viewModel.numberOfFirstSeenEpisodes == 0 ||
+            viewModel.numberOfCharacterLocationDetails == 0 {
             
             mainView.activityIndicator.startAnimating()
             
@@ -105,7 +107,7 @@ class MainViewController: UIViewController {
 
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.allCharacters.count
+        return viewModel.numberOfCharacters
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -113,8 +115,8 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         
         DispatchQueue.main.async { [weak self] in
             if let self {
-                cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row],
-                               epName: self.viewModel.firstSeenEpisode[indexPath.row])
+                cell.configure(characterInfo: self.viewModel.currentCharacter(indexPath: indexPath),
+                               epName: self.viewModel.currentFirstSeenEpisode(indexPath: indexPath))
             }
         }
         
@@ -130,8 +132,8 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        let character = viewModel.allCharacters[indexPath.row]
-        let firstSeenEpisode = viewModel.firstSeenEpisode[indexPath.row]
+        let character = viewModel.currentCharacter(indexPath: indexPath)
+        let firstSeenEpisode = viewModel.currentFirstSeenEpisode(indexPath: indexPath)
         
         // first we need to check by name if the location for the current character does exists
         // in the character array of locations. if so, take the first index where this occurs
@@ -158,7 +160,9 @@ extension MainViewController: UISearchResultsUpdating, UISearchBarDelegate {
             
             DispatchQueue.main.async { [weak self] in
                 if let self {
-                    resultController.configure(characters: self.viewModel.charactersSearched, firstSeenEpisode: self.viewModel.firstSeenEpisode, location: self.viewModel.characterLocationSearched)
+                    resultController.configure(characters: self.viewModel.charactersSearched,
+                                               firstSeenEpisode: self.viewModel.firstSeenEpisodeSearched,
+                                               location: self.viewModel.characterLocationSearched)
                     resultController.collectionView.reloadData()
                 }
             }
