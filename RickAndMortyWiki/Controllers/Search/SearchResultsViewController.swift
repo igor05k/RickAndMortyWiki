@@ -78,9 +78,11 @@ extension SearchResultsViewController: UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as? CharacterInfoCollectionViewCell else { return UICollectionViewCell() }
         
-        DispatchQueue.main.async { [weak self] in
-            if let self {
-                cell.configure(characterInfo: self.viewModel.charactersSearched[indexPath.row], epName: self.viewModel.firstSeenEpisodeSearched[indexPath.row])
+        if !viewModel.charactersSearched.isEmpty && !viewModel.firstSeenEpisodeSearched.isEmpty {
+            DispatchQueue.main.async { [weak self] in
+                if let self {
+                    cell.configure(characterInfo: self.viewModel.charactersSearched[indexPath.row], epName: self.viewModel.firstSeenEpisodeSearched[indexPath.row])
+                }
             }
         }
         
