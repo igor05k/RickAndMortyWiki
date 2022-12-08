@@ -6,9 +6,12 @@
 //
 
 import UIKit
+import Combine
 
 class MainViewController: UIViewController {
     private var viewModel: MainViewModel
+    
+    private var anyCancellables: Set<AnyCancellable> = []
     
     lazy var mainView: MainView = {
         let main = MainView()
@@ -20,6 +23,7 @@ class MainViewController: UIViewController {
     init(viewModel: MainViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        viewModel.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -32,9 +36,13 @@ class MainViewController: UIViewController {
         setActivityIndicator()
         setRefreshControl()
         setSearchBar()
-//        viewModel.retryIfConnectionFails2()
-//        mainView.collectionView.reloadData()
-        retryIfConnectionFails()
+        
+//        DispatchQueue.main.async {
+//            print("viewModel.numberOfCharacters", self.viewModel.numberOfCharacters)
+//            print("viewModel.numberOfFirstSeenEpisodes", self.viewModel.numberOfFirstSeenEpisodes)
+//            print("viewModel.numberOfCharacterLocationDetails", self.viewModel.numberOfCharacterLocationDetails)
+//        }
+//        retryIfConnectionFails()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -66,10 +74,14 @@ class MainViewController: UIViewController {
             mainView.activityIndicator.startAnimating()
             
             viewModel.fetchAllCharacters()
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+             
+            DispatchQueue.main.async { [weak self] in
                 self?.mainView.activityIndicator.stopAnimating()
                 self?.mainView.collectionView.reloadData()
+                print("RETRY!!!!")
+//                print("viewModel.numberOfCharacters", self?.viewModel.numberOfCharacters)
+//                print("viewModel.numberOfFirstSeenEpisodes", self?.viewModel.numberOfFirstSeenEpisodes)
+//                print("viewModel.numberOfCharacterLocationDetails", self?.viewModel.numberOfCharacterLocationDetails)
             }
         }
     }
@@ -91,15 +103,15 @@ class MainViewController: UIViewController {
     @objc func refresh() {
         mainView.collectionView.refreshControl?.beginRefreshing()
         
+        viewModel.fetchAllCharacters()
+        
         mainView.collectionView.isHidden = true
         mainView.activityIndicator.startAnimating()
         
-        viewModel.fetchAllCharacters()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
-            self?.mainView.collectionView.reloadData()
+        DispatchQueue.main.async { [weak self] in
             self?.mainView.activityIndicator.stopAnimating()
             self?.mainView.collectionView.refreshControl?.endRefreshing()
+//            self?.mainView.collectionView.reloadData()
             self?.mainView.collectionView.isHidden = false
         }
     }
@@ -113,10 +125,17 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
         
-        DispatchQueue.main.async { [weak self] in
-            if let self {
-                cell.configure(characterInfo: self.viewModel.currentCharacter(indexPath: indexPath),
-                               epName: self.viewModel.currentFirstSeenEpisode(indexPath: indexPath))
+
+        print("viewModel.numberOfCharacters", viewModel.numberOfCharacters)
+        print("viewModel.numberOfFirstSeenEpisodes", viewModel.numberOfFirstSeenEpisodes)
+        print("viewModel.numberOfCharacterLocationDetails", viewModel.numberOfCharacterLocationDetails)
+        
+        if !viewModel.isCharacterArrayEmpty && !viewModel.isFirstSeenEpisodeEmpty {
+            DispatchQueue.main.async { [weak self] in
+                if let self {
+                    cell.configure(characterInfo: self.viewModel.currentCharacter(indexPath: indexPath),
+                                   epName: self.viewModel.currentFirstSeenEpisode(indexPath: indexPath))
+                }
             }
         }
         
@@ -176,6 +195,21 @@ extension MainViewController: SearchDelegate {
             let viewModel = DetailsViewModel(characters: character, location: location, firstSeenEpisode: firstSeenEpisode)
             let detailsViewController = DetailsViewController(viewModel: viewModel)
             self.navigationController?.pushViewController(detailsViewController, animated: true)
+        }
+    }
+}
+
+extension MainViewController: MainViewModelProtocol {
+    func startLoading() {
+        DispatchQueue.main.async { [weak self] in
+            self?.mainView.activityIndicator.startAnimating()
+        }
+    }
+    
+    func stopLoading() {
+        DispatchQueue.main.async { [weak self] in
+            self?.mainView.activityIndicator.stopAnimating()
+            self?.mainView.collectionView.reloadData()
         }
     }
 }
