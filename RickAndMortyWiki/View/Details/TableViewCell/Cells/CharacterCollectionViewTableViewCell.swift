@@ -9,7 +9,7 @@ import UIKit
 
 class CharacterCollectionViewTableViewCell: UITableViewCell {
     static let identifier = String(describing: CharacterCollectionViewTableViewCell.self)
-    private var characterSelected: [AllCharacterResults] = [AllCharacterResults]()
+    private var characterSelected: [CharacterResults] = [CharacterResults]()
     private var episodeResults: EpisodeResults?
     
     private var cellViewModel: CharacterCollectionViewTableViewCellViewModel?
@@ -49,7 +49,7 @@ class CharacterCollectionViewTableViewCell: UITableViewCell {
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
-    func configure(with model: AllCharacterResults, episodeName: EpisodeResults) {
+    func configure(with model: CharacterResults, episodeName: EpisodeResults) {
         cellViewModel = CharacterCollectionViewTableViewCellViewModel(allCharacters: model, episodeResults: episodeName)
         
         if let cellViewModel {

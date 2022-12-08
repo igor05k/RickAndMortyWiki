@@ -22,14 +22,15 @@ class CharacterInfoCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: Configure method
-    func configure(characterInfo: AllCharacterResults, epName: EpisodeResults) {
+    func configure(characterInfo: CharacterResults, epName: EpisodeResults) {
         cellViewModel = CharacterInfoCollectionViewCellViewModel(characterInfo: characterInfo, episodeResults: epName)
 
         characterName.text = cellViewModel?.getName
         statusLabel.text = cellViewModel?.getStatus
         speciesLabel.text = "- \(cellViewModel?.getSpecies ?? "Unknown")"
         locationLabel.text = cellViewModel?.getLastKnownLocation.name
-        characterImageView.downloaded(from: cellViewModel?.getCharacterImage ?? "")
+        characterImageView.loadImageUsingCache(withUrl: cellViewModel?.getCharacterImage ?? "")
+//        characterImageView.downloaded(from: cellViewModel?.getCharacterImage ?? "")
         episodeLabel.text = cellViewModel?.getEpisodeName
         
         

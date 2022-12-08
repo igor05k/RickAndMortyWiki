@@ -10,18 +10,17 @@ import UIKit
 class ResidentsCollectionViewCell: UICollectionViewCell {
     static let identifier = String(describing: ResidentsCollectionViewCell.self)
     
-//    lazy var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView(style: .large)
-    
     private var viewModel: ResidentsCollectionViewCellViewModel?
     
     // MARK: Setup
-    func configure(with residents: AllCharacterResults) {
+    func configure(with residents: CharacterResults) {
         viewModel = ResidentsCollectionViewCellViewModel(allCharacters: residents)
         
         characterName.text = viewModel?.getCharacterName
         statusLabel.text = viewModel?.getCharacterStatus
-        speciesLabel.text = "- \(viewModel?.getCharacterSpecies ?? "Unknown")"
-        characterImageView.downloaded(from: viewModel?.getCharacterImage ?? "")
+        speciesLabel.text = "\(viewModel?.getCharacterSpecies ?? "Unknown")"
+        characterImageView.loadImageUsingCache(withUrl: viewModel?.getCharacterImage ?? "")
+//        characterImageView.downloaded(from: viewModel?.getCharacterImage ?? "")
         
         if statusLabel.text == "Alive" {
             statusCircle.backgroundColor = .green
@@ -33,7 +32,6 @@ class ResidentsCollectionViewCell: UICollectionViewCell {
     lazy var characterImageView: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
-//        image.backgroundColor = .yellow
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
@@ -146,22 +144,18 @@ class ResidentsCollectionViewCell: UICollectionViewCell {
     
     func setupStatusCircle() {
         topContainer.addSubview(statusCircle)
-        topContainer.addSubview(statusLabel)
         topContainer.addSubview(speciesLabel)
         
         NSLayoutConstraint.activate([
-            statusCircle.topAnchor.constraint(equalTo: topContainer.topAnchor, constant: 13),
+            statusCircle.topAnchor.constraint(equalTo: topContainer.topAnchor, constant: 8),
             statusCircle.leadingAnchor.constraint(equalTo: topContainer.leadingAnchor, constant: 12),
             statusCircle.widthAnchor.constraint(equalToConstant: 10),
             statusCircle.heightAnchor.constraint(equalToConstant: 10),
-            statusCircle.centerYAnchor.constraint(equalTo: statusLabel.centerYAnchor),
-            
-            statusLabel.topAnchor.constraint(equalTo: topContainer.topAnchor, constant: 8),
-            statusLabel.leadingAnchor.constraint(equalTo: statusCircle.trailingAnchor, constant: 5),
             
             speciesLabel.topAnchor.constraint(equalTo: topContainer.topAnchor, constant: 8),
-            speciesLabel.leadingAnchor.constraint(equalTo: statusLabel.trailingAnchor, constant: 4),
+            speciesLabel.leadingAnchor.constraint(equalTo: statusCircle.trailingAnchor, constant: 8),
             speciesLabel.trailingAnchor.constraint(equalTo: topContainer.trailingAnchor, constant: -8),
+            speciesLabel.centerYAnchor.constraint(equalTo: statusCircle.centerYAnchor),
         ])
     }
 }

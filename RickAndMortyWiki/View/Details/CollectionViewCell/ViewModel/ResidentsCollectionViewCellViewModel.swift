@@ -8,9 +8,9 @@
 import Foundation
 
 final class ResidentsCollectionViewCellViewModel {
-    private var allCharacters: AllCharacterResults
+    private var allCharacters: CharacterResults
     
-    init(allCharacters: AllCharacterResults) {
+    init(allCharacters: CharacterResults) {
         self.allCharacters = allCharacters
     }
     

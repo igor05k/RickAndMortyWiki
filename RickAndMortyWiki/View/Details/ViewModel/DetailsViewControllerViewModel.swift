@@ -8,15 +8,15 @@
 import Foundation
 
 final class DetailsViewModel {
-    var character: AllCharacterResults
+    var character: CharacterResults
     var location: LocationDetails
     var firstSeenEpisode: EpisodeResults
     
-    @Published var residents: [AllCharacterResults] = [AllCharacterResults]()
+    @Published var residents: [CharacterResults] = [CharacterResults]()
     
     private let service: Service
     
-    init(_ service: Service = Service(), characters: AllCharacterResults, location: LocationDetails, firstSeenEpisode: EpisodeResults) {
+    init(_ service: Service = Service(), characters: CharacterResults, location: LocationDetails, firstSeenEpisode: EpisodeResults) {
         self.service = service
         self.character = characters
         self.location = location

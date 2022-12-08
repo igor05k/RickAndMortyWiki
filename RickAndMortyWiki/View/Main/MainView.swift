@@ -24,6 +24,23 @@ class MainView: UIView {
         return collection
     }()
     
+    // MARK: Refresh and Activity indicator
+    lazy var refreshControl: UIRefreshControl = UIRefreshControl()
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        return spinner
+    }()
+    
+    
+    // MARK: Search bar
+    lazy var searchController: UISearchController = {
+        let search = UISearchController(searchResultsController: SearchResultsViewController())
+        search.searchBar.placeholder = "Character name..."
+        search.searchBar.searchBarStyle = .minimal
+        return search
+    }()
+    
     // MARK: Inits
     override init(frame: CGRect) {
         super.init(frame: frame)

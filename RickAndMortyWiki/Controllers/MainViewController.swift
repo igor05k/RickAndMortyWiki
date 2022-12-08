@@ -8,14 +8,7 @@
 import UIKit
 
 class MainViewController: UIViewController {
-    private var viewModel: MainViewViewModel
-    
-    lazy var refreshControl: UIRefreshControl = UIRefreshControl()
-    lazy var activityIndicator: UIActivityIndicatorView = {
-        let spinner = UIActivityIndicatorView(style: .large)
-        spinner.translatesAutoresizingMaskIntoConstraints = false
-        return spinner
-    }()
+    private var viewModel: MainViewModel
     
     lazy var mainView: MainView = {
         let main = MainView()
@@ -24,9 +17,10 @@ class MainViewController: UIViewController {
         return main
     }()
     
-    init(viewModel: MainViewViewModel) {
+    init(viewModel: MainViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        viewModel.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -38,6 +32,8 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         setActivityIndicator()
         setRefreshControl()
+        setSearchBar()
+        retryIfFails()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -55,50 +51,72 @@ class MainViewController: UIViewController {
         self.view = mainView
     }
     
+    func setSearchBar() {
+        navigationItem.searchController = mainView.searchController
+        mainView.searchController.searchResultsUpdater = self
+        mainView.searchController.searchBar.delegate = self
+    }
+    
+    func retryIfFails() {
+        if viewModel.numberOfCharacters == 0 ||
+            viewModel.numberOfFirstSeenEpisodes == 0 ||
+            viewModel.numberOfCharacterLocationDetails == 0 {
+            
+            mainView.activityIndicator.startAnimating()
+            
+            viewModel.fetchAllCharacters()
+             
+            DispatchQueue.main.async { [weak self] in
+                self?.mainView.activityIndicator.stopAnimating()
+                self?.mainView.collectionView.reloadData()
+            }
+        }
+    }
+    
     func setRefreshControl() {
-        mainView.collectionView.refreshControl = refreshControl
-        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        mainView.collectionView.refreshControl = mainView.refreshControl
+        mainView.refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }
     
     func setActivityIndicator() {
-        self.view.addSubview(activityIndicator)
+        self.view.addSubview(mainView.activityIndicator)
         
         NSLayoutConstraint.activate([
-            activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+            mainView.activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            mainView.activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
         ])
     }
     
     @objc func refresh() {
         mainView.collectionView.refreshControl?.beginRefreshing()
         
-        mainView.collectionView.isHidden = true
-        activityIndicator.startAnimating()
-        
         viewModel.fetchAllCharacters()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
-            self?.mainView.collectionView.reloadData()
-            self?.activityIndicator.stopAnimating()
+        mainView.collectionView.isHidden = true
+        mainView.activityIndicator.startAnimating()
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.mainView.activityIndicator.stopAnimating()
             self?.mainView.collectionView.refreshControl?.endRefreshing()
             self?.mainView.collectionView.isHidden = false
-
         }
     }
 }
 
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.allCharacters.count
+        return viewModel.numberOfCharacters
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
         
-        DispatchQueue.main.async { [weak self] in
-            if let self {
-                cell.configure(characterInfo: self.viewModel.allCharacters[indexPath.row],
-                               epName: self.viewModel.firstSeenEpisode[indexPath.row])
+        if !viewModel.isCharacterArrayEmpty && !viewModel.isFirstSeenEpisodeEmpty {
+            DispatchQueue.main.async { [weak self] in
+                if let self {
+                    cell.configure(characterInfo: self.viewModel.currentCharacter(indexPath: indexPath),
+                                   epName: self.viewModel.currentFirstSeenEpisode(indexPath: indexPath))
+                }
             }
         }
         
@@ -114,17 +132,70 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        let character = viewModel.allCharacters[indexPath.row]
-        let firstSeenEpisode = viewModel.firstSeenEpisode[indexPath.row]
+        let character = viewModel.currentCharacter(indexPath: indexPath)
+        let firstSeenEpisode = viewModel.currentFirstSeenEpisode(indexPath: indexPath)
         
-        // first we need to check by name if the origin for the current character does exists
+        // first we need to check by name if the location for the current character does exists
         // in the character array of locations. if so, take the first index where this occurs
         // and return a new object
         guard let location = viewModel.filterLocationDetails(character: character) else { return }
-        print(location)
         
         let viewModel = DetailsViewModel(characters: character, location: location, firstSeenEpisode: firstSeenEpisode)
         let detailsViewController = DetailsViewController(viewModel: viewModel)
         self.navigationController?.pushViewController(detailsViewController, animated: true)
+    }
+}
+
+extension MainViewController: UISearchResultsUpdating, UISearchBarDelegate {
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchBarText = mainView.searchController.searchBar
+        
+        if let searchText = searchBarText.text,
+              !searchText.isEmpty,
+              searchText.count >= 3,
+           let resultController = mainView.searchController.searchResultsController as? SearchResultsViewController {
+            
+            resultController.delegate = self
+            viewModel.search(name: searchText)
+            
+            DispatchQueue.main.async { [weak self] in
+                if let self {
+                    resultController.configure(characters: self.viewModel.charactersSearched,
+                                               firstSeenEpisode: self.viewModel.firstSeenEpisodeSearched,
+                                               location: self.viewModel.characterLocationSearched)
+                    resultController.collectionView.reloadData()
+                }
+            }
+        }
+        
+        if searchBarText.text?.count == 0 {
+            print("count", searchBarText.text?.count)
+            viewModel.cleanAllArraysAfterSearch()
+        }
+    }
+}
+
+extension MainViewController: SearchDelegate {
+    func didTapCharacter(character: CharacterResults, firstSeenEpisode: EpisodeResults, location: LocationDetails) {
+        DispatchQueue.main.async {
+            let viewModel = DetailsViewModel(characters: character, location: location, firstSeenEpisode: firstSeenEpisode)
+            let detailsViewController = DetailsViewController(viewModel: viewModel)
+            self.navigationController?.pushViewController(detailsViewController, animated: true)
+        }
+    }
+}
+
+extension MainViewController: MainViewModelProtocol {
+    func startLoading() {
+        DispatchQueue.main.async { [weak self] in
+            self?.mainView.activityIndicator.startAnimating()
+        }
+    }
+    
+    func stopLoading() {
+        DispatchQueue.main.async { [weak self] in
+            self?.mainView.activityIndicator.stopAnimating()
+            self?.mainView.collectionView.reloadData()
+        }
     }
 }
