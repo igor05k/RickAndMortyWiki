@@ -12,8 +12,6 @@ class MainViewController: UIViewController {
     
     lazy var mainView: MainView = {
         let main = MainView()
-        main.collectionView.delegate = self
-        main.collectionView.dataSource = self
         return main
     }()
     
@@ -34,6 +32,12 @@ class MainViewController: UIViewController {
         setRefreshControl()
         setSearchBar()
         retryIfFails()
+    }
+    
+    func configCollectionView() {
+        mainView.collectionView.delegate = self
+        mainView.collectionView.dataSource = self
+        mainView.collectionView.register(CharacterInfoCollectionViewCell.self, forCellWithReuseIdentifier: CharacterInfoCollectionViewCell.identifier)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -90,6 +94,7 @@ class MainViewController: UIViewController {
     @objc func refresh() {
         mainView.collectionView.refreshControl?.beginRefreshing()
         
+//        viewModel.removeAllCharacters()
         viewModel.fetchAllCharacters()
         
         mainView.collectionView.isHidden = true
@@ -111,13 +116,9 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterInfoCollectionViewCell.identifier, for: indexPath) as! CharacterInfoCollectionViewCell
         
-        if !viewModel.isCharacterArrayEmpty && !viewModel.isFirstSeenEpisodeEmpty {
-            DispatchQueue.main.async { [weak self] in
-                if let self {
-                    cell.configure(characterInfo: self.viewModel.currentCharacter(indexPath: indexPath),
-                                   epName: self.viewModel.currentFirstSeenEpisode(indexPath: indexPath))
-                }
-            }
+        if !viewModel.isFirstSeenEpisodeEmpty {
+            cell.configure(characterInfo: viewModel.currentCharacter(indexPath: indexPath),
+                           epName: viewModel.currentFirstSeenEpisode(indexPath: indexPath))
         }
         
         cell.layer.cornerRadius = 15
@@ -186,6 +187,17 @@ extension MainViewController: SearchDelegate {
 }
 
 extension MainViewController: MainViewModelProtocol {
+    func success() {
+        DispatchQueue.main.async { [weak self] in
+            self?.configCollectionView()
+            self?.mainView.collectionView.reloadData()
+        }
+    }
+    
+    func error(details: String) {
+        print(details)
+    }
+    
     func startLoading() {
         DispatchQueue.main.async { [weak self] in
             self?.mainView.activityIndicator.startAnimating()

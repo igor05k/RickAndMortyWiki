@@ -10,6 +10,8 @@ import Foundation
 protocol MainViewModelProtocol: AnyObject {
     func startLoading()
     func stopLoading()
+    func success()
+    func error(details: String)
 }
 
 final class MainViewModel {
@@ -36,88 +38,22 @@ final class MainViewModel {
             self?.delegate?.startLoading()
             switch result {
             case .success(let success):
-                // remove all items in order to populate again
-                self?.firstSeenEpisode.removeAll()
-                self?.characterLocationDetails.removeAll()
-                
                 // assign the result to a list
+//                self?.removeAllCharacters()
+                self?.fetchFirstSeenEpisode()
                 self?.allCharacters = success.results
                 
                 // fetch additional data for the characters
-                self?.fetchFirstSeenEpisode()
+                
                 self?.fetchLocationDetails()
                 
                 self?.delegate?.stopLoading()
+                self?.delegate?.success()
             case .failure(let failure):
+                self?.delegate?.error(details: failure.localizedDescription)
                 print(failure)
             }
         }
-    }
-    
-    public var isCharacterArrayEmpty: Bool {
-        return allCharacters.isEmpty
-    }
-    
-    public var isFirstSeenEpisodeEmpty: Bool {
-        return firstSeenEpisode.isEmpty
-    }
-    
-    public var getCharactersSearched: [CharacterResults] {
-        return charactersSearched
-    }
-    
-    public var getFirstSeenEpisodeSearched: [EpisodeResults] {
-        return firstSeenEpisodeSearched
-    }
-    
-    public var getCharacterLocationSearched: [LocationDetails] {
-        return characterLocationSearched
-    }
-    
-    func cleanAllArraysAfterSearch() {
-//        charactersSearched.removeAll()
-        firstSeenEpisodeSearched.removeAll()
-        characterLocationSearched.removeAll()
-    }
-    
-    // get number of items
-    public var numberOfCharacters: Int {
-        return allCharacters.count
-    }
-    
-    public var numberOfFirstSeenEpisodes: Int {
-        return firstSeenEpisode.count
-    }
-    
-    public var numberOfCharacterLocationDetails: Int {
-        return characterLocationDetails.count
-    }
-    
-    // fetch items
-    func currentCharacter(indexPath: IndexPath) -> CharacterResults {
-        return allCharacters[indexPath.row]
-    }
-    
-    func currentFirstSeenEpisode(indexPath: IndexPath) -> EpisodeResults {
-        return firstSeenEpisode[indexPath.row]
-    }
-    
-    func currentCharacterLocationDetails(indexPath: IndexPath) -> LocationDetails {
-        return characterLocationDetails[indexPath.row]
-    }
-    
-    
-    // SEARCH
-    func currentCharactersSearched(indexPath: IndexPath) -> CharacterResults {
-        return charactersSearched[indexPath.row]
-    }
-    
-    func currentFirstSeenEpisodeSearched(indexPath: IndexPath) -> EpisodeResults {
-        return firstSeenEpisodeSearched[indexPath.row]
-    }
-    
-    func currentCharacterLocationSearched(indexPath: IndexPath) -> LocationDetails {
-        return characterLocationSearched[indexPath.row]
     }
     
     /// fetch character location if it exists.
@@ -167,7 +103,7 @@ final class MainViewModel {
                             switch result {
                             case .success(let episodesResults):
                                 self.firstSeenEpisodeSearched.append(episodesResults)
-                                print("EPISODE DETAILS: \(String(describing: self.firstSeenEpisodeSearched.count))")
+//                                print("EPISODE DETAILS: \(String(describing: self.firstSeenEpisodeSearched.count))")
                             case .failure(let failure):
                                 print(failure)
                             }
@@ -180,7 +116,7 @@ final class MainViewModel {
                             switch result {
                             case .success(let success):
                                 self.characterLocationSearched.append(success)
-                                print("LOCATION DETAILS \(String(describing: self.characterLocationSearched.count))")
+//                                print("LOCATION DETAILS \(String(describing: self.characterLocationSearched.count))")
                             case .failure(let failure):
                                 print(failure)
                             }
@@ -191,6 +127,76 @@ final class MainViewModel {
                 print(failure)
             }
         }
+    }
+    
+    func removeAllCharacters() {
+        self.firstSeenEpisode.removeAll()
+        self.characterLocationDetails.removeAll()
+    }
+    
+    public var isCharacterArrayEmpty: Bool {
+        return allCharacters.isEmpty
+    }
+    
+    public var isFirstSeenEpisodeEmpty: Bool {
+        return firstSeenEpisode.isEmpty
+    }
+    
+    public var getCharactersSearched: [CharacterResults] {
+        return charactersSearched
+    }
+    
+    public var getFirstSeenEpisodeSearched: [EpisodeResults] {
+        return firstSeenEpisodeSearched
+    }
+    
+    public var getCharacterLocationSearched: [LocationDetails] {
+        return characterLocationSearched
+    }
+    
+    func cleanAllArraysAfterSearch() {
+        firstSeenEpisodeSearched.removeAll()
+        characterLocationSearched.removeAll()
+    }
+    
+    // get number of items
+    public var numberOfCharacters: Int {
+        return allCharacters.count
+    }
+    
+    public var numberOfFirstSeenEpisodes: Int {
+        return firstSeenEpisode.count
+    }
+    
+    public var numberOfCharacterLocationDetails: Int {
+        return characterLocationDetails.count
+    }
+    
+    // fetch items
+    func currentCharacter(indexPath: IndexPath) -> CharacterResults {
+        return allCharacters[indexPath.row]
+    }
+    
+    func currentFirstSeenEpisode(indexPath: IndexPath) -> EpisodeResults {
+        return firstSeenEpisode[indexPath.row]
+    }
+    
+    func currentCharacterLocationDetails(indexPath: IndexPath) -> LocationDetails {
+        return characterLocationDetails[indexPath.row]
+    }
+    
+    
+    // SEARCH
+    func currentCharactersSearched(indexPath: IndexPath) -> CharacterResults {
+        return charactersSearched[indexPath.row]
+    }
+    
+    func currentFirstSeenEpisodeSearched(indexPath: IndexPath) -> EpisodeResults {
+        return firstSeenEpisodeSearched[indexPath.row]
+    }
+    
+    func currentCharacterLocationSearched(indexPath: IndexPath) -> LocationDetails {
+        return characterLocationSearched[indexPath.row]
     }
 }
 
