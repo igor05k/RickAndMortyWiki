@@ -31,7 +31,7 @@ class MainViewController: UIViewController {
         setActivityIndicator()
         setRefreshControl()
         setSearchBar()
-        retryIfFails()
+//        retryIfFails()
     }
     
     func configCollectionView() {
@@ -61,25 +61,25 @@ class MainViewController: UIViewController {
         mainView.searchController.searchBar.delegate = self
     }
     
-    func retryIfFails() {
-        if viewModel.numberOfCharacters == 0 ||
-            viewModel.numberOfFirstSeenEpisodes == 0 ||
-            viewModel.numberOfCharacterLocationDetails == 0 {
-            
-            mainView.activityIndicator.startAnimating()
-            
-            viewModel.fetchAllCharacters()
-             
-            DispatchQueue.main.async { [weak self] in
-                self?.mainView.activityIndicator.stopAnimating()
-                self?.mainView.collectionView.reloadData()
-            }
-        }
-    }
+//    func retryIfFails() {
+//        if viewModel.numberOfCharacters == 0 ||
+//            viewModel.numberOfFirstSeenEpisodes == 0 ||
+//            viewModel.numberOfCharacterLocationDetails == 0 {
+//
+//            mainView.activityIndicator.startAnimating()
+//
+//            viewModel.fetchAllCharacters()
+//
+//            DispatchQueue.main.async { [weak self] in
+//                self?.mainView.activityIndicator.stopAnimating()
+//                self?.mainView.collectionView.reloadData()
+//            }
+//        }
+//    }
     
     func setRefreshControl() {
         mainView.collectionView.refreshControl = mainView.refreshControl
-        mainView.refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+//        mainView.refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }
     
     func setActivityIndicator() {
@@ -91,21 +91,21 @@ class MainViewController: UIViewController {
         ])
     }
     
-    @objc func refresh() {
-        mainView.collectionView.refreshControl?.beginRefreshing()
-        
+//    @objc func refresh() {
+//        mainView.collectionView.refreshControl?.beginRefreshing()
+//
 //        viewModel.removeAllCharacters()
-        viewModel.fetchAllCharacters()
-        
-        mainView.collectionView.isHidden = true
-        mainView.activityIndicator.startAnimating()
-        
-        DispatchQueue.main.async { [weak self] in
-            self?.mainView.activityIndicator.stopAnimating()
-            self?.mainView.collectionView.refreshControl?.endRefreshing()
-            self?.mainView.collectionView.isHidden = false
-        }
-    }
+//        viewModel.fetchAllCharacters()
+//
+//        mainView.collectionView.isHidden = true
+//        mainView.activityIndicator.startAnimating()
+//
+//        DispatchQueue.main.async { [weak self] in
+//            self?.mainView.activityIndicator.stopAnimating()
+//            self?.mainView.collectionView.refreshControl?.endRefreshing()
+//            self?.mainView.collectionView.isHidden = false
+//        }
+//    }
 }
 
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -157,7 +157,7 @@ extension MainViewController: UISearchResultsUpdating, UISearchBarDelegate {
            let resultController = mainView.searchController.searchResultsController as? SearchResultsViewController {
             
             resultController.delegate = self
-            viewModel.search(name: searchText)
+//            viewModel.search(name: searchText)
             
             DispatchQueue.main.async { [weak self] in
                 if let self {
@@ -189,6 +189,7 @@ extension MainViewController: SearchDelegate {
 extension MainViewController: MainViewModelProtocol {
     func success() {
         DispatchQueue.main.async { [weak self] in
+            print("SUCCESS -> CONFIG TABLE VIEW NOW")
             self?.configCollectionView()
             self?.mainView.collectionView.reloadData()
         }
@@ -200,12 +201,14 @@ extension MainViewController: MainViewModelProtocol {
     
     func startLoading() {
         DispatchQueue.main.async { [weak self] in
+            print("START LOADING")
             self?.mainView.activityIndicator.startAnimating()
         }
     }
     
     func stopLoading() {
         DispatchQueue.main.async { [weak self] in
+            print("STOP LOADING")
             self?.mainView.activityIndicator.stopAnimating()
             self?.mainView.collectionView.reloadData()
         }
